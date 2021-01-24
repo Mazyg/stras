@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="ThemeBucket">
+  <link rel="shortcut icon" href="#" type="image/png">
+    <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+  <title>全部信息</title>
+
+    <div th:replace="admin_common :: commomheader"></div>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".del").click(function(){
+                var $infoId = $(this).parent().parent().children("td").eq(0).text();
+                $.ajax({
+                    type:"POST",
+                    url:"/admin/deleteInfo",
+                    data:"infoId="+$infoId,
+                    success:function (msg) {
+                        if(msg === "success"){
+                            alert("删除成功！")
+                        }else{
+                            alert("出错了！")
+                        }
+                        window.location.href="/admin/allInfo?pn="+[[${infoList.current}]];
+                    },
+                    error:function () {
+                        alert("出错了！")
+                    }
+                });
+            })
+
+            $(".delV").click(function(){
+                var $vid = $(this).parent().parent().children("td").eq(0).text();
+                $.ajax({
+                    type:"POST",
+                    url:"/admin/deleteVideo",
+                    data:"vid="+$vid,
+                    success:function (msg) {
+                        if(msg === "success"){
+                            alert("删除成功！")
+                        }else{
+                            alert("出错了！")
+                        }
+                        window.location.href="/admin/allInfo?pnV="+[[${videoList.current}]];
+                    },
+                    error:function () {
+                        alert("出错了！")
+                    }
+                });
+            })
+        })
+    </script>
+
+    <style>
+        .td1{
+            color: #1CAF9A;
+        }
+        .td2{
+            color: #c9302c;
+        }
+        .bu{
+            color: white;
+        }
+    </style>
+</head>
+
+<body class="sticky-header">
+
+<section>
+    <!-- left side start-->
+    <div th:replace="admin_common :: #leftmune(url='allInfo')"></div>
+    <!-- left side end-->
+    
+    <!-- main content start-->
+    <div class="main-content" >
+
+        <!-- header section start-->
+        <div th:replace="admin_common :: #headermune"></div>
+        <!-- header section end-->
+
+        <!-- page heading start-->
+        <div class="page-heading">
+            <h3>
+              ALL INFO
+            </h3>
+        </div>
+        <!-- page heading end-->
+
+        <!--body wrapper start-->
+        <div class="wrapper">
+             <div class="row">
+                <div class="col-sm-12">
+                <section class="panel">
+                <header class="panel-heading">
+                    文章
+                </header>
+                <div class="panel-body">
+                <div class="adv-table editable-table ">
+                <div class="space15"></div>
+                <table class="table table-striped table-hover table-bordered" id="editable-sample">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>标题</th>
+                    <th>时间</th>
+                    <th>类别</th>
+                    <th>点赞数</th>
+                    <th>浏览量</th>
+                    <th>状态</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="" th:each="info:${infoList.records}">
+                    <td th:text="${info.infoId}"></td>
+                    <td th:text="${info.title}"></td>
+                    <td th:text="${info.date}"></td>
+                    <td class="center" th:text="${info.infoType}"></td>
+                    <td th:text="${info.nice}"></td>
+                    <td th:text="${info.view}"></td>
+                    <td th:class="${info.infoStatus}=='已通过'?'td1':(${info.infoStatus}=='未通过'?'td2':'')" th:text="${info.infoStatus}"></td>
+                    <td><a type="button" style="color: white" class="btn btn-info btn-sm " th:href="@{/admin/infoDetail(pn=${infoList.current},infoId=${info.infoId})}" >详情</a>
+                        <a>&nbsp;&nbsp;&nbsp;</a>
+                        <button class="btn btn-danger btn-sm del" type="button">删除</button>
+                    </td>
+                </tr>
+                </tbody>
+                </table>
+                    <div class="row-fluid">
+                        <div class="span6">
+                            <div class="dataTables_info" id="dynamic-table_info">第 [[${infoList.current}]] 页 共 [[${infoList.pages}]] 页 [[${infoList.total}]] 条数据</div>
+                        </div>
+                        <div class="span6"><div class="dataTables_paginate paging_bootstrap pagination">
+                            <ul><li class="prev"><a th:href="@{/admin/allInfo(pn=${infoList.current}-1,pnV=${videoList.current})}">← Pre</a></li>
+                                <li th:class="${num == infoList.current?'active':''}" th:each="num:${#numbers.sequence(1,infoList.pages)}"><a th:href="@{/admin/allInfo(pn=${num},pnV=${videoList.current})}">[[${num}]]</a></li>
+                                <li class="next"><a th:href="@{/admin/allInfo(pn=${infoList.current+1},pnV=${videoList.current})}">Next → </a></li>
+                            </ul></div></div></div>
+                </div>
+                </div>
+                </section>
+                    <section class="panel">
+                        <header class="panel-heading">
+                            视频
+                        </header>
+                        <div class="panel-body">
+                            <div class="adv-table editable-table ">
+                                <div class="space15"></div>
+                                <table class="table table-striped table-hover table-bordered">
+                                    <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>标题</th>
+                                        <th>发布时间</th>
+                                        <th>点赞数</th>
+                                        <th>浏览量</th>
+                                        <th>操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr class="" th:each="video:${videoList.records}">
+                                        <td th:text="${video.vid}"></td>
+                                        <td th:text="${video.vtitle}"></td>
+                                        <td th:text="${video.vdate}"></td>
+                                        <td class="center" th:text="${video.vnice}"></td>
+                                        <td th:text="${video.vview}"></td>
+                                        <td><a type="button" style="color: white" class="btn btn-info btn-sm" th:href="@{/admin/videoDetail(vid=${video.vid},pnV=${videoList.current})}">详情</a>
+                                            <a>&nbsp;&nbsp;&nbsp;</a>
+                                            <button class="btn btn-danger btn-sm delV" type="button">删除</button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <div class="row-fluid">
+                                    <div class="span6">
+                                        <div class="dataTables_info" >第 [[${videoList.current}]] 页 共 [[${videoList.pages}]] 页 [[${videoList.total}]] 条数据</div>
+                                    </div>
+                                    <div class="span6"><div class="dataTables_paginate paging_bootstrap pagination">
+                                        <ul><li class="prev"><a th:href="@{/admin/allInfo(pnV=${videoList.current}-1,pn=${infoList.current})}">← Pre</a></li>
+                                            <li th:class="${num == videoList.current?'active':''}" th:each="num:${#numbers.sequence(1,videoList.pages)}"><a th:href="@{/admin/allInfo(pnV=${num},pn=${infoList.current})}">[[${num}]]</a></li>
+                                            <li class="next"><a th:href="@{/admin/allInfo(pnV=${videoList.current+1},pn=${infoList.current})}">Next → </a></li>
+                                        </ul></div></div></div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+                </div>
+        </div>
+        <!--body wrapper end-->
+
+        <!--footer section start-->
+        <footer>
+            <div th:replace="admin_common :: #footer"></div>
+        </footer>
+        <!--footer section end-->
+
+
+    </div>
+    <!-- main content end-->
+</section>
+
+<!-- Placed js at the end of the document so the pages load faster -->
+
+<div th:replace="admin_common :: commomScript"></div>
+
+</body>
+</html>

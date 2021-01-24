@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="commomheader">
+    <link href="css/style.css" th:href="@{/css/style.css}" rel="stylesheet">
+    <link th:href="@{/css/style-responsive.css}" rel="stylesheet">
+    <script th:src="@{/js/html5shiv.js}"></script>
+    <script th:src="@{/js/respond.min.js}"></script>
+  </head>
+  <body>
+
+   <!--左侧菜单-->
+  <div id="leftmune" class="left-side sticky-left-side">
+
+      <!--logo and iconic logo start-->
+      <div class="logo">
+          <a th:href="@{/admin/index.html}"><img th:src="@{/images/logo.png}" alt=""></a>
+      </div>
+
+      <div class="logo-icon text-center">
+          <a th:href="@{/admin/index.html}"><img th:src="@{/images/logo_icon.png}" alt=""></a>
+      </div>
+      <!--logo and iconic logo end-->
+
+
+      <div class="left-side-inner">
+
+          <!-- visible to small devices only -->
+          <div class="visible-xs hidden-sm hidden-md hidden-lg">
+              <div class="media logged-user">
+                  <img alt="" th:src="${session.user.photo}" class="media-object">
+                  <div class="media-body">
+                      <h4><a href="#" th:text="${session.user.uname}">John Doe</a></h4>
+                      <span>"Hello There..."</span>
+                  </div>
+              </div>
+
+              <h5 class="left-nav-title">Account Information</h5>
+              <ul class="nav nav-pills nav-stacked custom-nav">
+                  <li><a href="#"><i class="fa fa-rocket"></i> <span>用户界面</span></a></li>
+                  <li><a th:href="@{/loginOut}"><i class="fa fa-sign-out"></i> <span>退出登录</span></a></li>
+              </ul>
+          </div>
+
+          <!--sidebar nav start-->
+          <ul class="nav nav-pills nav-stacked custom-nav">
+              <li th:class="${url=='index'?'active':''}"><a th:href="@{/admin/index.html}"><i class="fa fa-home"></i> <span>指示板</span></a>
+              </li>
+              <li th:class="${url=='personal'?'active':''}"><a th:href="@{/admin/personal}"><i class="fa fa-user"></i> <span>个人信息</span></a>
+              </li>
+              <li class="menu-list" th:class="${url}=='userInfo'?'menu-list nav-active':(${url}=='adminInfo'?'menu-list nav-active':'menu-list')">
+                  <a href=""><i class="fa fa-users"></i> <span>用户管理</span></a>
+                  <ul class="sub-menu-list">
+                      <li th:class="${url=='userInfo'?'active':''}"><a th:href="@{/admin/userInfo}"> 用户信息</a></li>
+                      <li th:class="${url=='adminInfo'?'active':''}"><a th:href="@{/admin/adminInfo}"> 管理员信息</a></li>
+                  </ul>
+              </li>
+              <li  th:class="${url}=='allTopic'?'menu-list nav-active':(${url}=='notTopic'?'menu-list nav-active':'menu-list')">
+                  <a href=""><i class="fa fa-star"></i> <span>话题管理</span></a>
+                  <ul class="sub-menu-list">
+                      <li th:class="${url=='notTopic'?'active':''}"><a th:href="@{/admin/notTopic}"> 待审核话题</a></li>
+                      <li th:class="${url=='allTopic'?'active':''}"><a th:href="@{/admin/allTopic}"> 全部话题</a></li>
+                  </ul>
+              </li>
+              <li th:class="${url}=='putInfo'?'menu-list nav-active':(${url}=='putVideo'?'menu-list nav-active':(${url}=='allInfo'?'menu-list nav-active':(${url}=='notInfo'?'menu-list nav-active':'menu-list')))">
+                  <a href=""><i class="fa fa-book"></i> <span>文章管理</span></a>
+                  <ul class="sub-menu-list">
+                      <li th:class="${url=='putInfo'?'active':''}"><a th:href="@{/admin/putInfo}"> 文章发布</a></li>
+                      <li th:class="${url=='putVideo'?'active':''}"><a th:href="@{/admin/putVideo}">视频发布</a></li>
+                      <li th:class="${url=='notInfo'?'active':''}"><a th:href="@{/admin/notInfo}">待审核文章</a></li>
+                      <li th:class="${url=='allInfo'?'active':''}"><a th:href="@{/admin/allInfo}">所有信息</a></li>
+                  </ul>
+              </li>
+
+              <li><a th:href="@{/loginOut}"><i class="fa fa-sign-in"></i> <span>退出登录</span></a></li>
+
+          </ul>
+          <!--sidebar nav end-->
+
+      </div>
+  </div>
+
+  <!-- header section start-->
+  <div id="headermune" class="header-section">
+
+      <!--toggle button start-->
+      <a class="toggle-btn"><i class="fa fa-bars"></i></a>
+      <!--toggle button end-->
+
+      <!--search start-->
+      <form class="searchform" action="http://view.jqueryfuns.com/2014/4/10/7_df25ceea231ba5f44f0fc060c943cdae/index.html" method="post">
+          <input type="text" class="form-control" name="keyword" placeholder="Search here..." />
+      </form>
+      <!--search end-->
+
+      <!--notification menu start -->
+      <div class="menu-right">
+          <ul class="notification-menu">
+              <li>
+                  <a href="#" class="btn btn-default dropdown-toggle info-number" data-toggle="dropdown">
+                      <i class="fa fa-tasks"></i>
+                      <span class="badge">8</span>
+                  </a>
+                  <div class="dropdown-menu dropdown-menu-head pull-right">
+                      <h5 class="title">You have 8 pending task</h5>
+                      <ul class="dropdown-list user-list">
+                          <li class="new">
+                              <a href="#">
+                                  <div class="task-info">
+                                      <div>Database update</div>
+                                  </div>
+                                  <div class="progress progress-striped">
+                                      <div style="width: 40%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="40" role="progressbar" class="progress-bar progress-bar-warning">
+                                          <span class="">40%</span>
+                                      </div>
+                                  </div>
+                              </a>
+                          </li>
+                          <li class="new">
+                              <a href="#">
+                                  <div class="task-info">
+                                      <div>Dashboard done</div>
+                                  </div>
+                                  <div class="progress progress-striped">
+                                      <div style="width: 90%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="90" role="progressbar" class="progress-bar progress-bar-success">
+                                          <span class="">90%</span>
+                                      </div>
+                                  </div>
+                              </a>
+                          </li>
+                          <li>
+                              <a href="#">
+                                  <div class="task-info">
+                                      <div>Web Development</div>
+                                  </div>
+                                  <div class="progress progress-striped">
+                                      <div style="width: 66%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="66" role="progressbar" class="progress-bar progress-bar-info">
+                                          <span class="">66% </span>
+                                      </div>
+                                  </div>
+                              </a>
+                          </li>
+                          <li>
+                              <a href="#">
+                                  <div class="task-info">
+                                      <div>Mobile App</div>
+                                  </div>
+                                  <div class="progress progress-striped">
+                                      <div style="width: 33%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="33" role="progressbar" class="progress-bar progress-bar-danger">
+                                          <span class="">33% </span>
+                                      </div>
+                                  </div>
+                              </a>
+                          </li>
+                          <li>
+                              <a href="#">
+                                  <div class="task-info">
+                                      <div>Issues fixed</div>
+                                  </div>
+                                  <div class="progress progress-striped">
+                                      <div style="width: 80%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="80" role="progressbar" class="progress-bar">
+                                          <span class="">80% </span>
+                                      </div>
+                                  </div>
+                              </a>
+                          </li>
+                          <li class="new"><a href="">See All Pending Task</a></li>
+                      </ul>
+                  </div>
+              </li>
+              <li>
+                  <a href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                      <img th:src="${session.user.photo}" alt="" />
+                     [[${session.user.uname}]]
+                      <span class="caret"></span>
+                  </a>
+                  <ul class="dropdown-menu dropdown-menu-usermenu pull-right">
+                      <li><a href="#"><i class="fa fa-rocket"></i> <span>用户界面</span></a></li>
+                      <li><a th:href="@{/loginOut}"><i class="fa fa-sign-out"></i> <span>退出登录</span></a></li>
+                  </ul>
+              </li>
+
+          </ul>
+      </div>
+      <!--notification menu end -->
+
+  </div>
+  <!-- header section end-->
+
+   <div id="footer">2021 &copy; design by song&mei</div>
+
+   <div th:fragment="commomScript">
+       <!--常见的所有页面的脚本-->
+
+       <script th:src="@{/js/jquery-1.10.2.min.js}"></script>
+       <script th:src="@{/js/jquery-ui-1.9.2.custom.min.js}"></script>
+       <script th:src="@{/js/jquery-migrate-1.2.1.min.js}"></script>
+       <script th:src="@{/js/bootstrap.min.js}"></script>
+       <script th:src="@{/js/modernizr.min.js}"></script>
+       <script th:src="@{/js/jquery.nicescroll.js}"></script>
+       <script th:src="@{/js/scripts.js}"></script>
+   </div>
+  </body>
+  </html>

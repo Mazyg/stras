@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="ThemeBucket">
+  <link rel="shortcut icon" href="#" type="image/png">
+
+  <title>管理员信息</title>
+
+  <!--data table-->
+  <link rel="stylesheet" href="js/data-tables/DT_bootstrap.css" />
+
+    <div th:replace="admin_common :: commomheader"></div>
+</head>
+
+<body class="sticky-header">
+
+<section>
+    <!-- left side start-->
+    <div th:replace="admin_common :: #leftmune(url='adminInfo')"></div>
+    <!-- left side end-->
+    
+    <!-- main content start-->
+    <div class="main-content" >
+
+        <!-- header section start-->
+        <div th:replace="admin_common :: #headermune"></div>
+        <!-- header section end-->
+
+        <!-- page heading start-->
+        <div class="page-heading">
+            <h3>
+               Admin Table
+            </h3>
+        </div>
+        <!-- page heading end-->
+
+        <!--body wrapper start-->
+        <div class="wrapper">
+             <div class="row">
+                <div class="col-sm-12">
+                <section class="panel">
+                <header class="panel-heading">
+                    管理员
+                </header>
+                <div class="panel-body">
+                <div class="adv-table editable-table ">
+                <div class="space15"></div>
+                <table class="table table-striped table-hover table-bordered" id="editable-sample">
+                <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>姓名</th>
+                    <th>性别</th>
+                    <th>电话号码</th>
+                    <th>状态</th>
+                    <th>用户类型</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="" th:each="admins,stat:${adminList.records}">
+                    <td th:text="${stat.count}"></td>
+                    <td th:text="${admins.uname}"></td>
+                    <td th:text="${admins.sex}"></td>
+                    <td class="center" th:text="${admins.phone}"></td>
+                    <td th:text="${admins.ustatus}"></td>
+                    <td th:text="${admins.utype}"></td>
+                </tr>
+                </tbody>
+                </table>
+                    <div class="row-fluid">
+                        <div class="span6">
+                            <div class="dataTables_info" id="dynamic-table_info">第 [[${adminList.current}]] 页 共 [[${adminList.pages}]] 页 [[${adminList.total}]] 条数据</div>
+                        </div>
+                        <div class="span6"><div class="dataTables_paginate paging_bootstrap pagination">
+                            <ul><li class="prev"><a th:href="@{/admin/adminInfo(pn=${adminList.current}-1)}">← Pre</a></li>
+                                <li th:class="${num == adminList.current?'active':''}" th:each="num:${#numbers.sequence(1,adminList.pages)}"><a th:href="@{/admin/adminInfo(pn=${num})}">[[${num}]]</a></li>
+                                <li class="next"><a th:href="@{/admin/adminInfo(pn=${adminList.current+1})}">Next → </a></li>
+                            </ul></div></div></div>
+                </div>
+                </div>
+                </section>
+                </div>
+                </div>
+        </div>
+        <!--body wrapper end-->
+
+        <!--footer section start-->
+        <footer>
+            <div th:replace="admin_common :: #footer"></div>
+        </footer>
+        <!--footer section end-->
+
+
+    </div>
+    <!-- main content end-->
+</section>
+
+<!-- Placed js at the end of the document so the pages load faster -->
+
+<div th:replace="admin_common :: commomScript"></div>
+<!--data table-->
+<script type="text/javascript" src="js/data-tables/jquery.dataTables.js"></script>
+<script type="text/javascript" src="js/data-tables/DT_bootstrap.js"></script>
+
+
+<!--script for editable table-->
+<script src="js/editable-table.js"></script>
+
+<!-- END JAVASCRIPTS -->
+
+</body>
+</html>

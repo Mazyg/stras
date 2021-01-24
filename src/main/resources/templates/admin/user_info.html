@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="ThemeBucket">
+  <link rel="shortcut icon" href="#" type="image/png">
+
+  <title>用户信息管理</title>
+
+  <!--dynamic table-->
+  <link th:href="@{/js/advanced-datatable/css/demo_page.css}" rel="stylesheet" />
+  <link th:href="@{/js/advanced-datatable/css/demo_table.css}" rel="stylesheet" />
+  <link rel="stylesheet" th:href="@{/js/data-tables/DT_bootstrap.css}" />
+    <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+
+    <div th:replace="admin_common :: commomheader"></div>
+    <script type="text/javascript">
+        /*封号*/
+        $(document).ready(function () {
+            $(".update1").click(function(){
+                var $phone = $(this).parent().parent().children("td").eq(3).text();
+                $.ajax({
+                    type:"POST",
+                    url:"/admin/restrictUser",
+                    data:"phone="+$phone,
+                    success:function (msg) {
+                        if(msg === "success"){
+                            alert("操作成功！")
+                        }else{
+                            alert("已是当前状态！")
+                        }
+                        window.location.href="/admin/userInfo?pn="+[[${userList.current}]];
+                    },
+                    error:function () {
+                        console.log("cuo")
+                        alert("出错了！")
+                    }
+                });
+            })
+        })
+        /*解除限制*/
+        $(document).ready(function () {
+            $(".update2").click(function(){
+                var $phone = $(this).parent().parent().children("td").eq(3).text();
+                $.ajax({
+                    type:"POST",
+                    url:"/admin/disenthral",
+                    data:"phone="+$phone,
+                    success:function (msg) {
+                        if(msg === "success"){
+                            alert("操作成功！")
+                        }else{
+                            alert("已是当前状态！")
+                        }
+                        window.location.href="/admin/userInfo?pn="+[[${userList.current}]];
+                    },
+                    error:function () {
+                        console.log("cuo")
+                        alert("出错了！")
+                    }
+                });
+            })
+        })
+    </script>
+    <style>
+        .font1{
+            color: #c9302c;
+        }
+        .font2{
+            color: #4cae4c;
+        }
+    </style>
+</head>
+
+<body class="sticky-header">
+
+<section>
+    <!-- left side start-->
+    <div th:replace="admin_common :: #leftmune(url='userInfo')"></div>
+    <!-- left side end-->
+    
+    <!-- main content start-->
+    <div class="main-content" >
+
+        <!-- header section start-->
+        <div th:replace="admin_common :: #headermune"></div>
+        <!-- header section end-->
+
+        <!-- page heading start-->
+        <div class="page-heading">
+            <h3>
+                用户信息管理
+            </h3>
+        </div>
+        <!-- page heading end-->
+        <!--body wrapper start-->
+        <div class="wrapper">
+        <div class="row">
+        <div class="col-sm-12">
+        <section class="panel">
+        <header class="panel-heading">
+            用户信息
+        </header>
+        <div class="panel-body">
+        <div class="adv-table">
+        <table  class="display table table-bordered table-striped" id="dynamic-table">
+        <thead>
+        <tr>
+            <th>序号</th>
+            <th>用户名</th>
+            <th>性别</th>
+            <th class="hidden-phone">电话号码</th>
+            <th class="hidden-phone">状态</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="gradeX" th:each="users,stat:${userList.records}">
+            <td th:text="${stat.count}"></td>
+            <td th:text="${users.uname}"></td>
+            <td th:text="${users.sex}"></td>
+            <td th:text="${users.phone}"></td>
+            <td th:class="${users.ustatus=='正常'?'font2':'font1'}" th:text="${users.ustatus}"></td>
+            <td> <!--<a th:href="@{/admin/restrictUser/{phone}(phone=${users.phone},pn=${userList.current})}" class="btn btn-danger btn-sm" type="button">封号</a>-->
+                <a  class="btn btn-danger btn-sm update1" type="button" >封号</a>
+                <a>&nbsp;&nbsp;&nbsp;</a>
+                <a class="btn btn-success btn-sm update2" type="button">解封</a></td>
+        </tr>
+        </tbody>
+        <tfoot></tfoot>
+        </table>
+            <div class="row-fluid">
+                <div class="span6">
+                    <div class="dataTables_info" id="dynamic-table_info">第 [[${userList.current}]] 页 共 [[${userList.pages}]] 页 [[${userList.total}]] 条数据</div>
+                </div>
+                <div class="span6"><div class="dataTables_paginate paging_bootstrap pagination">
+                    <ul><li class="prev"><a th:href="@{/admin/userInfo(pn=${userList.current}-1)}">← Pre</a></li>
+                        <li th:class="${num == userList.current?'active':''}" th:each="num:${#numbers.sequence(1,userList.pages)}"><a th:href="@{/admin/userInfo(pn=${num})}">[[${num}]]</a></li>
+                        <li class="next"><a th:href="@{/admin/userInfo(pn=${userList.current+1})}">Next → </a></li>
+                    </ul></div></div></div>
+        </div>
+        </div>
+        </section>
+        </div>
+        </div>
+        </div>
+        <!--body wrapper end-->
+
+        <!--footer section start-->
+        <footer>
+            <div th:replace="admin_common :: #footer"></div>
+        </footer>
+        <!--footer section end-->
+
+
+    </div>
+    <!-- main content end-->
+</section>
+
+<!-- Placed js at the end of the document so the pages load faster -->
+<div th:replace="admin_common :: commomScript"></div>
+
+<!--dynamic table-->
+<script type="text/javascript" language="javascript" th:src="@{/js/advanced-datatable/js/jquery.dataTables.js}"></script>
+<script type="text/javascript" th:src="@{/js/data-tables/DT_bootstrap.js}"></script>
+<!--dynamic table initialization -->
+<!--<script src="js/dynamic_table_init.js"></script>-->
+</body>
+</html>

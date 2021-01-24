@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="keywords" content="admin, dashboard, bootstrap, template, flat, modern, theme, responsive, fluid, retina, backend, html5, css, css3">
+  <meta name="description" content="">
+  <meta name="author" content="ThemeBucket">
+  <link rel="shortcut icon" href="#" type="image/png">
+
+  <title>管理员-欢迎</title>
+
+  <!--图表样式-->
+  <link href="../../static/js/iCheck/skins/minimal/minimal.css" rel="stylesheet">
+  <link href="../../static/js/iCheck/skins/square/square.css" rel="stylesheet">
+  <link href="../../static/js/iCheck/skins/square/red.css" rel="stylesheet">
+  <link href="../../static/js/iCheck/skins/square/blue.css" rel="stylesheet">
+
+  <!--日历样式-->
+  <link th:href="@{/css/clndr.css}" rel="stylesheet">
+
+    <div th:replace="admin_common :: commomheader"></div>
+
+</head>
+
+<body class="sticky-header">
+
+<section>
+    <!-- 左边开始-->
+    <div th:replace="admin_common :: #leftmune(url='index')"></div>
+    <!-- 左边结束-->
+    
+    <!--主要内容开始-->
+    <div class="main-content" >
+
+        <!-- 头部分开始-->
+        <div th:replace="admin_common :: #headermune"></div>
+        <!-- 头部分结束-->
+
+        <!-- 页面标题开始-->
+        <div class="page-heading"></div>
+        <!-- page heading end-->
+
+        <!--body wrapper start-->
+        <div class="wrapper">
+            <div class="row">
+                <div class="col-md-6">
+                    <!--statistics start-->
+                    <div class="row state-overview">
+                        <div class="col-md-6 col-xs-12 col-sm-6">
+                            <div class="panel purple">
+                                <div class="symbol">
+                                    <i class="fa fa-users"></i>
+                                </div>
+                                <div class="state-value">
+                                    <div class="value">[[${userNum}]]</div>
+                                    <div class="title">用户总数</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-xs-12 col-sm-6">
+                            <div class="panel red">
+                                <div class="symbol">
+                                    <i class="fa fa-star"></i>
+                                </div>
+                                <div class="state-value">
+                                    <div class="value">[[${topicNum}]]</div>
+                                    <div class="title">话题总数</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row state-overview">
+                        <div class="col-md-6 col-xs-12 col-sm-6">
+                            <div class="panel blue">
+                                <div class="symbol">
+                                    <i class="fa fa-book"></i>
+                                </div>
+                                <div class="state-value">
+                                    <div class="value">[[${infoNum}]]</div>
+                                    <div class="title">文章总数</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-xs-12 col-sm-6">
+                            <div class="panel green">
+                                <div class="symbol">
+                                    <i class="fa fa-video-camera"></i>
+                                </div>
+                                <div class="state-value">
+                                    <div class="value">[[${videoNum}]]</div>
+                                    <div class="title">视频总数 </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--statistics end-->
+                </div>
+                <div class="col-md-6">
+                    <!--more statistics box start-->
+                    <div class="panel deep-purple-box">
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-7 col-sm-7 col-xs-7">
+                                    <div class="revenue-graph col-md-offset-3">
+                                        <h4>&nbsp;</h4>
+                                        <h2> <i class="fa fa-frown-o"></i>&nbsp; [[${userNot}]]</h2>
+                                        <h2> <i class="fa fa-star-half-empty"></i>&nbsp;  [[${topicNot}]]</h2>
+                                        <h2> <i class="fa fa-info-circle"></i>&nbsp;  [[${infoNot}]]</h2>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-5 col-sm-5 col-xs-5">
+                                    <ul class="bar-legend">
+                                        <li><span style="font-size: 25px"><i class="fa fa-frown-o"></i></span><h4>受限用户</h4></li>
+                                        <li>&nbsp;</li>
+                                        <li><span style="font-size: 25px"><i class="fa  fa-star-half-empty"></i></span><h4>待审核话题</h4></li>
+                                        <li>&nbsp;</li>
+                                        <li><span style="font-size: 25px"><i class="fa fa-info-circle"></i></span><h4>待审核文章</h4></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--more statistics box end-->
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="panel">
+                        <div class="panel-body">
+                            <div class="calendar-block ">
+                                <div class="cal1">
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="panel blue-box twt-info">
+                        <div class="panel-body">
+                            <h3>繁星后台管理系统</h3>
+                            <p>每个人都是一颗平凡的星星，构成浩瀚的宇宙</p>
+                            <div class="panel">
+                                <div class="panel-body">
+                                    <p></p>
+                                    <div class="media usr-info">
+                                        <a class="pull-left">
+                                            <img class="thumb" th:src="${session.user.photo}" alt=""/>
+                                        </a>
+                                        <div class="media-body">
+                                            <h4 class="media-heading">[[${session.user.uname}]]</h4>
+                                            <span>[[${session.user.utype}]] <p></p> <p>美好的一天开始了</p></span>
+                                        </div>
+                                    </div>
+                                </div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--body end-->
+
+        <!--footer section start-->
+        <footer>
+            <div th:replace="admin_common :: #footer"></div>
+        </footer>
+        <!--footer section end-->
+
+
+    </div>
+    <!--主要内容结束-->
+</section>
+
+<!-- 最后把js文件的页面加载速度 -->
+<div th:replace="admin_common :: commomScript"></div>
+
+<!--饼形图-->
+<script th:src="@{/js/easypiechart/jquery.easypiechart.js}"></script>
+<script th:src="@{/js/easypiechart/easypiechart-init.js}"></script>
+
+<!--莫里斯图表-->
+<script th:src="@{/js/morris-chart/morris.js}"></script>
+<script th:src="@{/js/morris-chart/raphael-min.js}"></script>
+
+<!--日历-->
+<script th:src="@{/js/calendar/clndr.js}"></script>
+<script th:src="@{/js/calendar/evnt.calendar.init.js}"></script>
+<script th:src="@{/js/calendar/moment-2.2.1.js}"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js"></script>
+
+
+
+<!--仪表板的图表-->
+<script th:src="@{/js/dashboard-chart-init.js}"></script>
+
+
+</body>
+</html>

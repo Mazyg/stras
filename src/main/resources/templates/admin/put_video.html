@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="ThemeBucket">
+  <link rel="shortcut icon" href="#" type="image/png">
+
+  <title>视频推送</title>
+    <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/video-js.min.css}">
+    <script th:src="@{/js/video.min.js}"></script>
+
+    <div th:replace="admin_common :: commomheader"></div>
+    <script type="text/javascript">
+        function selectFile(){
+            $("#photo").trigger("click");
+        }
+        function selectFileV(){
+            $("#video").trigger("click");
+        }
+        function getImage() {
+            var photo=document.querySelector("#photo");
+            var file=photo.files[0];
+            var type = $("#info").val();
+            var formData=new FormData();
+            formData.append("img",file);
+            formData.append("type",type);
+            var xhr=new XMLHttpRequest();
+            xhr.open("post","http://81.68.234.98:5598/upload/img")
+            xhr.onload=function (ev) {
+                var json;
+                if(xhr.status!==200){
+                    failFun('HTTP Error:'+xhr.status);
+                    return
+                }
+                json=JSON.parse(this.responseText);
+                if(!json||typeof json.location !='string'){
+                    failFun('Invalid JSON:'+xhr.responseText);
+                    return;
+                }else{
+                    console.log(json.location);
+                    $("#url").val(json.location) ;
+                    $("#src").attr("src",json.location);
+                }
+
+
+            };
+            xhr.send(formData);
+        }
+        function getvideo() {
+            var photo=document.querySelector("#video");
+            console.log(photo);
+            var file=photo.files[0];
+            var formData=new FormData();
+            formData.append("movie",file);
+            var xhr=new XMLHttpRequest();
+            xhr.open("post","http://81.68.234.98:5598/upload/movie")
+            xhr.onload=function (ev) {
+                var json;
+                if(xhr.status!==200){
+                    failFun('HTTP Error:'+xhr.status);
+                    return
+                }
+                json=JSON.parse(this.responseText);
+                if(!json||typeof json.location !='string'){
+                    failFun('Invalid JSON:'+xhr.responseText);
+                    return;
+                }else{
+                    console.log(json.location);
+                    $("#urlV").val(json.location) ;
+                    $("#vi").attr("src",json.location);
+                    document.querySelector('video').load();
+                }
+
+            };
+            xhr.send(formData);
+        }
+        function addVideo(){
+            $.ajax({
+                type:"POST",
+                url:"/admin/addVideo",
+                data:$('#fromVideo').serialize(),
+                success:function (msg) {
+                    if(msg === "success"){
+                        alert("操作成功！")
+                    }else{
+                        alert("修改出错！")
+                    }
+                    window.location.href="/admin/putVideo";
+                },
+                error:function () {
+                    alert("出错了！")
+                }
+            });
+        }
+    </script>
+    <style>
+        .div-highe{
+            height: 70px;
+        }
+        .imgs{
+            width: 150px;
+            height: 150px;
+        }
+        .div-highe2{
+            height: 40px;
+        }
+    </style>
+</head>
+
+<body class="sticky-header">
+
+<section>
+    <!-- left side start-->
+    <div th:replace="admin_common :: #leftmune(url='putVideo')"></div>
+    <!-- left side end-->
+    
+    <!-- main content start-->
+    <div class="main-content" >
+
+        <!-- header section start-->
+        <div th:replace="admin_common :: #headermune"></div>
+        <!-- header section end-->
+
+        <!-- page heading start-->
+        <div class="page-heading">
+        </div>
+        <!-- page heading end-->
+        <!--body wrapper start-->
+        <div class="wrapper">
+            <div class="row">
+                <!--视频推送-->
+                <div class="col-lg-6">
+                    <section class="panel">
+                        <header class="panel-heading">
+                            Video
+                        </header>
+                        <div class="panel-body">
+                            <form role="form" id="fromVideo">
+                                <div class="form-group">
+                                    <label for="exampleInputPassword1">视频标题</label>
+                                    <input  class="form-control" id="exampleInputPassword1" name="Vtitle" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputPassword1">信息类型</label>
+                                    <input  class="form-control" id="info" value="视频" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label>上传封面</label>
+                                    <div class="input-group col-xs-12">
+                                        <div class="col-xs-10">
+                                            <input type="text" class="form-control file-upload-info" readonly placeholder="上传封面" id="url" name="Vphoto" >
+
+                                            <input type="file" id="photo" style="display:none" multiple="multiple" onchange="getImage()"/>
+                                        </div>
+                                        <div class="col-xs-2">
+                                            <button class="file-upload-browse btn btn-primary" type="button" onclick="selectFile()">上传</button></div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>上传视频</label>
+                                    <div class="input-group col-xs-12">
+                                        <div class="col-xs-10">
+                                            <input type="text" class="form-control file-upload-info" readonly placeholder="上传视频(mp4格式)" id="urlV" name="video" >
+
+                                            <input type="file" id="video" style="display:none" multiple="multiple" onchange="getvideo()"/>
+                                        </div>
+                                        <div class="col-xs-2">
+                                            <button class="file-upload-browse btn btn-primary" type="button" onclick="selectFileV()">上传</button></div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="content">话题简介</label>
+                                    <textarea  id="content" name="Vintroduce"  class="col-10 form-control"  style=" height:120px" ></textarea>
+                                </div>
+                                <button type="button" class="btn btn-success" onclick="addVideo()">提交</button>
+                                <button type="reset" class="btn btn-danger">重置</button>
+                            </form>
+
+                        </div>
+                    </section>
+                </div>
+                 <!--图片，视频预览-->
+                <div class="col-lg-6">
+                    <section class="panel">
+                        <header class="panel-heading">
+                          封面预览
+                        </header>
+                        <div class="panel-body">
+                            <label  class="col-sm-3  control-label"></label>
+                            <div class="col-sm-7 col-sm-offset-2">
+                                 <span>
+                               <img class="imgs" id="src" src="/images/cover.jpg"  alt="封面" />
+                                 </span>
+                            </div>
+                        </div>
+                    </section>
+                    <section class="panel">
+                        <header class="panel-heading">
+                            视频预览
+                        </header>
+                        <div class="panel-body">
+                            <div>
+                            <video id="my-video" class="video-js vjs-default-skin video" controls preload="none" width="580" height="264"
+                                   poster="http://81.68.234.98:5598/file/img/14/picture-2ab863cc-53a3-4e32-b8e3-0534ddf199ed.jpeg"
+                                   data-setup="{}">
+                                <source id="vi" src="http://81.68.234.98:5598/file/movie/movie-4a8f625a-757c-4d9f-a446-141806f76cbe.mp4" type='video/mp4' />
+                                <source src="" type="video/flv">
+                                <track kind="captions" src="demo.captions.vtt" srclang="en" label="English"></track>
+                                <track kind="subtitles" src="demo.captions.vtt" srclang="en" label="English"></track>
+                            </video>
+                            </div>
+                        </div>
+                    </section>
+
+                </div>
+            </div>
+        </div>
+    </div>
+        <!--body wrapper end-->
+
+        <!--footer section start-->
+        <footer>
+            <div th:replace="admin_common :: #footer"></div>
+        </footer>
+        <!--footer section end-->
+    <!-- main content end-->
+</section>
+
+<!-- Placed js at the end of the document so the pages load faster -->
+<div th:replace="admin_common :: commomScript"></div>
+</body>
+<!--<script type="text/javascript">
+    //设置中文
+    var myPlayer = videojs('my-video');
+    videojs("my-video").ready(function(){
+        var myPlayer = this;
+        myPlayer.play();
+    });
+</script>-->
+</html>

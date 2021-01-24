@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="ThemeBucket">
+    <link rel="shortcut icon" href="#" type="image/png">
+    <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+
+    <title>注册</title>
+
+    <link href="css/style.css" rel="stylesheet">
+    <link href="css/style-responsive.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="js/html5shiv.js"></script>
+    <script src="js/respond.min.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+        /*电话号码注册*/
+        function istel(){
+            var tel = $("#phone").val();
+            var $reg=/^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|9[89])\d{8}$/;
+            if(!$reg.test(tel)){
+                alert("电话号码格式错误！")
+                $(" #phone").val("")
+                return false;
+            }
+            $.ajax({
+                type:"POST",
+                url:"/phoneTest",
+                data:"phone="+tel,
+                success:function (msg) {
+                    if(msg==="false"){
+                        alert("该号码已注册")
+                        $(" #phone").val("")
+                    }
+                },
+                error:function (msg) {
+                    alert("出错了")
+                }
+            });
+        }
+        /*判断密码是否相等*/
+        function isEq() {
+            var p1= $("#password1").val();
+            var p2 = $("#password2").val();
+            if(p1 != p2){
+                alert("两次密码不一致，请重新输入！")
+                regster.password1.value="";
+                regster.password2.value="";
+                return false;
+            }
+        }
+
+        function register(){
+            $.ajax({
+                type:"POST",
+                url:"/registerUser",
+                data:$('#regster').serialize(),
+                success:function (msg) {
+                    console.log(msg);
+                    if(msg === "success"){
+                        alert("注册成功，去登录吧！")
+                    }else{
+                        alert("信息有误！")
+                    }
+                },
+                error:function (msg) {
+                    alert("出错了！")
+                }
+            });
+        }
+    </script>
+
+</head>
+
+<body class="login-body">
+
+<div class="container">
+
+    <form class="form-signin" id="regster">
+        <div class="form-signin-heading text-center">
+            <h1 class="sign-title">新用户注册</h1>
+            <img src="images/login-logo.png" alt=""/>
+        </div>
+        <div class="login-wrap">
+            <p>输入您的个人信息</p>
+            <input type="text" autofocus="" placeholder="用户名" name="uname" class="form-control" required>
+            <input type="text" id="phone" autofocus="" placeholder="电话号码" name="phone" class="form-control" onblur="istel()" required>
+            <div class="radios">
+                <label for="radio-01" class="label_radio col-lg-6 col-sm-6">
+                    <input type="radio" checked="" value="男" id="radio-01" name="sex"> 男
+                </label>
+                <label for="radio-02" class="label_radio col-lg-6 col-sm-6">
+                    <input type="radio" value="女" id="radio-02" name="sex"> 女
+                </label>
+            </div>
+
+            <p>输入您的帐户密码</p>
+            <input type="password" id="password1" name="password" placeholder="密码" class="form-control" required>
+            <input type="password" id="password2" placeholder="确认密码" class="form-control" onblur="isEq()" required>
+            <!--<label class="checkbox">
+                <input type="checkbox" value="agree this condition" required> 我同意服务条款和隐私政策
+            </label>-->
+            <button type="submit" class="btn btn-lg btn-login btn-block" onclick="register()">
+                <i class="fa fa-check"></i>
+            </button>
+
+            <div class="registration">
+                已经注册。
+                <a th:href="@{/}" class="">
+                    去登陆
+                </a>
+            </div>
+
+        </div>
+
+    </form>
+
+</div>
+
+
+
+<!-- Placed js at the end of the document so the pages load faster -->
+
+<!-- Placed js at the end of the document so the pages load faster -->
+<script src="js/jquery-1.10.2.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/modernizr.min.js"></script>
+
+</body>
+</html>

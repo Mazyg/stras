@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="ThemeBucket">
+  <link rel="shortcut icon" href="#" type="image/png">
+
+  <title>话题详情</title>
+
+  <!--dynamic table-->
+  <link th:href="@{/js/advanced-datatable/css/demo_page.css}" rel="stylesheet" />
+  <link th:href="@{/js/advanced-datatable/css/demo_table.css}" rel="stylesheet" />
+  <link rel="stylesheet" th:href="@{/js/data-tables/DT_bootstrap.css}" />
+    <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+
+    <div th:replace="admin_common :: commomheader"></div>
+    <script type="text/javascript">
+        /*审核通过*/
+        function updateTopic() {
+            var $tid = $("#tid").val();
+            $.ajax({
+                type:"POST",
+                url:"/admin/updateTopic",
+                data:"tid="+$tid,
+                success:function (msg) {
+                    if(msg === "success"){
+                        alert("审核通过！")
+                    }else{
+                        alert("已是审核过了！")
+                    }
+                    window.location.href="/admin/topicDetail2?id="+[[${topicDetail.tid}]]+"&pn="+[[${pns}]];
+                },
+                error:function () {
+                    alert("出错了！")
+                }
+            });
+        }
+        /*审核不通过*/
+        function updateTopic2() {
+            var $tid = $("#tid").val();
+            $.ajax({
+                type:"POST",
+                url:"/admin/updateTopic2",
+                data:"tid="+$tid,
+                success:function (msg) {
+                    if(msg === "success"){
+                        alert("已拒绝该话题！")
+                    }else{
+                        alert("已是审核过了！")
+                    }
+                    window.location.href="/admin/topicDetail2?id="+[[${topicDetail.tid}]]+"&pn="+[[${pns}]];
+                },
+                error:function () {
+                    alert("出错了！")
+                }
+            });
+        }
+    </script>
+
+
+</head>
+
+<body class="sticky-header">
+
+<section>
+    <!-- left side start-->
+    <div th:replace="admin_common :: #leftmune(url='notTopic')"></div>
+    <!-- left side end-->
+    
+    <!-- main content start-->
+    <div class="main-content" >
+
+        <!-- header section start-->
+        <div th:replace="admin_common :: #headermune"></div>
+        <!-- header section end-->
+
+        <!-- page heading start-->
+        <div class="page-heading">
+            <h3>
+                话题详情
+            </h3>
+        </div>
+        <!-- page heading end-->
+        <!--body wrapper start-->
+        <div class="wrapper">
+            <div class="row">
+                <!--话题详情-->
+                <div class="col-lg-6">
+                    <section class="panel">
+                        <header class="panel-heading">
+                            话题详情
+                        </header>
+                        <div class="panel-body">
+                            <form role="form" id="fromTopic">
+                                <div class="form-group">
+                                    <label for="tid">话题ID</label>
+                                    <input type="text" class="form-control"  id="tid" name="tid" th:value="${topicDetail.tid}" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputPassword1">话题标题</label>
+                                    <input  class="form-control" id="exampleInputPassword1" name="Ttitle" th:value="${topicDetail.ttitle}" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="type">话题类型</label>
+                                    <input  class="form-control" id="type" name="Ttype" th:value="${topicDetail.ttype}" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="status1">话题状态</label>
+                                    <input  class="form-control" id="status1"  th:value="${topicDetail.tstatus}+${topicDetail.tresult}" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="content">话题简介</label>
+                                    <textarea  id="content" name="content"  class="col-10 form-control"  style=" height:120px" readonly th:text="${topicDetail.content}"></textarea>
+                                </div>
+                                <button type="button" class="btn btn-success" onclick="updateTopic()">通过审核</button>
+                                <button type="button" class="btn btn-danger" onclick="updateTopic2()">不通过</button>
+                                <a type="button" class="btn btn-primary" th:href="@{/admin/notTopic(pn=${pns})}">返回上一页</a>
+                            </form>
+
+                        </div>
+                    </section>
+                </div>
+                <!--话题发起人-->
+                <div class="col-lg-6">
+                    <section class="panel">
+                        <header class="panel-heading">
+                           话题发起人
+                        </header>
+                        <div class="panel-body">
+                            <form class="form-horizontal" role="form">
+                                <div class="form-group">
+                                    <label for="inputEmail1" class="col-lg-2 col-sm-2 control-label">发起人</label>
+                                    <div class="col-lg-10">
+                                        <input type="text" class="form-control" id="inputEmail1" th:value="${topicUser.uname}" readonly>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputPassword1" class="col-lg-2 col-sm-2 control-label">账号</label>
+                                    <div class="col-lg-10">
+                                        <input  class="form-control" id="inputPassword1" th:value="${topicUser.phone}" readonly>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="type1" class="col-lg-2 col-sm-2 control-label">用户类型</label>
+                                    <div class="col-lg-10">
+                                        <input  class="form-control" id="type1" th:value="${topicUser.utype}" readonly>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="status" class="col-lg-2 col-sm-2 control-label">账号状态</label>
+                                    <div class="col-lg-6">
+                                        <input  class="form-control" id="status" th:value="${topicUser.ustatus}" readonly>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </section>
+
+                </div>
+            </div>
+        </div>
+    </div>
+        <!--body wrapper end-->
+
+        <!--footer section start-->
+        <footer>
+            <div th:replace="admin_common :: #footer"></div>
+        </footer>
+        <!--footer section end-->
+    <!-- main content end-->
+</section>
+
+<!-- Placed js at the end of the document so the pages load faster -->
+<div th:replace="admin_common :: commomScript"></div>
+
+<!--dynamic table-->
+<script type="text/javascript" language="javascript" th:src="@{/js/advanced-datatable/js/jquery.dataTables.js}"></script>
+<script type="text/javascript" th:src="@{/js/data-tables/DT_bootstrap.js}"></script>
+<!--dynamic table initialization -->
+<!--<script src="js/dynamic_table_init.js"></script>-->
+</body>
+</html>

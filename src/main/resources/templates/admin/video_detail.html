@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="ThemeBucket">
+  <link rel="shortcut icon" href="#" type="image/png">
+
+  <title>视频推送</title>
+    <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/video-js.min.css}">
+    <script th:src="@{/js/video.min.js}"></script>
+
+    <div th:replace="admin_common :: commomheader"></div>
+    <style>
+        .div-highe{
+            height: 70px;
+        }
+        .imgs{
+            width: 150px;
+            height: 150px;
+        }
+        .div-highe2{
+            height: 40px;
+        }
+    </style>
+</head>
+
+<body class="sticky-header">
+
+<section>
+    <!-- left side start-->
+    <div th:replace="admin_common :: #leftmune(url='allInfo')"></div>
+    <!-- left side end-->
+    
+    <!-- main content start-->
+    <div class="main-content" >
+
+        <!-- header section start-->
+        <div th:replace="admin_common :: #headermune"></div>
+        <!-- header section end-->
+
+        <!-- page heading start-->
+        <div class="page-heading">
+        </div>
+        <!-- page heading end-->
+        <!--body wrapper start-->
+        <div class="wrapper">
+            <div class="row">
+                <!--视频推送-->
+                <div class="col-lg-6">
+                    <section class="panel">
+                        <header class="panel-heading">
+                            Video
+                        </header>
+                        <div class="panel-body">
+                            <form role="form" id="fromVideo">
+                                <div class="form-group">
+                                    <label for="exampleInputPassword1">视频标题</label>
+                                    <input  class="form-control" id="exampleInputPassword1" name="Vtitle" th:value="${video.vtitle}" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="info">信息类型</label>
+                                    <input  class="form-control" id="info" value="视频" readonly>
+                                </div>
+                                <div class="col-sm-12">
+                                <div class="form-group col-sm-6">
+                                    <label>浏览量</label>
+                                    <div class="input-group col-sm-12">
+                                            <input type="text" class="form-control " readonly  th:value="${video.vview}" >
+                                    </div>
+                                </div>
+                                <div class="form-group col-sm-6">
+                                    <label>点赞数</label>
+                                    <div class="input-group col-sm-12">
+                                            <input type="text" class="form-control " readonly  th:value="${video.vnice}">
+                                    </div>
+                                </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="date">发布时间</label>
+                                    <input  class="form-control" id="date" th:value="${video.vdate}" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="content">话题简介</label>
+                                    <textarea  id="content" name="Vintroduce"  class="col-10 form-control"  style=" height:120px" >[[${video.vintroduce}]]</textarea>
+                                </div>
+                                <a type="button" class="btn btn-success" th:href="@{/admin/allInfo(pnV=${pnV})}">返回上一页</a>
+                            </form>
+
+                        </div>
+                    </section>
+                </div>
+                 <!--图片，视频预览-->
+                <div class="col-lg-6">
+                    <section class="panel">
+                        <header class="panel-heading">
+                          封面预览
+                        </header>
+                        <div class="panel-body">
+                            <label  class="col-sm-3  control-label"></label>
+                            <div class="col-sm-7 col-sm-offset-2">
+                                 <span>
+                               <img class="imgs" id="src" th:src="${video.vphoto}"  alt="封面" />
+                                 </span>
+                            </div>
+                        </div>
+                    </section>
+                    <section class="panel">
+                        <header class="panel-heading">
+                            视频预览
+                        </header>
+                        <div class="panel-body">
+                            <div>
+                            <video id="my-video" class="video-js vjs-default-skin video" controls preload="none" width="580" height="264"
+                                   poster="http://81.68.234.98:5598/file/img/14/picture-2ab863cc-53a3-4e32-b8e3-0534ddf199ed.jpeg"
+                                   data-setup="{}">
+                                <source id="vi" th:src="${video.video}" type='video/mp4' />
+                                <source src="" type="video/flv">
+                                <track kind="captions" src="demo.captions.vtt" srclang="en" label="English"></track>
+                                <track kind="subtitles" src="demo.captions.vtt" srclang="en" label="English"></track>
+                            </video>
+                            </div>
+                        </div>
+                    </section>
+
+                </div>
+            </div>
+        </div>
+    </div>
+        <!--body wrapper end-->
+
+        <!--footer section start-->
+        <footer>
+            <div th:replace="admin_common :: #footer"></div>
+        </footer>
+        <!--footer section end-->
+    <!-- main content end-->
+</section>
+
+<!-- Placed js at the end of the document so the pages load faster -->
+<div th:replace="admin_common :: commomScript"></div>
+</body>
+<!--<script type="text/javascript">
+    //自动播放
+    var myPlayer = videojs('my-video');
+    videojs("my-video").ready(function(){
+        var myPlayer = this;
+        myPlayer.play();
+    });
+</script>-->
+</html>
