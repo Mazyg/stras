@@ -7,6 +7,7 @@ import com.jxnu.stras.service.VideoService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @Service("VideoService")
 public class VideoServiceImpl extends ServiceImpl<VideoMapper,Video> implements VideoService {
@@ -21,5 +22,10 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper,Video> implements 
     @Override
     public boolean deleteVideo(Integer vid) {
         return videoMapper.deleteVideo(vid);
+    }
+
+    @Override
+    public List<Video> findVideo() {
+        return videoMapper.findVideo();
     }
 }

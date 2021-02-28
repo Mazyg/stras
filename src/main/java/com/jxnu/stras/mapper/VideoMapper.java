@@ -6,6 +6,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
+import java.util.List;
+
 @Mapper
 public interface VideoMapper extends BaseMapper<Video> {
 
@@ -14,4 +16,11 @@ public interface VideoMapper extends BaseMapper<Video> {
 
     @Update("update video set Vstatus=1 where vid=#{vid}")
     public boolean deleteVideo(Integer vid);
+
+    /*查询最新的四条视频信息*/
+    @Select("SELECT vid,vtitle,vintroduce, date_format(vdate ,'%Y-%m-%d' ) vdate,vphoto,video,vnice FROM `video`\n" +
+            "where Vstatus = 0\n" +
+            "ORDER  BY Vdate desc\n" +
+            "limit 0 ,4")
+    public List<Video>  findVideo();
 }

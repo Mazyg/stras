@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>用户个人中心-繁星思政网</title>
+    <div th:replace="personal_common :: commonheadperson"></div>
+</head>
+<body>
+<header >
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <img th:src="@{/img/title.ico}">
+            </div><br>
+            <div>
+                <ul class="nav navbar-nav">
+                    <li><a th:href="@{/user/mainInfo}">首页</a>
+                    </li>
+                    <li><a th:href="@{/user/allE}">全球战疫</a>
+                    </li>
+                    <li><a th:href="@{/user/hotInfo}">热点资讯</a>
+                    </li>
+                    <li><a href="">爱我中华</a>
+                    </li>
+                    <li><a th:href="@{/user/manModels}">榜样力量</a>
+                    </li>
+                    <li><a href="">话题</a>
+                    </li>
+                    <li><a href="" >书籍</a></li>
+                    <li><a href="">电影</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+<!-----------个人展示部分---------------------------------------------->
+<div th:replace="personal_common :: personphoto"></div>
+<!--------------------------主体部分---------------------------------->
+<div class="col-md-12" >
+    <!--侧边导航------------------->
+    <div th:replace="personal_common :: leftperson(urlP='personInfo')"></div>
+    <!--主体部分---------------------------->
+    <div class="col-md-7  db"><br>
+        <form id="form2" class="form-horizontal" role="form">
+            <div class="form-group">
+                <label for="disabledTextInput" class="col-sm-2 control-label">账号</label>
+                <div class="col-sm-8">
+                    <span>
+                        <input type="text" id="disabledTextInput" class="form-control" name="phone" th:value="${session.user.phone}"  readonly = "readonly">
+                    </span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="disabledTextInput" class="col-sm-2 control-label">状态</label>
+                <div class="col-sm-8">
+                    <input type="text"  class="form-control" name="ustatus" th:value="${session.user.ustatus}"  readonly = "readonly">
+                </div>
+            </div>
+            <div class="form-group">
+                <label  class="col-sm-2 control-label">昵称</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" id="uname" name="uname" placeholder="请输入名字" th:value="${session.user.uname}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label  class="col-sm-2 control-label">密码</label>
+                <div class="col-sm-8">
+                    <input type="password" class="form-control" name="password" placeholder="请输入密码" th:value="${session.user.password}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label  class="col-sm-2 control-label">性别</label>
+                <input type="hidden" id ="selectRefundReason"  th:value="${session.user.sex}"/>
+                <div class="col-sm-8">
+                    <select class="form-control" name="sex" th:value="${session.user.sex}">
+                        <option value="男" th:selected="${session.user.sex=='男'}">男</option>
+                        <option value="女" th:selected="${session.user.sex=='女'}">女</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label  class="col-sm-2 control-label">用户类型</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" name="utype" th:value="${session.user.utype}" readonly>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-8">
+                    <button type="button" class="btn btn-primary btn-lg btn-block" onclick="updateUser()">修改</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<!-------------------------------------底部------------------------>
+<div th:replace="personal_common :: downpersonal"></div>
+</body>
+</html>

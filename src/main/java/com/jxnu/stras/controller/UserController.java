@@ -76,18 +76,14 @@ public class UserController {
      * 修改用户信息
      * @param user
      * @param request
-     * @param model
      * @return
      */
     @ResponseBody
     @PostMapping("/admin/updateUser")
-    public String updateUser(User user, HttpServletRequest request,Model model){
-        System.out.println("Mifxunh!"+user.getPhone());
+    public String updateUser(User user, HttpServletRequest request){
         boolean isUser = userService.updateUser(user);
-        System.out.println("isUser"+isUser);
         if(isUser==true){
             User userUpadte = userService.getUserByPhone(user.getPhone());
-            System.out.println("user"+userUpadte);
             HttpSession session = request.getSession(true);
             session.setAttribute("user", userUpadte);
            return "success";

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="commomheader">
+    <link rel="shortcut icon" th:href="@{/img/title.ico}" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link th:href="@{/css/base_news.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{/font/font.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{/css/inner.css}" rel="stylesheet" type="text/css">
+    <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script th:src="@{/js/user/jquery-1.8.3.min.js}" type="text/javascript"></script>
+    <link rel="stylesheet" th:href="@{/css/slick.css}">
+    <script th:src="@{/js/user/slick.min.js}" type="text/javascript"></script>
+    <script th:src="@{/js/user/regexcut.js}" type="text/javascript"></script>
+    <link rel="stylesheet" th:href="@{/css/owl.carousel.css}">
+    <script th:src="@{/js/user/owl.carousel.min.js}" type="text/javascript"></script>
+    <script th:src="@{/js/user/comm.js}" type="text/javascript"></script>
+    <script type="text/javascript" th:src="@{/js/user/jump.js}"></script>
+    <script type="text/javascript" th:src="@{/js/user/searchsub.js}"></script>
+    <link th:href="@{/css/search-suggest.css}" rel="stylesheet" type="text/css">
+    <script type="text/javascript" th:src="@{/js/user/search-suggest.js}"></script>
+    <script type="text/javascript" th:src="@{/js/user/demo.js}"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <style type="text/css">
+        .imgs1{
+            width: 100px;
+            height: 80px;
+        }
+    </style>
+
+</head>
+<body>
+<!--导航栏-->
+<header id="head" class="clearfix" >
+    <section class="mainWrap">
+        <div class="topwraper relative clearfix">
+            <div class="search">
+                <input type="text" id="search" name="baidu_line" autocomplete="off"/>
+                <a onclick="searchSub(${numberPerPage})"><i>搜索</i></a>
+            </div>
+        </div>
+    </section>
+    <nav class="navwrap yahei">
+        <section class="mainWrap">
+            <ul id="nav">
+                <li><a th:href="@{/user/mainInfo}">首页</a>
+                </li>
+                <li><a th:href="@{/user/allE}">全球战疫</a>
+                </li>
+                <li><a th:href="@{/user/hotInfo}">热点时事</a>
+                </li>
+                <li><a href="">爱我中华</a>
+                </li>
+                <li><a th:href="@{/user/manModels}">榜样力量</a>
+                </li>
+                <li><a href="">话题</a>
+                </li>
+                <li><a href="" >书籍</a></li>
+                <li><a href="">电影</a></li>
+                <li th:if="${session.user != null}"><a th:href="@{/user/personalInfo}">个人中心</a>
+                    <ul class="last">
+                        <li th:if="${session.user.utype=='admin'}"><a th:href="@{/admin/index.html}">管理界面</a></li>
+                        <li><a th:href="@{/loginOut}">退出登录</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </section>
+    </nav>
+</header>
+</body>
+</html>

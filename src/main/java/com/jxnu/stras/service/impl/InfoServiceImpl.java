@@ -6,6 +6,7 @@ import com.jxnu.stras.mapper.InfoMapper;
 import com.jxnu.stras.service.InfoService;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
+import java.util.List;
 
 @Service("InfoService")
 public class InfoServiceImpl extends ServiceImpl<InfoMapper,Info> implements InfoService {
@@ -51,5 +52,32 @@ public class InfoServiceImpl extends ServiceImpl<InfoMapper,Info> implements Inf
     @Override
     public boolean deleteInfo(Integer infoId) {
         return infoMapper.deleteInfo(infoId);
+    }
+
+    /**
+     * 按时间查询最新的5条轮播图
+     * @return
+     */
+    @Override
+    public List<Info> mainRotate() {
+        return infoMapper.mainRotate();
+    }
+
+    /*查询侧边信息*/
+    @Override
+    public List<Info> findInfoByHot() {
+        return infoMapper.findInfoByHot();
+    }
+
+    /**
+     * 根据文章类别查找
+     * @param info_type 类别
+     * @param start 开始位置
+     * @param length 查询条数
+     * @return
+     */
+    @Override
+    public List<Info> findInfoBytype(String info_type, int start, int length) {
+        return infoMapper.findInfoBytype(info_type,start,length);
     }
 }

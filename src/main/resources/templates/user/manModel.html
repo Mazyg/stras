@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>榜样力量</title>
+    <div th:replace="info_common :: commomheader"></div>
+</head>
+<body>
+<!--导航栏-->
+<div th:replace="info_common :: #head"></div>
+
+
+<div class="content yahei subchannel">
+    <div class="mainWrap clearfix">
+        <!--主体部分--------------------->
+        <section class="colunm1">
+            <!--顶部大图------------------------->
+            <div class="biggallery">
+                <div class="biggallerywraper" th:each="infoTop:${manTop}">
+                    <ul class="biggallerylist clearfix">
+                        <li><a href="" target="_blank"><img th:src="${infoTop.photo}"></a></li>
+                    </ul>
+                    <div class="imgintro1">
+                        <b></b>
+                        <h3>
+                            <a href="" target="_blank"  id="title1-1" class="jiequ">[[${infoTop.title}]]</a>
+                        </h3>
+                        <p>[[${infoTop.introduce}]]</p>
+                    </div>
+                </div>
+            </div>
+            <!--文章列表部分------------------------------->
+            <ul class="picnewslist people">
+                <li class="clearfix" th:each="hotList:${manList.records}">
+                    <figure>
+                        <a class="picwraper" href="" target="_blank">
+                            <img th:src="${hotList.photo}">
+                        </a>
+                        <div class="contentwraper">
+                            <figcaption>
+                                <span class="tips">[[${hotList.infoType}]]</span>
+                                <a href="" target="_blank"  class="jiequ">
+                                    [[${hotList.title}]]
+                                </a>
+                            </figcaption>
+                            <p>[[${hotList.introduce}]]</p>
+                            <div class="thumb">
+                                <i class=" glyphicon glyphicon-time"></i>
+                                [[${hotList.date}]]
+                                <i class=" glyphicon glyphicon-eye-open"></i>[[${hotList.view}]]
+                                <font  >
+                                    <span  ></span>
+                                </font>
+
+                            </div>
+                        </div>
+                    </figure>
+                </li>
+            </ul>
+            <br>
+            <!--分页部分-->
+            <div class="pager">
+
+                <a th:href="@{/user/manModels(pn=${manList.current}-1)}" rel="external nofollow" ><<</a>
+                <!-- 页数列表 -->
+                <a  th:each="num:${#numbers.sequence(1,manList.pages)}"  th:href="@{/user/manModels(pn=${num})}" rel="external nofollow" class="currentPage">[[${num}]]</a>
+                <!-- 下一页 按钮 -->
+                <a th:href="@{/user/manModels(pn=${manList.current}+1)}" rel="external nofollow">
+                    >>
+                </a>
+
+            </div>
+        </section>
+        <!--侧边部分--------------------->
+        <section class="colunm2">
+            <section class="mod withborder">
+                <h2>
+                    <span class="iconwraper"><i class="thunews-play-circle glyphicon glyphicon-play-circle"></i></span>
+                    精彩视频
+                    <a href="#" style="font-size:12px; color:#666; margin-left:30px">
+                    </a>
+                </h2>
+                <table class="table newslist clearfix" >
+                    <tr th:each="videos:${videoList}" >
+                        <td><a href=""><img class="imgs1" th:src="${videos.vphoto}"></a></td>
+                        <td> <a href="" ><p style="float: left">[[${videos.vtitle}]]</p></a>
+                            <br><small style="float: right"><i class=" glyphicon glyphicon-time"></i>[[${videos.vdate}]]</small></td>
+                    </tr>
+                </table>
+            </section>
+            <section class="mod withborder">
+                <h2 class="red"><span class="iconwraper">
+            <i class="thunews-line-chart glyphicon glyphicon-fire"></i>
+            </span>
+                    近期热点
+                    <a href="#" style="font-size:12px; color:#666; margin-left:30px">
+                    </a>
+                </h2>
+                <ul class="newslist clearfix"  id="resText">
+                    <li th:each="hotS:${hot}"><a href="">[[${hotS.title}]]<small style="float: right">[[${hotS.date}]]</small></a></li>
+                </ul>
+            </section>
+        </section>
+    </div>
+</div>
+</body>
+</html>

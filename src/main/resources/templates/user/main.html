@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover">
+    <meta name="format-detection" content="telephone=no" />
+    <title>首页</title>
+    <link rel="shortcut icon" th:href="@{/img/title.ico}" />
+    <link rel="stylesheet" th:href="@{/css/slick.css}">
+    <link th:href="@{/css/index.css}" rel="stylesheet" type="text/css">
+    <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script th:src="@{/js/user/jquery-1.8.3.min.js}" type="text/javascript"></script>
+    <script th:src="@{/js/user/slick.min.js}"></script>
+    <script th:src="@{/js/user/comm.js?v=1}" type="text/javascript"></script>
+
+</head>
+
+<body>
+<!--导航栏及轮播大图------------------->
+<div class="header" id="header">
+    <div class="masklayer"></div>
+    <div class="smenu" id="smenu"><i class="icon-menu"></i></div>
+    <div class="navwrapper">
+        <div class="logowrapper">
+            <a href="#" class="logo"><img src="" alt=""></a>
+        </div>
+        <div class="nav">
+            <div class="mainnav clearfix">
+                <ul id="nav">
+                    <li><a th:href="@{/user/allE}">全球战疫</a>
+                    </li>
+                    <li><a th:href="@{/user/hotInfo}">热点时事</a>
+                    </li>
+                    <li><a href="">爱我中华</a>
+                    </li>
+                    <li><a th:href="@{/user/manModels}">榜样力量</a>
+                    </li>
+                    <li><a href="">话题</a>
+                    </li>
+                    <li><a href="">书籍</a></li>
+                    <li><a href="">电影</a></li>
+                        <li th:if="${session.user != null}"><a  th:href="@{/user/personalInfo}" >个人中心</a>
+                            <ul class="last">
+                                <li th:if="${session.user.utype=='admin'}"><a th:href="@{/admin/index.html}">管理员界面</a></li>
+                                <li><a th:href="@{/loginOut}">退出登录</a></li>
+                            </ul>
+                        </li>
+                </ul>
+            </div>
+            <div class="subnav clearfix" th:if="${session.user?.uname}">
+                <ul>
+                    <li><a th:text="${session.user.uname}"></a></li>
+                </ul>
+            </div>
+            <div class="subnav clearfix" th:if="${ session.user ==null}">
+                    <ul>
+                    <li><a th:href="@{/}">登录</a></li>
+                    <li class="en"><a th:href="@{/registration}">注册</a></li>
+                    </ul>
+            </div>
+            </div>
+        </div>
+    <div class="topimg">
+        <ul >
+                <li th:each="rotate:${mainRotate}" th:style="'background-image: url('+${rotate.photo}+')'">
+                    <a href="">
+                        <h3 th:text="${rotate.title}"></h3>
+                    </a>
+                </li>
+        </ul>
+    </div>
+</div>
+<script type="text/javascript">
+    $('.topimg ul').slick({
+        infinite: true,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        autoplay: true,
+        centerMode: false,
+        arrows:true,
+        fade:true,
+        dots:true,
+        speed:1000,
+        autoplaySpeed:6000,
+        prevArrow:"<div class='pre arrow'><i>&lt;</i></div>",
+        nextArrow:"<div class='next arrow'><i>&gt;</i></div>",
+        customPaging:function(slider, i) {
+            return '<button>0' + (i + 1) +"</button>";
+        },
+        responsive: [{
+            breakpoint: 1000,
+            settings: {
+                fade:false,
+                speed:300
+            }
+        }]
+    });
+</script>
+<!--导航栏及轮播大图结束------------------------------->
+<div class="content">
+    <!--榜样及热点时事------------------------------------------------->
+    <div class="section_1">
+        <div class="cbg"></div>
+        <div class="mainWrap">
+            <div class="news clearfix">
+                <ul>
+                        <li  class="fi" th:each="manModel:${manModel1}">
+                            <a href="" target="_blank">
+                                <img th:src="${manModel.photo}" alt="">
+                                <div class="txtwrapper">
+                                    <div class="time">
+                                        <i class="icon-clock"></i> [[${manModel.date}]]
+                                    </div>
+                                    <p style="font-size: 14px" ><b>[[${manModel.title}]]</b><br/>
+                                       [[${manModel.introduce}]]</p>
+                                </div>
+                            </a>
+                        </li>
+                        <li th:each="mandel:${manModel2}">
+                            <a href="" target="_blank">
+                                <img th:src="${mandel.photo}" alt="">
+                                <div class="txtwrapper">
+                                    <div class="time"><i class="icon-clock"></i>[[${mandel.date}]]
+                                    </div>
+                                    <p style="font-size: 14px"><b>[[${mandel.title}]]</b><br/>
+                                        [[${mandel.introduce}]]</p>
+                                </div>
+                            </a>
+                        </li>
+                </ul>
+            </div>
+            <div class="events">
+                <h2><b></b>热门时事<b></b></h2>
+                <ul class="clearfix">
+                        <li th:each="hot:${hotView}">
+                            <a href="" target="_blank">
+                                <div class="time">
+                                    <span></span>[[${hot.date}]]
+                                </div>
+                                <div class="txtwrapper">
+                                    <h3 th:text="${hot.title}"></h3>
+                                    <p th:text="${hot.introduce}"></p>
+                                </div>
+                            </a>
+                        </li>
+                </ul>
+            </div>
+            <a href="" target="_blank" class="newsmore">更多热点时事</a>
+        </div>
+    </div>
+    <!--爱我中华轮播图------------------------------------------------------------->
+    <div class="section_2">
+        <div class="mainWrap relative">
+            <h2><span>爱我中华</span><a href="" class="more">更多 ></a></h2>
+            <div class="focus">
+                <div class="bigpic">
+                    <ul>
+                            <li th:each="chineseView:${chinese}">
+                                <a href="" target="_blank">
+                                    <img th:src="${chineseView.photo}"alt=""><div class="txtwrapper">
+                                    <div class="cata">[[${chineseView.infoType}]]</div>
+                                    <h3 th:text="${chineseView.title}"></h3>
+                                    <p> [[${chineseView.introduce}]]</p>
+                                </div>
+                                </a>
+                            </li>
+                    </ul>
+                </div>
+                <div class="smallpic">
+                    <ul>
+                        <li th:each="chineseView:${chinese}">
+                            <a href="" target="_blank">
+                                <img th:src="${chineseView.photo}"alt=""><div class="txtwrapper">
+                                <div class="cata">[[${chineseView.infoType}]]</div>
+                                <h3 th:text="${chineseView.title}"></h3>
+                                <p> [[${chineseView.introduce}]]</p>
+                            </div>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        $('.smallpic ul').slick({
+            infinite: true,
+            slidesToShow: 1,
+            slidesToScroll: 1,
+            autoplay: true,
+            centerMode: false,
+            arrows:false,
+            dots:false,
+            asNavFor:$('.bigpic ul')
+        });
+        $('.bigpic ul').slick({
+            infinite: true,
+            slidesToShow: 1,
+            slidesToScroll: 1,
+            autoplay: true,
+            centerMode: false,
+            arrows:false,
+            dots:true,
+            autoplaySpeed:4000,
+            // prevArrow:"&lt;div class='pre arrow'>&lt;i class='icon-angle-left'>&lt;/i>&lt;/div>",
+            // nextArrow:"&lt;div class='next arrow'>&lt;i class='icon-angle-right'>&lt;/i>&lt;/div>",
+            asNavFor:$('.smallpic ul')
+        });
+
+    </script>
+</div>
+
+<div class="footer">
+    <div class="mainWrap">
+        <div class="ulink clearfix">
+            <div class="plink">
+                <h2>常用链接</h2>
+                <ul class="plink_2 clearfix">
+                    <li><a href="https://www.xuexi.cn/" target="_blank">学习强国</a></li>
+                    <li><a href="http://agzy.youth.cn/" target="_blank">中国青年网</a></li>
+                    <li><a href="http://www.moe.gov.cn/" target="_blank">中国人民共和国教育部</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="copy">
+        <div class="mainWrap clearfix">
+            <div class="contact">
+                Tel:2-4-3-2002018　<br>Email:524864369@jxnu.edu.cn
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

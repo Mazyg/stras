@@ -105,7 +105,7 @@ public class LoginController {
     @GetMapping("/loginOut")
     public String loginOut(HttpServletRequest request){
         request.getSession().invalidate();
-        return "login";
+        return "user/mainInfo";
     }
 
     /**

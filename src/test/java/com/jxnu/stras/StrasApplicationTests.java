@@ -1,9 +1,11 @@
 package com.jxnu.stras;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.jxnu.stras.domin.Info;
 import com.jxnu.stras.domin.Topic;
 import com.jxnu.stras.domin.User;
 import com.jxnu.stras.mapper.UserMapper;
+import com.jxnu.stras.service.InfoService;
 import com.jxnu.stras.service.TopicService;
 import com.jxnu.stras.service.UserService;
 import org.junit.jupiter.api.Test;
@@ -22,6 +24,9 @@ class StrasApplicationTests {
 
     @Resource
     private TopicService topicService;
+
+    @Resource
+    private InfoService infoService;
 
     @Resource
     private UserMapper userMapper;
@@ -53,6 +58,12 @@ class StrasApplicationTests {
         System.out.println("topic"+topic);
         User user = userService.getUserByPhone(topic.getUphone());
         System.out.println("user"+user);
+    }
+
+    @Test
+    void findInfo(){
+        List<Info> model = infoService.findInfoBytype("新时代楷模",0,3);
+        System.out.println("bfj==="+model);
     }
 
 }

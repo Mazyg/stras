@@ -10,7 +10,7 @@ public class LoginConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new LoginInterceptor())
                 .addPathPatterns("/admin/**")  //所有请求都被拦截包括静态资源
-                .excludePathPatterns("/","/admin/css/**","/admin/fonts/**","/admin/images/**","/admin/js/**","/css/**","/front/**","/js/**","/images/**"); //放行的请求
+                .excludePathPatterns("/","/user/**","/admin/css/**","/admin/fonts/**","/admin/images/**","/admin/js/**","/user/css/**","/front/**","/js/**","/images/**"); //放行的请求
     }
 
 }

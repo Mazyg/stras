@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 @Controller
 public class InfoController {
@@ -86,12 +87,30 @@ public class InfoController {
      */
     @GetMapping("/admin/videoDetail")
     public String videoDetail(@RequestParam(value = "pnV",defaultValue = "1")Integer pnV,Integer vid,Model model){
-        System.out.println("pn="+pnV+"vid="+vid);
-        Video video = videoService.getVideoById(vid);
-        System.out.println("v==="+video);
+        Video video = videoService.getVideoById(vid);;
         model.addAttribute("video",video);
         model.addAttribute("pnV",pnV);
         return "admin/video_detail";
+    }
+
+    /**
+     * 用户首页跳转
+     * @param model
+     * @return
+     */
+    @GetMapping("/user/mainInfo")
+    public String mainInfo(Model model){
+        List<Info> mainRotate = infoService.mainRotate();
+        model.addAttribute("mainRotate",mainRotate);
+        List<Info> manModel1 = infoService.findInfoBytype("新时代楷模",0,1);
+        model.addAttribute("manModel1",manModel1);
+        List<Info> manModel2 = infoService.findInfoBytype("新时代楷模",1,2);
+        model.addAttribute("manModel2",manModel2);
+        List<Info> hotView = infoService.findInfoBytype("热点时事",0,3);
+        model.addAttribute("hotView",hotView);
+        List<Info> chinese = infoService.findInfoBytype("最美中国景",0,3);
+        model.addAttribute("chinese",chinese);
+        return "user/main";
     }
 
     /**
@@ -180,6 +199,66 @@ public class InfoController {
         model.addAttribute("infoList",infoList);
         model.addAttribute("videoList",videoList);
         return "admin/all_info";
+    }
+
+    /*跳转热点时事界面*/
+    @GetMapping("/user/hotInfo")
+    public String hotInfo(@RequestParam(value = "pn",defaultValue = "1")Integer pn,Model model){
+        Page<Info> infoPage = new Page<>(pn,4);
+        QueryWrapper<Info> wrapper = new QueryWrapper<>();
+        wrapper.eq("info_del",0);
+        wrapper.eq("info_type","热点时事");
+        Page<Info> infoList = infoService.page(infoPage,wrapper);
+        model.addAttribute("hotInfo",infoList);
+        List<Info> hotView = infoService.findInfoBytype("热点时事",0,1);
+        model.addAttribute("hotTop",hotView);
+        List<Info> hot = infoService.findInfoByHot();
+        model.addAttribute("hot",hot);
+        List<Video> videoList = videoService.findVideo();
+        model.addAttribute("videoList",videoList);
+        return "user/hotSth";
+    }
+
+
+    /**
+     * 跳转榜样力量页面
+     * @param pn 页数
+     * @param model
+     * @return
+     */
+    @GetMapping("/user/manModels")
+    public String manModel(@RequestParam(value = "pn",defaultValue = "1")Integer pn,Model model){
+        Page<Info> infoPage = new Page<>(pn,4);
+        QueryWrapper<Info> wrapper = new QueryWrapper<>();
+        wrapper.eq("info_del",0);
+        wrapper.eq("info_type","榜样力量");
+        Page<Info> infoList = infoService.page(infoPage,wrapper);
+        model.addAttribute("manList",infoList);
+        List<Info> manTop = infoService.findInfoBytype("榜样力量",0,1);
+        model.addAttribute("manTop",manTop);
+        List<Info> hot = infoService.findInfoByHot();
+        model.addAttribute("hot",hot);
+        List<Video> videoList = videoService.findVideo();
+        model.addAttribute("videoList",videoList);
+        return "/user/manModel";
+    }
+
+
+    @GetMapping("/user/allE")
+    public String allEarth(@RequestParam(value = "pn",defaultValue = "1")Integer pn,Model model){
+        Page<Info> infoPage = new Page<>(pn,4);
+        QueryWrapper<Info> wrapper = new QueryWrapper<>();
+        wrapper.eq("info_del",0);
+        wrapper.eq("info_type","全球战疫");
+        Page<Info> infoList = infoService.page(infoPage,wrapper);
+        model.addAttribute("eList",infoList);
+        List<Info> manTop = infoService.findInfoBytype("全球战疫",0,1);
+        model.addAttribute("eTop",manTop);
+        List<Info> hot = infoService.findInfoByHot();
+        model.addAttribute("hot",hot);
+        List<Video> videoList = videoService.findVideo();
+        model.addAttribute("videoList",videoList);
+        return "/user/allEarth";
     }
 
     /**
