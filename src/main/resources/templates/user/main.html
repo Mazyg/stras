@@ -36,7 +36,7 @@
                     </li>
                     <li><a th:href="@{/user/manModels}">榜样力量</a>
                     </li>
-                    <li><a href="">话题</a>
+                    <li><a th:href="@{/user/topic}">话题广场</a>
                     </li>
                     <li><a href="">书籍</a></li>
                     <li><a href="">电影</a></li>
@@ -55,7 +55,7 @@
             </div>
             <div class="subnav clearfix" th:if="${ session.user ==null}">
                     <ul>
-                    <li><a th:href="@{/}">登录</a></li>
+                    <li><a th:href="@{/login.html}">登录</a></li>
                     <li class="en"><a th:href="@{/registration}">注册</a></li>
                     </ul>
             </div>

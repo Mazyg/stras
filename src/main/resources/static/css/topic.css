@@ -662,6 +662,7 @@ body{
     height: 260px;
     box-sizing: border-box;
     padding-top: 80px;
+    background-image: url("../img/bg_02.jpg");
 }
 .myMsg_conPic{
     width: 95px;

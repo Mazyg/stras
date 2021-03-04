@@ -2,8 +2,10 @@ package com.jxnu.stras.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.jxnu.stras.domin.Info;
 import com.jxnu.stras.domin.Topic;
 import com.jxnu.stras.domin.User;
+import com.jxnu.stras.service.InfoService;
 import com.jxnu.stras.service.TopicService;
 import com.jxnu.stras.service.UserService;
 import org.springframework.stereotype.Controller;
@@ -18,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 @Controller
 public class TopicController {
@@ -28,6 +31,35 @@ public class TopicController {
     @Resource
     UserService userService;
 
+    @Resource
+    InfoService infoService;
+
+    /**
+     * 用户界面展示所有的话题
+     * @param pn 页数
+     * @param is 0 按时间排序，1按热度排序
+     * @param model
+     * @return
+     */
+    @GetMapping("/user/topic")
+    public String userAllTopic(@RequestParam(value = "pn",defaultValue = "1")Integer pn ,@RequestParam(value = "is",defaultValue = "0")Integer is, Model model){
+        Page<Topic> topicPage = new Page<>(pn,6);
+        QueryWrapper<Topic> wrapper = new QueryWrapper<>();
+        wrapper.eq("del",0);
+        if(is == 1){
+            Page<Topic> topicPage1 = topicService.getAllTopicByView(topicPage,wrapper);
+            model.addAttribute("topicList",topicPage1);
+            model.addAttribute("is",1);
+        }else{
+            Page<Topic> topics = topicService.getAllTopic(topicPage,wrapper);
+            model.addAttribute("topicList",topics);
+            model.addAttribute("is",0);
+        }
+        List<Topic> hotTopic = topicService.findTopicByHot();
+        model.addAttribute("hotTopics",hotTopic);
+        return "user/topic";
+    }
+
     /**
      * 分页查询所有话题
      * @return
@@ -37,6 +69,7 @@ public class TopicController {
         Page<Topic> topicPage = new Page<>(pn,6);
         QueryWrapper<Topic> wrapper = new QueryWrapper<>();
         wrapper.eq("del",0);/*0表示话题存在，未被删除*/
+        wrapper.select("tid","date","content","phone","tstatus","ttitle","ttype","tview","tresult","del");
         Page<Topic> topicList = topicService.page(topicPage,wrapper);
         System.out.println(topicList);
         long current = topicList.getCurrent();
@@ -56,6 +89,7 @@ public class TopicController {
         QueryWrapper<Topic> wrapper = new QueryWrapper<>();
         wrapper.eq("del",0);/*0表示话题存在，未被删除*/
         wrapper.eq("Tstatus","未审核");
+        wrapper.select("tid","date","content","phone","tstatus","ttitle","ttype","tview","tresult","del");
         Page<Topic> topicList = topicService.page(topicPage,wrapper);
         System.out.println(topicList);
         long current = topicList.getCurrent();
@@ -75,7 +109,7 @@ public class TopicController {
     @GetMapping("/admin/topicDetail")
     public String topicDetail(@RequestParam("id")Integer tid,@RequestParam(value = "pn",defaultValue = "1")Integer pn,Model model){
         Topic topic = topicService.getTopicbyID(tid);
-        User user = userService.getUserByPhone(topic.getUphone());
+        User user = userService.getUserByPhone(topic.getPhone());
         model.addAttribute("topicDetail",topic);
         model.addAttribute("topicUser",user);
         model.addAttribute("pns",pn);
@@ -92,7 +126,7 @@ public class TopicController {
     @GetMapping("/admin/topicDetail2")
     public String topicDetail2(@RequestParam("id")Integer tid,@RequestParam(value = "pn",defaultValue = "1")Integer pn,Model model){
         Topic topic = topicService.getTopicbyID(tid);
-        User user = userService.getUserByPhone(topic.getUphone());
+        User user = userService.getUserByPhone(topic.getPhone());
         model.addAttribute("topicDetail",topic);
         model.addAttribute("topicUser",user);
         model.addAttribute("pns",pn);
@@ -114,10 +148,14 @@ public class TopicController {
         topic.setDate(time);
         HttpSession session = request.getSession(true);
         User user = (User) session.getAttribute("user");
-        topic.setUphone(user.getPhone());
-        topic.setTstatus("已审核");
-        topic.setTresult("已通过");
-        System.out.println("topic"+topic);
+        topic.setPhone(user.getPhone());
+        if("admin".equals(user.getUtype())){
+            topic.setTstatus("已审核");
+            topic.setTresult("已通过");
+        }else {
+            topic.setTstatus("未审核");
+            topic.setTresult("未通过");
+        }
         boolean isAdd = topicService.save(topic);
         if(isAdd==true){
             return "success";
@@ -175,5 +213,22 @@ public class TopicController {
         }else{
             return "false";
         }
+    }
+
+    /**
+     * 用户跳转话题详情
+     * @param tid 话题ID
+     * @param model
+     * @return
+     */
+    @GetMapping("/user/topicDal")
+    public String topicDal(@RequestParam("tid")Integer tid,Model model){
+        Topic topic = topicService.getTopicbyID(tid);
+        User user = userService.getUserByPhone(topic.getPhone());
+        List<Info>  infoList = infoService.findInfoBytype(topic.getTtype(),0,5);
+        model.addAttribute("topicDal",topic);
+        model.addAttribute("topicUser",user);
+        model.addAttribute("infoType",infoList);
+        return "user/topDal";
     }
 }

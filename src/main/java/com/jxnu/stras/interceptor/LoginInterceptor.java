@@ -24,7 +24,7 @@ public class LoginInterceptor implements HandlerInterceptor {
         }
         //拦截住。未登录。跳转到登录页
         request.setAttribute("msg","请先登录");
-        request.getRequestDispatcher("/").forward(request,response);
+        request.getRequestDispatcher("/login.html").forward(request,response);
         return false;
     }
 

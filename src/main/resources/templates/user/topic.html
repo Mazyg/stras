@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>话题广场</title>
+    <link rel="shortcut icon" th:href="@{/img/title.ico}" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" th:href="@{/css/reset.css}"/>
+    <link rel="stylesheet" th:href="@{/css/public.css}"/>
+    <link rel="stylesheet" th:href="@{/css/topic.css}"/>
+    <link th:href="@{/css/base_news.css}" rel="stylesheet" type="text/css">
+    <script type="text/javascript" th:src="@{/js/user/jump.js}"></script>
+    <style type="text/css">
+        body{
+            background: url("../img/bg_02.jpg");
+        }
+        .ac{
+            color: #1a1a1a;
+        }
+    </style>
+    <script type="text/javascript">
+        function addTopic() {
+                var $t_title = $("#title").val();
+                var $content = $("#content").val();
+                var $type = $("#type").val();
+                if($t_title==""|| $t_title == null){
+                    alert("标题不能为空！");
+                    return;
+                }
+                if($content==""|| $content == null){
+                    alert("简介不能为空！");
+                    return;
+                }
+            $.ajax({
+                type:"POST",
+                url:"/admin/addTopic",
+                data:$('#formTopic').serialize(),
+                success:function (msg) {
+                    console.log(msg);
+                    if(msg === "success"){
+                        alert("操作成功！")
+                    }else{
+                        alert("修改出错！")
+                    }
+                    window.location.href="/user/topic?pn="+[[${topicList.current}]]+"&is="+[[${is}]];
+                },
+                error:function () {
+                    alert("出错了！")
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+<header class="ltHead">
+    <div class="ltHead_cen">
+        <nav class="navwrap yahei">
+            <section class="mainWrap">
+                <ul id="nav">
+                    <li><a th:href="@{/}">首页</a>
+                    </li>
+                    <li><a th:href="@{/user/allE}">全球战疫</a>
+                    </li>
+                    <li><a th:href="@{/user/hotInfo}">热点时事</a>
+                    </li>
+                    <li><a href="">爱我中华</a>
+                    </li>
+                    <li><a th:href="@{/user/manModels}" >榜样力量</a>
+                    </li>
+                    <li><a th:href="@{/user/topic}">话题广场</a>
+                    </li>
+                    <li><a href="">书籍</a></li>
+                    <li><a href="">电影</a></li>
+                    <li th:if="${session.user != null}"><a href="@{/user/personalInfo}">个人中心</a>
+                        <ul class="last">
+                                    <li th:if="${session.user.utype == 'admin'}"><a th:href="@{/admin/index.html}">管理界面</a></li>
+                                    <li><a th:href="@{/loginOut}">退出登录</a></li>
+                            </ul>
+                        </li>
+                    </c:if>
+                </ul>
+            </section>
+        </nav>
+        <!--未登入开始-->
+        <div class="ltForm appear">
+            <ul th:if="${session.user == null}">
+                        <li><a th:href="@{/login.html}">登录</a></li>
+                        <li><a th:href="@{/registration}">注册</a></li>
+            </ul>
+        </div>
+        <div class="navFix">
+            <a class="navMe" th:if="${session.user != null}" th:text="${session.user.uname}"></a>
+            <a th:if="${session.user != null}" href="" class="navWrite" style="color: white" data-toggle="modal" data-target="#myModal">发起话题</a>
+        </div>
+    </div>
+</header>
+<div class="indexMain">
+    <div class="indexMain_left">
+        <div class="indexMain_left_btn">
+            <ul>
+                <li><a th:href="@{/user/topic}"  th:class="${is==0?'on':'ac'}">最新</a></li>
+                <li><a th:href="@{/user/topic(is=1)}"  th:class="${is==1?'on':'ac'}">最热</a></li>
+            </ul>
+        </div>
+        <div class="indexMain_left_con">
+            <!--有主题图循环开始-->
+                <div th:each="topics:${topicList.records}" class="indexCon_msg">
+                    <div class="indexCon_msg_pic"><img th:src="${topics.user.photo}"></div>
+                    <div class="indexCon_msg_detail">
+                        <a th:href="@{/user/topicDal(tid=${topics.tid})}">
+                            <div class="indexCon_msg_detail_tittle">
+                                <span>[[${topics.ttype}]]</span>
+                                <p >[[${topics.ttitle}]]</p>
+                            </div>
+                        </a>
+                        <div class="indexCon_msg_detail_other">
+                            <ul>
+                                <li>作者：[[${topics.user.uname}]]</li>
+                                <li>发布时间：[[${topics.date}]]</li>
+                                <li>浏览数：[[${topics.tview}]]</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+        </div>
+
+        <div class="indexFooter">
+            <div class="pager">
+                <!-- 上一页 按钮 -->
+                        <a th:href="@{/user/topic(pn=${topicList.current}-1,is=${is})} " rel="external nofollow" ><<</a>
+                <!-- 页数列表 -->
+                    <a th:each="num:${#numbers.sequence(1,topicList.pages)}" th:href="@{/user/topic(pn=${num},is=${is})}" rel="external nofollow"   th:class="${num==topicList.current?'currentPage ac':'currentPage'}">[[${num}]]</a>
+                <!-- 下一页 按钮 -->
+                        <a th:href="@{/user/topic(pn=${topicList.current}+1,is=${is})}" rel="external nofollow">
+                            >>
+                        </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="indexMain_right">
+        <div class="indexMain_rightCon">
+            <a th:if="${session.user != null}" href="" class="newMsg" style="color: white" data-toggle="modal" data-target="#myModal">发起话题</a>
+            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <form id="formTopic">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                <h4 class="modal-title" id="myModalLabel">新增话题</h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label for="title">标题</label>
+                                    <input type="text" class="col-10 form-control" id="title" placeholder="标题" required name="Ttitle">
+                                </div>
+                                <div class="form-group">
+                                    <label for="topic_category">话题类别</label>
+                                    <input type="hidden" id="type" name="t_type"><br>
+                                    <div class="col-md-6" id="topic_category">
+                                        <select class="form-control" id="topic" name="Ttype">
+                                            <option value="全球战疫">全球战疫</option>
+                                            <option value="榜样的力量">榜样的力量</option>
+                                            <option value="热点时事">热点时事</option>
+                                            <option value="电影">电影</option>
+                                            <option value="书籍">书籍</option>
+                                        </select>
+                                    </div>
+                                </div><br><br>
+                                <div class="form-group">
+                                    <label>简要描述</label>
+                                    <div class="input-group col-xs-12">
+                                        <textarea name="content" id="content" placeholder="描述一下你的话题" required class="col-10 form-control"  style=" height:180px"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                <button type="button" class="btn btn-primary" onclick="addTopic()">确定提交</button>
+                            </div>
+                        </form>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal -->
+            </div>
+
+            <div class="indexMain_right">
+                <div class="myMsg">
+                    <div class="myMsg_con">
+
+                                <div th:if="${session.user == null}" class="myMsg_conPic"></div>
+                                <p th:if="${session.user == null}">未登录</p>
+                                <div th:if="${session.user != null}" class="myMsg_conPic"><img th:src="${session.user.photo}"></div>
+                                <p th:if="${session.user != null}" id="user">[[${session.user.uname}]]</p>
+                    </div>
+                            <div th:if="${session.user != null}"  class="myMsg_footer">
+                                <ul class="nav nav-pills" role="tablist">
+                                    <li role="presentation"><a href="">话题数<span class="badge"><h4>6</h4></span></a></li>
+                                    <li role="presentation"><a href="">消息数<span class="badge"><h4>5</h4></span></a></li>
+                                </ul>
+                            </div>
+                </div>
+                <div class="indexPublic">
+                    <div class="indexPublic_head">
+                        本周热议
+                    </div>
+                    <div class="indexPublic_con">
+                        <ul class="weekHot">
+                                <li th:each="hotTopic:${hotTopics}"><a href="">[[${hotTopic.ttitle}]]</a></li>
+                        </ul>
+                    </div>
+                </div>
+              <!--  <div class="indexPublic">
+                    <div class="indexPublic_head">
+                        友情链接
+                    </div>
+                    <div class="indexPublic_con">
+                        <ul class="indexLink">
+                            <li><a href=""></a></li>
+                            <li><a href=""></a></li>
+                            <li><a href=""></a></li>
+                            <li><a href=""></a></li>
+                            <li><a href=""></a></li>
+                            <li><a href=""></a></li>
+                            <li><a href=""></a></li>
+                        </ul>
+                    </div>
+                </div>-->
+            </div>
+        </div>
+        <div class="clear"></div>
+    </div>
+    <footer class="publicFooter">
+        <p></p>
+    </footer>
+</div>
+</body>
+</html>
+<script src="../js/user/jquery-1.8.3.min.js"></script>
+<script>
+    $(".indexMain_left_btn li a").click(function(){
+        $(".indexMain_left_btn li a").removeClass("on");
+        $(this).addClass("on");
+    });
+    window.onscroll=function(){
+        var scrolls=document.body.scrollTop||document.documentElement.scrollTop;
+        var slided=60;
+        if(scrolls>=slided){
+            $(".appear").hide();
+            $(".navFix").show();
+            $(".ltHead").addClass("navTop");
+        }else{
+            $(".appear").show();
+            $(".navFix").hide();
+            $(".ltHead").removeClass("navTop");
+        }
+    };
+</script>

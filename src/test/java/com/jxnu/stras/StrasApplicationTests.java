@@ -1,9 +1,11 @@
 package com.jxnu.stras;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jxnu.stras.domin.Info;
 import com.jxnu.stras.domin.Topic;
 import com.jxnu.stras.domin.User;
+import com.jxnu.stras.mapper.TopicMapper;
 import com.jxnu.stras.mapper.UserMapper;
 import com.jxnu.stras.service.InfoService;
 import com.jxnu.stras.service.TopicService;
@@ -31,6 +33,9 @@ class StrasApplicationTests {
     @Resource
     private UserMapper userMapper;
 
+    @Resource
+    private TopicMapper topicMapper;
+
     @Test
     void topicNum(){
 
@@ -56,7 +61,7 @@ class StrasApplicationTests {
     void topicDetail(){
         Topic topic = topicService.getTopicbyID(1);
         System.out.println("topic"+topic);
-        User user = userService.getUserByPhone(topic.getUphone());
+        User user = userService.getUserByPhone(topic.getPhone());
         System.out.println("user"+user);
     }
 
@@ -64,6 +69,14 @@ class StrasApplicationTests {
     void findInfo(){
         List<Info> model = infoService.findInfoBytype("新时代楷模",0,3);
         System.out.println("bfj==="+model);
+    }
+
+    @Test
+    void findTopic(){
+        Page<Topic> topicPage = new Page<>(0,6);
+        QueryWrapper<Topic> wrapper = new QueryWrapper<>();
+        Page<Topic> topic = topicMapper.getAllTopic(topicPage,wrapper);
+        System.out.println("tr=="+topic);
     }
 
 }

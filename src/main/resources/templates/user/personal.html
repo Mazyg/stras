@@ -6,7 +6,7 @@
     <div th:replace="personal_common :: commonheadperson"></div>
 </head>
 <body>
-<header >
+<!--<header >
     <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
         <div class="container-fluid">
             <div class="navbar-header">
@@ -14,7 +14,7 @@
             </div><br>
             <div>
                 <ul class="nav navbar-nav">
-                    <li><a th:href="@{/user/mainInfo}">首页</a>
+                    <li><a th:href="@{/}">首页</a>
                     </li>
                     <li><a th:href="@{/user/allE}">全球战疫</a>
                     </li>
@@ -32,7 +32,8 @@
             </div>
         </div>
     </nav>
-</header>
+</header>-->
+<div th:replace="personal_common :: daohang"></div>
 <!-----------个人展示部分---------------------------------------->
 <div th:replace="personal_common :: personphoto"></div>
 <!--------------------------主体部分---------------------------------->

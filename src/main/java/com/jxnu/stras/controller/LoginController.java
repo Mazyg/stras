@@ -34,7 +34,7 @@ public class LoginController {
     @Resource
     VideoService videoService;
 
-    @GetMapping("/")
+    @GetMapping("/login.html")
     public String loginPage(){
         return "login";
     }
@@ -105,7 +105,7 @@ public class LoginController {
     @GetMapping("/loginOut")
     public String loginOut(HttpServletRequest request){
         request.getSession().invalidate();
-        return "user/mainInfo";
+        return "redirect:/";
     }
 
     /**

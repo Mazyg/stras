@@ -98,7 +98,7 @@ public class InfoController {
      * @param model
      * @return
      */
-    @GetMapping("/user/mainInfo")
+    @GetMapping("/")
     public String mainInfo(Model model){
         List<Info> mainRotate = infoService.mainRotate();
         model.addAttribute("mainRotate",mainRotate);
