@@ -124,7 +124,7 @@
 
                         <a th:href="@{/user/hotInfo(pn=${hotInfo.current}-1)}" rel="external nofollow" ><<</a>
                 <!-- 页数列表 -->
-                    <a  th:each="num:${#numbers.sequence(1,hotInfo.pages)}"  th:href="@{/user/hotInfo(pn=${num})}" rel="external nofollow" class="currentPage">[[${num}]]</a>
+                    <a  th:each="num:${#numbers.sequence(1,hotInfo.pages)}"  th:href="@{/user/hotInfo(pn=${num})}" rel="external nofollow" th:class="${num==hotInfo.current?'current':''}">[[${num}]]</a>
                 <!-- 下一页 按钮 -->
                         <a th:href="@{/user/hotInfo(pn=${hotInfo.current}+1)}" rel="external nofollow">
                             >>

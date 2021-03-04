@@ -132,7 +132,7 @@
                 <!-- 上一页 按钮 -->
                         <a th:href="@{/user/topic(pn=${topicList.current}-1,is=${is})} " rel="external nofollow" ><<</a>
                 <!-- 页数列表 -->
-                    <a th:each="num:${#numbers.sequence(1,topicList.pages)}" th:href="@{/user/topic(pn=${num},is=${is})}" rel="external nofollow"   th:class="${num==topicList.current?'currentPage ac':'currentPage'}">[[${num}]]</a>
+                    <a th:each="num:${#numbers.sequence(1,topicList.pages)}" th:href="@{/user/topic(pn=${num},is=${is})}" rel="external nofollow"   th:class="${num==topicList.current?'current':''}">[[${num}]]</a>
                 <!-- 下一页 按钮 -->
                         <a th:href="@{/user/topic(pn=${topicList.current}+1,is=${is})}" rel="external nofollow">
                             >>

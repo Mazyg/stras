@@ -61,7 +61,7 @@
 
                 <a th:href="@{/user/allE(pn=${eList.current}-1)}" rel="external nofollow" ><<</a>
                 <!-- 页数列表 -->
-                <a  th:each="num:${#numbers.sequence(1,eList.pages)}"  th:href="@{/user/allE(pn=${num})}" rel="external nofollow" class="currentPage">[[${num}]]</a>
+                <a  th:each="num:${#numbers.sequence(1,eList.pages)}"  th:href="@{/user/allE(pn=${num})}" rel="external nofollow" th:class="${num==eList.current?'current':''}">[[${num}]]</a>
                 <!-- 下一页 按钮 -->
                 <a th:href="@{/user/allE(pn=${eList.current}+1)}" rel="external nofollow">
                     >>
