@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>爱我中华</title>
+    <link rel="shortcut icon" th:href="@{/img/title.ico}" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link th:href="@{/css/chinese_base.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{/css/base_news.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{/css/inner.css}" rel="stylesheet" type="text/css">
+    <script th:src="@{/js/user/jquery-1.8.3.min.js}" type="text/javascript"></script>
+    <link rel="stylesheet" th:href="@{/css/slick.css}">
+    <script th:src="@{/js/user/slick.min.js}" type="text/javascript"></script>
+    <script th:src="@{/js/user/regexcut.js}" type="text/javascript"></script>
+    <link rel="stylesheet" th:href="@{/css/owl.carousel.css}">
+    <script th:src="@{/js/user/owl.carousel.min.js}" type="text/javascript"></script>
+    <script th:src="@{/js/user/chinese.js}" type="text/javascript"></script>
+    <!--[if lt IE 9]-->
+    <script th:src="@{/js/user/html5.js}" type="text/javascript"></script>
+    <script th:src="@{/js/user/json2.js}" type="text/javascript"></script>
+    <![endif]-->
+    <script th:src="@{/js/user/regex-cn.js}" type="text/javascript"></script>
+    <!--[if lt IE 8]-->
+    <script type="text/javascript" th:src="@{/js/user/jump.js}"></script>
+    <script type="text/javascript" th:src="@{/js/user/searchsub.js}"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <style type="text/css">
+        .imgs1{
+            width: 100px;
+            height: 80px;
+        }
+    </style>
+    <script>
+        function checkbrowse() {
+            var ua = navigator.userAgent.toLowerCase();
+            var is = (ua.match(/\b(chrome|opera|safari|msie|firefox)\b/) || ['', 'mozilla'])[1];
+            var r = '(?:' + is + '|version)[\\/: ]([\\d.]+)';
+            var v = (ua.match(new RegExp(r)) || [])[1];
+            jQuery.browser.is = is;
+            jQuery.browser.ver = v;
+            return {
+                'is': jQuery.browser.is,
+                'ver': jQuery.browser.ver
+            }
+        }
+        var public = checkbrowse();
+        var showeffect = "";
+        if ((public['is'] == 'msie' == public['ver'] < 8.0)) {
+            showeffect = "show"
+        } else {
+            showeffect = "fadeIn"
+        }
+    </script>
+</head>
+<body>
+<div th:replace="info_common :: #head"></div>
+<script type="text/javascript">
+    jQuery(function(){
+        jQuery('#nav li a [class^=item]').removeClass('current');
+        jQuery('#nav li a.item9652').addClass('current');
+    });
+</script>
+<div class="content yahei subchannel">
+    <div class="mainWrap clearfix">
+        <section class="colunm1">
+            <h2 class="channeltitle noborder hideonpc">最美中国景</h2>
+            <div class="biggallery">
+                <div class="biggallerywraper">
+                    <ul class="biggallerylist">
+                            <li th:each="chineses :${chinese}">
+                                <a href="" target="_blank"><img th:src="${chineses.photo}"></a>
+                                <div class="imgintro">
+                                    <b></b>
+                                    <h3><a href="" target="_blank" class="jiequ">【[[${chineses.title}]]】</a></h3>
+                                    <p th:text="${chineses.introduce}"></p>
+                                </div>
+                            </li>
+                    </ul>
+                </div>
+                <div class="imgthumb clearfix" style="margin-top:-10px">
+                    <ul>
+                            <li th:each="chineses : ${chinese}" class="active"><a><img th:src="${chineses.photo}"></a></li>
+                    </ul>
+                </div>
+                <script type="text/javascript">
+                    $(function(){
+
+                        $('.biggallery .biggallerywraper .biggallerylist').slick({
+                            infinite: true,
+                            slidesToShow: 1,
+                            slidesToScroll: 1,
+                            autoplay: true,
+                            centerMode: false,
+                            prevArrow:"<div class=\"sliderbutton prev\"><i>&lt;</i></div>",
+                            nextArrow:"<div class=\"sliderbutton next\"><i>&gt;</i></div>"
+                        });
+                        $('.biggallery .biggallerywraper .biggallerylist').on('beforeChange', function(event, slick, currentSlide,nextSlide){
+                            $(".biggallery .imgthumb li").removeClass("active");
+                            $(".biggallery .imgthumb li").eq(nextSlide).addClass("active");
+                            $(".biggallery .biggallerywraper .imgintro li").removeClass("active");
+                            $(".biggallery .biggallerywraper .imgintro li").eq(nextSlide).addClass("active");
+                        });
+
+                        $(".biggallery .imgthumb li").click(function(){
+                            $('.biggallery .biggallerywraper .biggallerylist').slick("slickGoTo",$(this).index());
+                        })
+                    })
+                </script>
+            </div>
+            <ul class="picwhitenewslist clearfix">
+                    <li th:each="chineseAll:${chineseList.records}">
+                        <figure>
+                            <a href="" target="_blank"><img th:src="${chineseAll.photo}" ></a>
+                            <figcaption><a target="_blank" href="" class="jiequ">【[[${chineseAll.title}]]】</a></figcaption>
+                            <div class="thumb"><i class="thunews-clock-o"></i>[[${chineseAll.date}]]<i class="thunews-eye"></i> <font id="font_itemlist_total_20191115111315714796419"><span id="itemlist_total_20191115111315714796419"></span></font></div>
+                        </figure>
+                    </li>
+            </ul>
+            <br>
+            <div class="pager">
+                <!-- 上一页 按钮 -->
+                        <a th:href="@{/user/chineseInfo(pn=${chineseList.current}-1)}" rel="external nofollow" ><<</a>
+                <!-- 页数列表 -->
+                    <a th:each="num:${#numbers.sequence(1,chineseList.pages)}" rel="external nofollow" th:href="@{/user/chineseInfo(pn=${num})}"  th:class="${num==chineseList.current?'current':''}">[[${num}]]</a>
+                <!-- 下一页 按钮 -->
+                        <a th:href="@{/user/chineseInfo(pn=${chineseList.current}+1)}" rel="external nofollow">
+                            >>
+                        </a>
+            </div>
+        </section>
+        <section class="colunm2">
+            <section class="mod withborder">
+                <h2>
+                    <span class="iconwraper"> <i class="thunews-play-circle glyphicon glyphicon-play-circle"></i></span>
+                    精彩视频
+                    <a href="#" style="font-size:12px; color:#666; margin-left:30px">
+                    </a>
+                </h2>
+                <table class="table newslist clearfix" >
+                        <tr th:each="video:${videoList}">
+                            <td><a href=""><img class="imgs1" th:src="${video.vphoto}"></a></td>
+                            <td style="word-break:break-all; word-wrap:break-word; white-space:inherit"> <a href=""><p style="float: left" >[[${video.vtitle}]]</p></a>
+                                <br><small style="float: right"><i class=" glyphicon glyphicon-time"></i>[[${video.vdate}]]</small></td>
+                        </tr>
+                </table>
+            </section>
+            <section class="mod withborder">
+                <h2 class="red"><span class="iconwraper">
+            <i class="thunews-line-chart glyphicon glyphicon-fire"></i>
+            </span>
+                    近期热点
+                    <a href="#" style="font-size:12px; color:#666; margin-left:30px">
+                    </a>
+                </h2>
+                <ul class="newslist clearfix"  id="resText">
+                    <li th:each="hots:${hot}"><a href="">[[${hots.title}]]<small style="float: right">[[${hots.date}]]</small></a></li>
+                </ul>
+            </section>
+        </section>
+    </div>
+</div>
+</body>
+</html>

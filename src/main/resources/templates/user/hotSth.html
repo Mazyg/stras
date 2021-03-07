@@ -144,7 +144,7 @@
                 <table class="table newslist clearfix" >
                         <tr th:each="videos:${videoList}" >
                             <td><a href=""><img class="imgs1" th:src="${videos.vphoto}"></a></td>
-                            <td> <a href="" ><p style="float: left">[[${videos.vtitle}]]</p></a>
+                            <td style="word-break:break-all; word-wrap:break-word; white-space:inherit"> <a href="" ><p style="float: left">[[${videos.vtitle}]]</p></a>
                                 <br><small style="float: right"><i class=" glyphicon glyphicon-time"></i>[[${videos.vdate}]]</small></td>
                         </tr>
                 </table>

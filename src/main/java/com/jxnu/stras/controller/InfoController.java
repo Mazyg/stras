@@ -49,7 +49,7 @@ public class InfoController {
     }
 
     /**
-     * 信息详情页面跳转
+     * 后台信息详情页面跳转
      * @param pn
      * @param infoId
      * @param model
@@ -111,6 +111,29 @@ public class InfoController {
         List<Info> chinese = infoService.findInfoBytype("最美中国景",0,3);
         model.addAttribute("chinese",chinese);
         return "user/main";
+    }
+
+
+    /**
+     * 爱我中华页面跳转
+     * @param model
+     * @param pn 页数
+     * @return
+     */
+    @GetMapping("/user/chineseInfo")
+    public String chinese(Model model,@RequestParam(value = "pn",defaultValue = "1")Integer pn){
+        Page<Info> infoPage = new Page<>(pn,3);
+        QueryWrapper<Info> wrapper = new QueryWrapper<>();
+        wrapper.like("info_type","最美");
+        Page<Info> infoList = infoService.page(infoPage,wrapper);
+        List<Info> chinese = infoService.findInfoBytype("最美中国景",0,4);
+        model.addAttribute("chinese",chinese);
+        model.addAttribute("chineseList",infoList);
+        List<Info> hot = infoService.findInfoByHot();
+        model.addAttribute("hot",hot);
+        List<Video> videoList = videoService.findVideo();
+        model.addAttribute("videoList",videoList);
+        return "user/chinese";
     }
 
     /**

@@ -32,14 +32,12 @@
                     </li>
                     <li><a th:href="@{/user/hotInfo}">热点时事</a>
                     </li>
-                    <li><a href="">爱我中华</a>
+                    <li><a th:href="@{/user/chineseInfo}">爱我中华</a>
                     </li>
                     <li><a th:href="@{/user/manModels}">榜样力量</a>
                     </li>
                     <li><a th:href="@{/user/topic}">话题广场</a>
                     </li>
-                    <li><a href="">书籍</a></li>
-                    <li><a href="">电影</a></li>
                         <li th:if="${session.user != null}"><a  th:href="@{/user/personalInfo}" >个人中心</a>
                             <ul class="last">
                                 <li th:if="${session.user.utype=='admin'}"><a th:href="@{/admin/index.html}">管理员界面</a></li>

@@ -62,6 +62,13 @@ public interface InfoMapper extends BaseMapper<Info> {
     public List<Info> findInfoByHot();
 
 
+    /**
+     * 通过文章类别搜索文章
+     * @param info_type 类别
+     * @param start 第几页
+     * @param length 长度
+     * @return
+     */
     @Select("SELECT  *\n" +
             "FROM `info`\n" +
             "where info_type like #{info_type} and info_del = 0\n"+

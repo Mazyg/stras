@@ -14,6 +14,9 @@
         body{
             background-image: url("../img/bg_02.jpg");
         }
+        .hig{
+            height: 80px;
+        }
     </style>
 </head>
 <body>
@@ -64,8 +67,8 @@
                 <div class="newPending_head_tittle">评论</div>
             </div>
             <div class="writePending_con">
-                <input type="text" placeholder="写下你的评论...(请不要超过50个字)"class="commentText" maxlength="50"/>
-                <input type="submit" value="评论" id="postMsg"/>
+                <input type="text" th:placeholder="${session.user==null?'请登录后评论':'写下你的评论...(请不要超过50个字)'}"class="commentText" maxlength="50"/>
+                <input type="submit" value="评论" id="postMsg" th:disabled="${session.user==null?'disabled':'false'}"/>
             </div>
         </div>
         <div class="newPending">
@@ -73,66 +76,54 @@
                 <div class="tzHeng"></div>
                 <div class="newPending_head_tittle">相关回复</div>
             </div>
-            <!--楼主可以删除评论、自己可以删除自己的评论删除按钮酌情出现-->
-            <!--回复后的情况-->
-            <!--<c:forEach items="${dynamics}" var="dynamic">
-                <div class="newPending_son">
-                    <div class="pendPic"><img src="${dynamic.user.photo}"></div>
-                    <div class="pendDetail">
-                        <div class="pendDetail_head">
-                            <p>${dynamic.uname} <span>${dynamic.date}</span></p>
-                            <input type="text" style="display: none" id="wid" value="${dynamic.wid}">
-                        </div>
-                        <div class="pendDetail_con">
-                            <p>${dynamic.content}</p>
-                        </div>
-                        <c:choose>
-                            <c:when test="${empty dynamic.comments}"></c:when>
-                            <c:otherwise>
-                                <div class="pendDetail_replayCon">
-                                    <c:forEach items="${dynamic.comments}" var="comment">
-                                        <p><span>${comment.uname} 回复 ${comment.rname}：${comment.content}
-                                        <button class="replayBtn" id="comment">回复</button></span></p>
-                                        <div class="pendDetail_action">
-                                            <input type="text"  placeholder="回复${comment.uname}:(请不要超过40个字)" maxlength="40"/>
-                                            <input type="text" style="display: none" value="${comment.uname}" >
-                                            <input type="text" style="display: none" value="${dynamic.wid}" >
-                                            <button class="replyTopic">回复</button>
-                                            <button>取消</button>
-                                        </div>
-                                    </c:forEach>
-                                </div>
-                            </c:otherwise>
-                        </c:choose>
-                        <div class="pendDetail_btn">
-                            <ul>
-                                <li></li>
-                                <li class="replayBtn">+</li>
-                                <c:choose>
-                                    <c:when test="${dynamic.uname == users.uname}">
-                                        <input type="text" style="display: none" value="${dynamic.wid}" >
-                                        <li class="delateBtn">删除</li>
-                                    </c:when>
-                                    <c:otherwise></c:otherwise>
-                                </c:choose>
-                            </ul >
-                        </div>
-                        <div class="pendDetail_action">
-                            <input type="text" placeholder=" 回复 ${dynamic.uname} :(请不要超过40个字)" maxlength="40" />
-                            <input type="text" style="display: none" value="${dynamic.uname}" >
-                            <input type="text" style="display: none" value="${dynamic.wid}" >
-                            <button class="replyTopic">回复</button>
-                            <button>取消</button>
-                        </div>
-                    </div>
-                    <div class="clear"></div>
-                </div>
-            </c:forEach>
-            &lt;!&ndash;测试内容结束、十条内容分页&ndash;&gt;
-        </div>-->
-
+           <!-- 楼主可以删除评论、自己可以删除自己的评论删除按钮酌情出现
+            回复后的情况-->
+               <div th:each="dynamic:${dynamics}" class="newPending_son">
+                   <div class="pendPic"><img th:src="${dynamic.user.photo}"></div>
+                   <div class="pendDetail">
+                       <div class="pendDetail_head">
+                           <p>[[${dynamic.user.uname}]]<span>[[${dynamic.date}]]</span></p>
+                           <input type="text" style="display: none" id="wid" value="${dynamic.wid}">
+                       </div>
+                       <div class="pendDetail_con">
+                           <p th:text="${dynamic.content}"></p>
+                       </div>
+                               <div th:if="${dynamic.comments.size() != 0}" class="pendDetail_replayCon">
+                                       <div th:each="comment:${dynamic.comments}">
+                                       <p><span>${comment.uname} 回复 ${comment.rname}：${comment.content}
+                                       <button class="replayBtn" id="comment">回复</button></span></p>
+                                       <div class="pendDetail_action">
+                                           <input type="text"  placeholder="回复${comment.uname}:(请不要超过40个字)" maxlength="40"/>
+                                           <input type="text" style="display: none" value="${comment}" >
+                                           <input type="text" style="display: none" value="${dynamic.wid}" >
+                                           <button class="replyTopic">回复</button>
+                                           <button>取消</button>
+                                       </div>
+                                       </div>
+                               </div>
+                       <div class="pendDetail_btn">
+                           <ul th:if="${session.user != null }">
+                               <li></li>
+                               <li class="replayBtn">+</li>
+                                       <input  type="text" style="display: none" value="${dynamic.wid}" >
+                                       <li th:if="${session.user != null && dynamic.phone == session.user.phone}" class="delateBtn">删除</li>
+                           </ul >
+                       </div>
+                       <div class="pendDetail_action">
+                           <input type="text" placeholder=" 回复 [[${dynamic.user.uname}]] :(请不要超过40个字)" maxlength="40" />
+                           <input type="text" style="display: none" th:value="${dynamic.user.uname}" >
+                           <input type="text" style="display: none" th:value="${dynamic.wid}" >
+                           <button class="replyTopic">回复</button>
+                           <button>取消</button>
+                       </div>
+                   </div>
+                   <div class="clear"></div>
+               </div>
+            <!--测试内容结束、十条内容分页-->
         </div>
-    </div>
+        <div class="hig"></div>
+        </div>
+
     <div class="indexMain_right">
         <div class="myMsg">
                     <div class="myMsg_con">
@@ -157,18 +148,18 @@
             </div>
         </div>
     <div class="clear">
-        <input type="text" style="display: none" id="topicId" value="${topic.tid}">
-        <input type="text" style="display: none" id="t_type" value="${topic.t_type}">
+        <input type="text" style="display: none" id="topicId" th:value="${topicDal.tid}">
+       <!-- <input type="text" style="display: none" id="t_type" value="${topic.t_type}">-->
     </div>
     </div>
+</div>
 <footer class="publicFooter">
     <p></p>
 </footer>
-</div>
 </body>
 </html>
-<script src="js/jquery-1.8.3.min.js"></script>
-<script src="js/tiezi.js"></script>
+<script src="../js/user/jquery-1.8.3.min.js"></script>
+<script src="../js/user/tiezi.js"></script>
 <script>
     $(function () {
 
@@ -212,7 +203,7 @@
                 return;
             }
             $.ajax({
-                url:"../comment/saveComment.do",
+                url:"/user/saveComment",
                 contentType:"application/json;charset=UTF-8",
                 data:JSON.stringify({"content":$content,"uname":$uname,"rname":$rname,"wid":$wid}),
                 dataType:"json",
@@ -221,7 +212,7 @@
                     if (data == null){
                         alert("回复失败")
                     }else {
-                        window.location.href = "../topic/findTopicById.do?tid="+$tid+"&type="+$t_type;
+                        window.location.href = "/user/topicDal?tid="+$tid;
                     }
                 }
             });
@@ -232,8 +223,9 @@
             var $content = $(".commentText").val();
             var $user = $("#user").text();
             var $tid = $("#topicId").val();
-            var $t_type = $("#t_type").val();
-            var username = "<%=session.getAttribute("users")%>"
+           /* var $t_type = $("#t_type").val();*/
+            alert("tid"+$tid)
+           /* var username = "<%=session.getAttribute("users")%>"*/
 
             var patt1 = /^[\s]*$/;
             var patt2 = /^[0-9]+$/;
@@ -265,16 +257,17 @@
             }
 
             $.ajax({
-                url:"../dynamic/saveDynamic.do",
-                contentType:"application/json;charset=UTF-8",
-                data:JSON.stringify({"content":$content,"uname":$user,"tid":$tid}),
-                dataType:"json",
+                url:"/user/saveDynamic",
+                /*contentType:"application/json;charset=UTF-8",*/
+                data:{tid:$tid,
+                content:$content},
+               /* dataType:"json",*/
                 type:"post",
                 success:function (data) {
                     if (data == null){
                         alert("评论失败")
                     }else {
-                        window.location.href = "../topic/findTopicById.do?tid="+$tid+"&type="+$t_type;
+                        window.location.href = "/user/topicDal?tid="+$tid;
                     }
                 }
             });
@@ -286,14 +279,14 @@
             var $tid = $("#topicId").val();
             var $t_type = $("#t_type").val();
             $.ajax({
-                url:"../dynamic/deleteDynamic.do",
+                url:"/user/deleteDynamic",
                 data:"wid="+$wid,
                 type:"post",
                 success:function (result) {
                     if (result == "false"){
                         alert("删除回复失败");
                     }else {
-                        window.location.href = "../topic/findTopicById.do?tid="+$tid+"&type="+$t_type;
+                        window.location.href = "/user/topicDal.do?tid="+$tid;
                     }
                 }
             });

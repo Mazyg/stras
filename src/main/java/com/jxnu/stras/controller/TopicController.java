@@ -2,12 +2,11 @@ package com.jxnu.stras.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.jxnu.stras.domin.Dynamic;
 import com.jxnu.stras.domin.Info;
 import com.jxnu.stras.domin.Topic;
 import com.jxnu.stras.domin.User;
-import com.jxnu.stras.service.InfoService;
-import com.jxnu.stras.service.TopicService;
-import com.jxnu.stras.service.UserService;
+import com.jxnu.stras.service.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,6 +32,12 @@ public class TopicController {
 
     @Resource
     InfoService infoService;
+
+    @Resource
+    DynamicService dynamicService;
+
+    @Resource
+    CommentService commentService;
 
     /**
      * 用户界面展示所有的话题
@@ -229,6 +234,14 @@ public class TopicController {
         model.addAttribute("topicDal",topic);
         model.addAttribute("topicUser",user);
         model.addAttribute("infoType",infoList);
+        List<Dynamic> dynamics = dynamicService.findByTid(tid);
+        for(Dynamic dynamic:dynamics){
+            dynamic.setComments(commentService.findByWid(dynamic.getWid()));
+            dynamic.setUser(userService.getUserByPhone(dynamic.getPhone()));
+            System.out.println("comm=="+dynamic.getComments());
+        }
+
+        model.addAttribute("dynamics",dynamics);
         return "user/topDal";
     }
 }
