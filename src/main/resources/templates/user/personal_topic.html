@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>我的话题-繁星思政网</title>
+    <div th:replace="personal_common :: commonheadperson"></div>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".del").click(function(){
+                var $tid = $(this).parent().parent().children("td").eq(0).text();
+                $.ajax({
+                    type:"POST",
+                    url:"/admin/deleteTopic",
+                    data:"tid="+$tid,
+                    success:function (msg) {
+                        if(msg === "success"){
+                            alert("删除成功！")
+                        }else{
+                            alert("出错了！")
+                        }
+                        window.location.href="/person/personTopic?pn="+[[${topics.current}]];
+                    },
+                    error:function () {
+                        alert("出错了！")
+                    }
+                });
+            })
+        })
+    </script>
+</head>
+<body>
+<div th:replace="personal_common :: daohang"></div>
+<!-----------个人展示部分---------------------------------------->
+<div th:replace="personal_common :: personphoto"></div>
+<!--------------------------主体部分---------------------------------->
+<div class="col-md-12" >
+    <!--侧边导航------------------->
+    <div th:replace="personal_common :: leftperson(urlP='personTopic')"></div>
+    <!--主体部分---------------------------->
+    <div class="col-md-7  db"><br>
+        <table class="table table-striped table-hover table-bordered" id="editable-sample">
+            <thead>
+            <tr>
+                <th style="display: none">ID</th>
+                <th>主题</th>
+                <th>类型</th>
+                <th>时间</th>
+                <th>状态</th>
+                <th>浏览量</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="" th:each="topic:${topics.records}">
+                <td style="display: none" th:text="${topic.tid}"></td>
+                <td th:text="${topic.ttitle}"></td>
+                <td th:text="${topic.ttype}"></td>
+                <td class="center" th:text="${topic.date}">Lorem ipsume</td>
+                <td th:class="${topic.tresult}=='已通过'?'font2':(${topic.tstatus}=='已审核'?'font1':'')" th:text="${topic.tstatus}+${topic.tresult}"></td>
+                <td th:text="${topic.tview}"></td>
+                <td>
+                    <a type="button" class="btn btn-info btn-sm" style="color: white" th:href="@{/person/personalTopicDal(tid=${topic.tid},pn=${topics.current})}">详情</a>
+                    <a>&nbsp;&nbsp;&nbsp;</a>
+                    <a type="button" class="btn btn-danger btn-sm del">删除</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="pager">
+
+            <a th:href="@{/person/personTopic(pn=${topics.current}-1)}" rel="external nofollow" ><<</a>
+            <!-- 页数列表 -->
+            <a  th:each="num:${#numbers.sequence(1,topics.pages)}"  th:href="@{/person/personTopic(pn=${num})}" rel="external nofollow" th:class="${num==topics.current?'current':''}">[[${num}]]</a>
+            <!-- 下一页 按钮 -->
+            <a th:href="@{/person/personTopic(pn=${topics.current}+1)}" rel="external nofollow">
+                >>
+            </a>
+        </div>
+
+    </div>
+</div>
+<!-------------------------------------底部------------------------>
+<div th:replace="personal_common :: downpersonal"></div>
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>我的话题详情-繁星思政网</title>
+    <div th:replace="personal_common :: commonheadperson"></div>
+
+    <script type="text/javascript">
+        function updateTopic() {
+            var $tid = $('#tid').val();
+            var $content = $('#content').val();
+            var $title=$('#Ttitle').val();
+            $.ajax({
+                type:"POST",
+                url:"/person/updateTopicDal",
+                data:{
+                    tid:$tid,
+                    content:$content,
+                    Ttitle:$title
+                },
+                success:function (msg) {
+                    if(msg === "success"){
+                        alert("已修改！")
+                    }else{
+                        alert("修改失败！")
+                    }
+                    window.location.href="/person/personalTopicDal?tid="+[[${topicDetail.tid}]]+"&pn="+[[${pn}]];
+                },
+                error:function () {
+                    alert("出错了！")
+                }
+            });
+        }
+    </script>
+
+</head>
+<body>
+<div th:replace="personal_common :: daohang"></div>
+<!-----------个人展示部分---------------------------------------->
+<div th:replace="personal_common :: personphoto"></div>
+<!--------------------------主体部分---------------------------------->
+<div class="col-md-12" >
+    <!--侧边导航------------------->
+    <div th:replace="personal_common :: leftperson(urlP='personTopic')"></div>
+    <!--主体部分---------------------------->
+    <div class="col-md-7  db"><br>
+        <div class="col-lg-8 col-lg-offset-2">
+            <section class="panel">
+                <header class="panel-heading" style="color: white">
+                    话题详情
+                </header>
+                <div class="panel-body">
+                    <form role="form" id="fromTopic">
+                        <div class="form-group">
+                            <label for="tid">话题ID</label>
+                            <input type="text" class="form-control"  id="tid" name="tid" th:value="${topicDetail.tid}" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="Ttitle">话题标题</label>
+                            <input  class="form-control" id="Ttitle" name="Ttitle" th:value="${topicDetail.ttitle}" th:readonly="${topicDetail.tstatus=='已审核'?'true':'false'}">
+                        </div>
+                        <div class="form-group">
+                            <label for="Ttype">话题类型</label>
+                            <input  class="form-control" id="Ttype" name="Ttype" th:value="${topicDetail.ttype}" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="status1">话题状态</label>
+                            <input  class="form-control" id="status1"  th:value="${topicDetail.tstatus}+${topicDetail.tresult}" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="content">话题简介</label>
+                            <textarea  id="content" name="content"  class="col-10 form-control"  style=" height:120px" th:readonly="${topicDetail.tstatus=='已审核'?'true':'false'}" th:text="${topicDetail.content}"></textarea>
+                        </div>
+                        <button th:if="${topicDetail.tstatus=='未审核'}" type="button" class="btn btn-success" onclick="updateTopic()">修改</button>
+                        <a type="button" class="btn btn-primary" style="color: white" th:href="@{/person/personTopic(pn=${pn})}">返回上一页</a>
+                    </form>
+
+                </div>
+            </section>
+        </div>
+
+    </div>
+</div>
+<!-------------------------------------底部------------------------>
+<div th:replace="personal_common :: downpersonal"></div>
+</body>
+</html>

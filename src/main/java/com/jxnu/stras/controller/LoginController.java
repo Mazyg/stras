@@ -47,7 +47,11 @@ public class LoginController {
         if(user != null && password.equals(user.getPassword())){
             HttpSession session = request.getSession(true);
             session.setAttribute("user",user);
+            if("admin".equals(user.getUtype())){
             return "redirect:admin/index.html";
+            }else{
+                return "redirect:/";
+            }
         }else {
             model.addAttribute("msg","账号或密码错误");
             return "login";

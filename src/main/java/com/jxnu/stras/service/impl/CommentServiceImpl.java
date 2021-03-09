@@ -1,7 +1,11 @@
 package com.jxnu.stras.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jxnu.stras.domin.Comment;
+import com.jxnu.stras.domin.Topic;
 import com.jxnu.stras.mapper.CommentMapper;
 import com.jxnu.stras.service.CommentService;
 import org.springframework.stereotype.Service;
@@ -28,4 +32,16 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     public List<Comment> findByWid(Integer wid) {
         return commentMapper.findByWid(wid);
     }
+
+    @Override
+    public Integer countByUser(String rphone) {
+        return commentMapper.countByUser(rphone);
+    }
+
+    @Override
+    public Page<Comment> getAllComByrphone(IPage<Comment> page, QueryWrapper<Comment> Wrapper,String rphone) {
+        return commentMapper.getAllComByrphone(page,Wrapper,rphone);
+    }
+
+
 }

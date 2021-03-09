@@ -7,6 +7,7 @@ import com.jxnu.stras.domin.Topic;
 import com.jxnu.stras.domin.User;
 import com.jxnu.stras.mapper.TopicMapper;
 import com.jxnu.stras.mapper.UserMapper;
+import com.jxnu.stras.service.CommentService;
 import com.jxnu.stras.service.InfoService;
 import com.jxnu.stras.service.TopicService;
 import com.jxnu.stras.service.UserService;
@@ -35,6 +36,9 @@ class StrasApplicationTests {
 
     @Resource
     private TopicMapper topicMapper;
+
+    @Resource
+    private CommentService commentService;
 
     @Test
     void topicNum(){
@@ -77,6 +81,11 @@ class StrasApplicationTests {
         QueryWrapper<Topic> wrapper = new QueryWrapper<>();
         Page<Topic> topic = topicMapper.getAllTopic(topicPage,wrapper);
         System.out.println("tr=="+topic);
+    }
+
+    @Test
+    void findComm(){
+
     }
 
 }

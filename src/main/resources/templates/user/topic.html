@@ -40,9 +40,9 @@
                 success:function (msg) {
                     console.log(msg);
                     if(msg === "success"){
-                        alert("操作成功！")
+                        alert("等待审核通过！")
                     }else{
-                        alert("修改出错！")
+                        alert("发布出错！")
                     }
                     window.location.href="/user/topic?pn="+[[${topicList.current}]]+"&is="+[[${is}]];
                 },
@@ -73,7 +73,7 @@
                     </li>
                     <li><a href="">书籍</a></li>
                     <li><a href="">电影</a></li>
-                    <li th:if="${session.user != null}"><a href="@{/user/personalInfo}">个人中心</a>
+                    <li th:if="${session.user != null}"><a href="@{/person/personalInfo}">个人中心</a>
                         <ul class="last">
                                     <li th:if="${session.user.utype == 'admin'}"><a th:href="@{/admin/index.html}">管理界面</a></li>
                                     <li><a th:href="@{/loginOut}">退出登录</a></li>
@@ -109,7 +109,7 @@
                 <div th:each="topics:${topicList.records}" class="indexCon_msg">
                     <div class="indexCon_msg_pic"><img th:src="${topics.user.photo}"></div>
                     <div class="indexCon_msg_detail">
-                        <a th:href="@{/user/topicDal(tid=${topics.tid})}">
+                        <a th:href="@{/user/topicDal(tid=${topics.tid},pns=${topicList.current},is=${is})}">
                             <div class="indexCon_msg_detail_tittle">
                                 <span>[[${topics.ttype}]]</span>
                                 <p >[[${topics.ttitle}]]</p>
@@ -198,7 +198,8 @@
                             <div th:if="${session.user != null}"  class="myMsg_footer">
                                 <ul class="nav nav-pills" role="tablist">
                                     <li role="presentation"><a href="">话题数<span class="badge"><h4>6</h4></span></a></li>
-                                    <li role="presentation"><a href="">消息数<span class="badge"><h4>5</h4></span></a></li>
+                                    <li role="presentation"><a href="">消息数<span class="badge"><h4 th:text="${newNums}">5</h4></span></a></li>
+                                    <li role="presentation"><a href="">文章数<span class="badge"><h4>5</h4></span></a></li>
                                 </ul>
                             </div>
                 </div>

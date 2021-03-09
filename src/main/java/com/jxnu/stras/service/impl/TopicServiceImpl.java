@@ -54,6 +54,31 @@ public class TopicServiceImpl extends ServiceImpl<TopicMapper, Topic> implements
     }
 
     /**
+     * 用户个人界面界面修改话题
+     * @param topic
+     * @return
+     */
+    @Override
+    public boolean updateTopic3(Topic topic) {
+        return topicMapper.updateTopic3(topic);
+    }
+
+    @Override
+    public boolean updateView(Integer tid) {
+        return topicMapper.updateView(tid);
+    }
+
+    @Override
+    public Integer topicCountByphone(String phone) {
+        return topicMapper.topicCountByphone(phone);
+    }
+
+    @Override
+    public Integer topicCountByphoneStatus(String phone) {
+        return topicMapper.topicCountByphoneStatus(phone);
+    }
+
+    /**
      * 删除话题（逻辑删除）
      * @param tid
      * @return

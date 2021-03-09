@@ -22,6 +22,9 @@ public interface DynamicMapper extends BaseMapper<Dynamic> {
     @Select("select tid from dynamic where wid = #{wid}")
     Integer findTidByWid(Integer wid);
 
+    @Select("select * from dynamic where wid = #{wid}")
+    public Dynamic findDynamicByWid(Integer wid);
+
 
 
 }

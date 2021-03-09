@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:fragment="commonheadperson">
-    <link rel="shortcut icon" th:href="@{/img/title.ico}" />
+    <link rel="shortcut icon" th:href="@{/img/logos.ico}" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link th:href="@{/css/base_news.css}" rel="stylesheet" type="text/css">
     <link th:href="@{/font/font.css}" rel="stylesheet" type="text/css">
@@ -108,7 +108,7 @@
                     }else{
                         alert("修改出错！")
                     }
-                    window.location.href="/user/personalInfo";
+                    window.location.href="/person/personalInfo";
                 },
                 error:function () {
                     alert("出错了！")
@@ -133,14 +133,12 @@
                     </li>
                     <li><a th:href="@{/user/hotInfo}">热点资讯</a>
                     </li>
-                    <li><a href="">爱我中华</a>
+                    <li><a th:href="@{/user/chineseInfo}">爱我中华</a>
                     </li>
                     <li><a th:href="@{/user/manModels}">榜样力量</a>
                     </li>
                     <li><a th:href="@{/user/topic}">话题广场</a>
                     </li>
-                    <li><a href="" >书籍</a></li>
-                    <li><a href="">电影</a></li>
                 </ul>
             </div>
         </div>
@@ -158,7 +156,7 @@
             <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
-                        <form th:action="@{/user/updatePhoto}" method="post">
+                        <form th:action="@{/person/updatePhoto}" method="post">
                             <div class="modal-header">
                                 <h4 class="<%--modal-title--%> h4a" id="myModalLabel">更换头像</h4>
                             </div>
@@ -192,19 +190,19 @@
             <div>
                 <ul class="nav nav-pills">
                     <li>
-                        <p class="bf">&nbsp;&nbsp;&nbsp;&nbsp;4</p>
+                        <p class="bf">&nbsp;&nbsp;&nbsp;[[${topicNum}]]</p>
                         <span class="fc">&nbsp;&nbsp;&nbsp;&nbsp;话题数 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
                     </li>
                     <li>
-                        <p class="bf">&nbsp;&nbsp;&nbsp;&nbsp;1</p>
+                        <p class="bf">&nbsp;&nbsp;&nbsp;[[${infoNum}]]</p>
                         <span class="fc">&nbsp;&nbsp;&nbsp;&nbsp;文章数&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
                     </li>
                     <li>
-                        <p class="bf">&nbsp;&nbsp;&nbsp;&nbsp;0</p>
+                        <p class="bf">&nbsp;&nbsp;&nbsp;&nbsp;[[${newNums}]]</p>
                         <span class="fc">&nbsp;&nbsp;&nbsp;&nbsp;消息数&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
                     </li>
                     <li>
-                        <p class="bf">&nbsp;&nbsp;&nbsp;&nbsp;0</p>
+                        <p class="bf">&nbsp;&nbsp;&nbsp;&nbsp;[[${statusNum}]]</p>
                         <span class="fc">&nbsp;&nbsp;&nbsp;&nbsp;待审核数</span>
                     </li>
                 </ul>
@@ -220,11 +218,13 @@
 <!--侧边导航------------------->
 <div th:fragment="leftperson" class="col-md-1 col-md-offset-2 db" >
     <br>
-    <p th:if="${session.user.utype=='admin'}"><a>管理员界面</a></p><br>
-    <p><a th:class="${urlP=='personInfo'?'ap':''}">个人信息</a></p><br>
-    <p><a>我的话题</a></p><br>
-    <p><a>我的文章</a></p><br>
-    <p><a>退出登录</a></p>
+    <p th:if="${session.user.utype=='admin'}"><a th:href="@{/admin/index.html}">管理员界面</a></p><br>
+    <p><a th:href="@{/person/personalInfo}" th:class="${urlP=='personInfo'?'ap':''}">个人信息</a></p><br>
+    <p><a th:href="@{/person/personTopic}" th:class="${urlP=='personTopic'?'ap':''}">我的话题</a></p><br>
+    <p><a th:href="@{/person/putInfo}" th:class="${urlP=='personPut'?'ap':''}">发布文章</a></p><br>
+    <p><a th:href="@{/person/userInfo}" th:class="${urlP=='personInfos'?'ap':''}">我的文章</a></p><br>
+    <p><a th:href="@{/person/userNews}" th:class="${urlP=='personNews'?'ap':''}">我的消息</a></p><br>
+    <p><a th:href="@{/loginOut}">退出登录</a></p>
 </div>
 
 <!-------------------------------------底部------------------------>

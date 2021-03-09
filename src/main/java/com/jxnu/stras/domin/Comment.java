@@ -14,4 +14,7 @@ public class Comment implements Serializable {
     private String phone;
     private String wid;
     private String rphone;
+    private User user;
+    private User ruser;
+    private Dynamic dynamic;
 }
