@@ -337,7 +337,6 @@ public class InfoController {
         info.setDate(time);
         HttpSession session = request.getSession(true);
         User user = (User) session.getAttribute("user");
-        System.out.println("user"+user);
         info.setUphone(user.getPhone());
         info.setUtype(user.getUtype());
         if("admin".equals(user.getUtype())){

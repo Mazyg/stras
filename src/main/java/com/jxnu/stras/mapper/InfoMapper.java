@@ -49,7 +49,7 @@ public interface InfoMapper extends BaseMapper<Info> {
      * @return
      */
     @Select("SELECT * FROM `info`\n" +
-            "where info_type = '首页轮播' and info_del = 0\n" +
+            "where info_type = '首页轮播' and info_del = 0 and info_status = '已通过'\n" +
             "ORDER  BY date desc\n" +
             "limit 0 ,5")
     public List<Info> mainRotate();
@@ -60,6 +60,12 @@ public interface InfoMapper extends BaseMapper<Info> {
             "ORDER BY date DESC\n" +
             "limit 0,6\n")
     public List<Info> findInfoByHot();
+
+    @Select("select count(*) from info where Uphone = #{Uphone}")
+    public Integer countByPhone(String Uphone);
+
+    @Select("select count(*) from info where Uphone = #{Uphone} and info_status = '未审核'")
+    public Integer countByPhoneStatus(String Uphone);
 
 
     /**

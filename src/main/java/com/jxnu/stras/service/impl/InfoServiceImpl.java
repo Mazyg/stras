@@ -63,6 +63,17 @@ public class InfoServiceImpl extends ServiceImpl<InfoMapper,Info> implements Inf
         return infoMapper.mainRotate();
     }
 
+    @Override
+    public Integer countByPhone(String Uphone) {
+        return infoMapper.countByPhone(Uphone);
+    }
+
+    @Override
+    public Integer countByPhoneStatus(String Uphone) {
+        return infoMapper.countByPhoneStatus(Uphone);
+    }
+
+
     /*查询侧边信息*/
     @Override
     public List<Info> findInfoByHot() {

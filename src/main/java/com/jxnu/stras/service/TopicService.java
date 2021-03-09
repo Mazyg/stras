@@ -18,6 +18,11 @@ public interface TopicService extends IService<Topic> {
 
     public boolean updateTopic2(Integer tid);
     public List<Topic> findTopicByHot();
+    public boolean updateTopic3(Topic topic);
+    public boolean updateView(Integer tid);
+    public Integer topicCountByphone(String phone);
+    public Integer topicCountByphoneStatus(String phone);
+
 
     public boolean deleteTopic(Integer tid);
     public Page<Topic> getAllTopicByView(@Param("page") IPage<Topic> page, @Param(Constants.WRAPPER) QueryWrapper<Topic> topicWrapper);

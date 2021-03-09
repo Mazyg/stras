@@ -40,6 +40,14 @@ public interface TopicMapper extends BaseMapper<Topic> {
     public boolean updateTopic2(Integer tid);
 
     /**
+     * 用户个人中心修改话题
+     * @param topic
+     * @return
+     */
+    @Update("update topic set Ttitle = #{Ttitle},content=#{content},date=#{date} where tid=#{tid}")
+    public boolean updateTopic3(Topic topic);
+
+    /**
      * 删除话题（逻辑删除）
      * @param tid
      * @return
@@ -79,5 +87,15 @@ public interface TopicMapper extends BaseMapper<Topic> {
             "ORDER BY Tview DESC\n" +
             "LIMIT 0 , 3")
     public List<Topic> findTopicByHot();
+
+
+    @Update("update topic set Tview = Tview+1 where tid = #{tid} ")
+    public boolean updateView(Integer tid);
+
+    @Select("select count(*) from topic where phone = #{phone}")
+    public Integer topicCountByphone(String phone);
+
+    @Select("select count(*) from topic where phone = #{phone} and Tstatus = '未审核'")
+    public Integer topicCountByphoneStatus(String phone);
 
 }

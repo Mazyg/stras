@@ -10,6 +10,8 @@
     <link rel="stylesheet" th:href="@{/css/reset.css}"/>
     <link rel="stylesheet" th:href="@{/css/public.css}"/>
     <link rel="stylesheet" th:href="@{/css/topic.css}"/>
+    <link th:href="@{/css/base_news.css}" rel="stylesheet" type="text/css">
+    <script type="text/javascript" th:src="@{/js/user/jump.js}"></script>
     <style type="text/css">
         body{
             background-image: url("../img/bg_02.jpg");
@@ -24,8 +26,8 @@
     <div class="ltHead_cen">
        <!--<a href=""><img th:src="@{/img/title.ico}" alt="" class="headPic1"/></a>-->
         <ul class="headNav">
-            <li><a th:href="@{/user/mainInfo}">首页</a></li>
-            <li><a href="javascript:;" onClick="javascript:history.back(-1);">返回上一页</a></li>
+            <li><a th:href="@{/}">首页</a></li>
+            <li><a th:href="@{/user/topic(pn=${pn},is=${is})}">返回上一页</a></li>
         </ul>
         <!--未登入开始-->
         <div class="ltForm">
@@ -35,7 +37,7 @@
                         <li><a th:href="@{/registration}">注册</a></li>
             </ul>
             <ul th:if="${session.user != null}">
-                <li><a th:href="@{/user/personalInfo}" th:text="${session.user.uname}"></a></li>
+                <li><a th:href="@{/person/personalInfo}" th:text="${session.user.uname}"></a></li>
             </ul>
         </div>
     </div>
@@ -78,7 +80,7 @@
             </div>
            <!-- 楼主可以删除评论、自己可以删除自己的评论删除按钮酌情出现
             回复后的情况-->
-               <div th:each="dynamic:${dynamics}" class="newPending_son">
+               <div th:each="dynamic:${dynamics.records}" class="newPending_son">
                    <div class="pendPic"><img th:src="${dynamic.user.photo}"></div>
                    <div class="pendDetail">
 
@@ -91,12 +93,12 @@
                        </div>
                                <div th:if="${dynamic.comments.size() != 0}" class="pendDetail_replayCon">
                                        <div th:each="comment:${dynamic.comments}">
-                                       <p><span>${comment.uname} 回复 ${comment.rname}：${comment.content}
-                                       <button class="replayBtn" id="comment">回复</button></span></p>
+                                       <p><span>[[${comment.user.uname}]] 回复 @[[${comment.ruser.uname}]]：[[${comment.content}]]
+                                       <button class="replayBtn" id="comment"  th:if="${session.user != null}">回复</button></span></p>
                                        <div class="pendDetail_action">
-                                           <input type="text"  placeholder="回复${comment.uname}:(请不要超过40个字)" maxlength="40"/>
-                                           <input type="text" style="display: none" value="${comment}" >
-                                           <input type="text" style="display: none" value="${dynamic.wid}" >
+                                           <input type="text"  th:placeholder="${'回复'+comment.user.uname+':(请不要超过40个字)'}" maxlength="40"/>
+                                           <input type="text" style="display: none" th:value="${comment.user.phone}" >
+                                           <input type="text" style="display: none" th:value="${dynamic.wid}" >
                                            <button class="replyTopic">回复</button>
                                            <button>取消</button>
                                        </div>
@@ -106,13 +108,13 @@
                            <ul th:if="${session.user != null }">
                                <li></li>
                                <li class="replayBtn">+</li>
-                                       <input  type="text" style="display: none" value="${dynamic.wid}" >
+                                       <input  type="text" style="display: none" th:value="${dynamic.wid}" >
                                        <li th:if="${session.user != null && dynamic.phone == session.user.phone}" class="delateBtn">删除</li>
                            </ul >
                        </div>
                        <div class="pendDetail_action">
-                           <input type="text" placeholder=" 回复 [[${dynamic.user.uname}]] :(请不要超过40个字)" maxlength="40" />
-                           <input type="text" style="display: none" th:value="${dynamic.user.uname}" >
+                           <input type="text" th:placeholder="  ${'回复' +dynamic.user.uname+'(请不要超过40个字)'} " maxlength="40" />
+                           <input type="text" style="display: none" th:value="${dynamic.user.phone}" >
                            <input type="text" style="display: none" th:value="${dynamic.wid}" >
                            <button class="replyTopic">回复</button>
                            <button>取消</button>
@@ -122,6 +124,16 @@
                </div>
             <!--测试内容结束、十条内容分页-->
         </div>
+        <div class="pager">
+        <a th:href="@{/user/topicDal(pn=${dynamics.current}-1,tid=${ids})}" rel="external nofollow" ><<</a>
+        <!-- 页数列表 -->
+        <a  th:each="num:${#numbers.sequence(1,dynamics.pages)}"  th:href="@{/user/topicDal(pn=${num},tid=${ids})}" rel="external nofollow" th:class="${num==dynamics.current?'current':''}">[[${num}]]</a>
+        <!-- 下一页 按钮 -->
+        <a th:href="@{/user/topicDal(pn=${dynamics.current}+1,tid=${ids})}" rel="external nofollow">
+            >>
+        </a>
+
+    </div>
         <div class="hig"></div>
         </div>
 
@@ -135,6 +147,7 @@
                         <ul class="nav nav-pills" role="tablist">
                             <li role="presentation"><a href="">话题数<span class="badge"><h4>1</h4></span></a></li>
                             <li role="presentation"><a href="">消息数<span class="badge"><h4>4</h4></span></a></li>
+                            <li role="presentation"><a href="">文章数<span class="badge"><h4>4</h4></span></a></li>
                         </ul>
                     </div>
         </div>
@@ -206,7 +219,7 @@
             $.ajax({
                 url:"/user/saveComment",
                 contentType:"application/json;charset=UTF-8",
-                data:JSON.stringify({"content":$content,"uname":$uname,"rname":$rname,"wid":$wid}),
+                data:JSON.stringify({"content":$content,"phone":$uname,"rphone":$rname,"wid":$wid}),
                 dataType:"json",
                 type:"post",
                 success:function (data) {
@@ -225,7 +238,6 @@
             var $user = $("#user").text();
             var $tid = $("#topicId").val();
            /* var $t_type = $("#t_type").val();*/
-            alert("tid"+$tid)
            /* var username = "<%=session.getAttribute("users")%>"*/
 
             var patt1 = /^[\s]*$/;
@@ -287,7 +299,7 @@
                     if (result == "false"){
                         alert("删除回复失败");
                     }else {
-                        window.location.href = "/user/topicDal.do?tid="+$tid;
+                        window.location.href = "/user/topicDal?tid="+$tid;
                     }
                 }
             });

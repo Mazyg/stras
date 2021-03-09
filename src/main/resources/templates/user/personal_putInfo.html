@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>文章发布-繁星思政网</title>
+    <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="../tinymce/tinymce.min.js"></script>
+    <div th:replace="personal_common :: commonheadperson"></div>
+    <script type="text/javascript">
+        function selectFiles(){
+            $("#photoI").trigger("click");
+        }
+        function getImages() {
+            var photo=document.querySelector("#photoI");
+            var file=photo.files[0];
+            var type = $("#info").val();
+            var formData=new FormData();
+            formData.append("img",file);
+            formData.append("type",type);
+            var xhr=new XMLHttpRequest();
+            xhr.open("post","http://81.68.234.98:5598/upload/img")
+            xhr.onload=function (ev) {
+                var json;
+                if(xhr.status!==200){
+                    failFun('HTTP Error:'+xhr.status);
+                    return
+                }
+                json=JSON.parse(this.responseText);
+                if(!json||typeof json.location !='string'){
+                    failFun('Invalid JSON:'+xhr.responseText);
+                    return;
+                }else{
+                    console.log(json.location);
+                    $("#urls").val(json.location) ;
+                    $("#srcs").attr("src",json.location);
+                }
+
+
+            };
+            xhr.send(formData);
+        }
+        /**
+         * ajax提交表单，并刷新页面
+         */
+        function submitInfo() {
+            var content = tinyMCE.activeEditor.getContent();
+            alert(content);
+            $.ajax({
+                type:"POST",
+                url:"/admin/submitInfo",
+                data:$('#info_form').serialize()+content,
+                success:function (msg) {
+                    if(msg === "success"){
+                        alert("操作成功！审核通过后将发布")
+                    }else{
+                        alert("修改出错！")
+                    }
+                    window.location.href="/person/putInfo";
+                },
+                error:function () {
+                    alert("出错了！")
+                }
+            });
+        }
+    </script>
+
+    <script>
+        tinymce.init({
+            selector: '#description',
+            //skin:'oxide-dark',
+            language:'zh_CN',
+            plugins: 'print preview searchreplace autolink directionality visualblocks visualchars  image link media template code codesample table charmap hr pagebreak nonbreaking anchor insertdatetime advlist lists wordcount imagetools textpattern help emoticons autosave bdmap indent2em autoresize lineheight formatpainter axupimgs',
+            toolbar: 'code undo redo restoredraft | cut copy paste pastetext | forecolor backcolor bold italic underline strikethrough link anchor | alignleft aligncenter alignright alignjustify outdent indent | blockquote subscript superscript removeformat | \
+                     styleselect formatselect fontselect fontsizeselect | bullist numlist |  \
+                     table image media charmap emoticons hr pagebreak insertdatetime print preview  | indent2em lineheight formatpainter axupimgs',
+            height: 650, //编辑器高度
+            min_height: 400,
+            fontsize_formats: '12px 14px 16px 18px 24px 36px 48px 56px 72px',
+            font_formats: '微软雅黑=Microsoft YaHei,Helvetica Neue,PingFang SC,sans-serif;苹果苹方=PingFang SC,Microsoft YaHei,sans-serif;宋体=simsun,serif;仿宋体=FangSong,serif;黑体=SimHei,sans-serif;Arial=arial,helvetica,sans-serif;Arial Black=arial black,avant garde;Book Antiqua=book antiqua,palatino;Comic Sans MS=comic sans ms,sans-serif;Courier New=courier new,courier;Georgia=georgia,palatino;Helvetica=helvetica;Impact=impact,chicago;Symbol=symbol;Tahoma=tahoma,arial,helvetica,sans-serif;Terminal=terminal,monaco;Times New Roman=times new roman,times;Verdana=verdana,geneva;Webdings=webdings;Wingdings=wingdings,zapf dingbats;知乎配置=BlinkMacSystemFont, Helvetica Neue, PingFang SC, Microsoft YaHei, Source Han Sans SC, Noto Sans CJK SC, WenQuanYi Micro Hei, sans-serif;小米配置=Helvetica Neue,Helvetica,Arial,Microsoft Yahei,Hiragino Sans GB,Heiti SC,WenQuanYi Micro Hei,sans-serif',
+            link_list: [
+                { title: '预置链接1', value: 'http://www.tinymce.com' },
+                { title: '预置链接2', value: 'http://tinymce.ax-z.cn' }
+            ],
+            image_list: [
+                { title: '预置图片1', value: 'https://www.tiny.cloud/images/glyph-tinymce@2x.png' },
+                { title: '预置图片2', value: 'https://www.baidu.com/img/bd_logo1.png' }
+            ],
+            image_class_list: [
+                { title: 'None', value: '' },
+                { title: 'Some class', value: 'class-name' }
+            ],
+            //importcss_append: true,
+            //自定义文件选择器的回调内容
+            file_picker_callback: function (callback, value, meta) {
+                if (meta.filetype === 'file') {
+                    callback('https://www.baidu.com/img/bd_logo1.png', { text: 'My text' });
+                }
+                if (meta.filetype === 'image') {
+                    callback('https://www.baidu.com/img/bd_logo1.png', { alt: 'My alt text' });
+                }
+                if (meta.filetype === 'media') {
+                    callback('movie.mp4', { source2: 'alt.ogg', poster: 'https://www.baidu.com/img/bd_logo1.png' });
+                }
+            },
+            //为内容模板插件提供预置模板
+            templates: [
+                { title: '模板1', description: '介绍文字1', content: '模板内容' },
+                { title: '模板2', description: '介绍文字2', content: '<div class="mceTmpl"><span class="cdate">CDATE</span>，<span class="mdate">MDATE</span>，我的内容</div>' }
+            ],
+            //
+            template_cdate_format: '[CDATE: %m/%d/%Y : %H:%M:%S]',
+            template_mdate_format: '[MDATE: %m/%d/%Y : %H:%M:%S]',
+            autosave_ask_before_unload: false,
+            toolbar_drawer : false,
+            // images_upload_base_path: '/demo',
+            images_upload_handler: function (blobInfo, succFun, failFun) {
+                var xhr,formData;
+                var art_title=$("art_title").val();
+                var art_author=$("art_author").val();
+                var type = $("#info").val();
+                xhr = new XMLHttpRequest();
+                xhr.withCredentials= false;
+                xhr.open("post","http://81.68.234.98:5598/upload/img");
+                formData=new FormData();
+                formData.append("img" , blobInfo.blob());
+                formData.append("type",type);
+                xhr.onload = function (ev) {
+                    var json;
+                    if(xhr.status!==200){
+                        failFun('HTTP Error:'+xhr.status);
+                        return
+                    }
+                    json=JSON.parse(this.responseText);
+                    if(!json||typeof json.location !='string'){
+                        failFun('Invalid JSON:'+xhr.responseText);
+                        return;
+                    }
+                    // 成功回调
+                    succFun(json.location);
+                };
+                xhr.send(formData);
+            }
+
+        });
+    </script>
+
+    <style>
+        .div-highe{
+            height: 70px;
+        }
+        .img{
+            width: 160px;
+            height: 205px;
+        }
+        .div-highe2{
+            height: 40px;
+        }
+        .db{
+            background: white;
+            height: 900px;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="personal_common :: daohang"></div>
+<!-----------个人展示部分---------------------------------------->
+<div th:replace="personal_common :: personphoto"></div>
+<!--------------------------主体部分---------------------------------->
+<div class="col-md-12" >
+    <!--侧边导航------------------->
+    <div  class="col-md-1 col-md-offset-2 db" >
+        <br>
+        <p th:if="${session.user.utype=='admin'}"><a th:href="@{/admin/index.html}">管理员界面</a></p><br>
+        <p><a th:href="@{/person/personalInfo}" th:class="${urlP=='personInfo'?'ap':''}">个人信息</a></p><br>
+        <p><a th:href="@{/person/personTopic}" th:class="${urlP=='personTopic'?'ap':''}">我的话题</a></p><br>
+        <p><a th:href="@{/person/putInfo}" class="ap">发布文章</a></p><br>
+        <p><a th:href="@{/person/userInfo}" th:class="${urlP=='personInfos'?'ap':''}">我的文章</a></p><br>
+        <p><a th:href="@{/person/userNews}" th:class="${urlP=='personNews'?'ap':''}">我的消息</a></p><br>
+        <p><a th:href="@{/loginOut}">退出登录</a></p>
+    </div>
+    <!--主体部分---------------------------->
+    <div class="col-md-9  db"><br>
+        <section class="panel">
+            <div class="panel-body">
+                <!-- <div class="space15"></div>-->
+                <form class="forms-sample" id="info_form">
+                    <div class="col-sm-12">
+                        <div class="col-sm-7">
+                            <div class="form-group">
+                                <label for="title">标题</label>
+                                <input type="text" class="form-control" id="title" placeholder="标题" name="title" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="introduction">简介</label>
+                                <div class="input-group col-xs-12">
+                                    <textarea name="introduce" id="introduction" placeholder="简介" required="required" class="col-10 form-control"  style=" height:80px"></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="info_category"> 信息类别</label>
+                                <input type="text"  style="display:none" id="type" />
+                                <div class="col-sm-12" id="info_category">
+                                    <select class="form-control" id="info" name="infoType">
+                                        <option value="全球战疫">全球战疫</option>
+                                        <option value="榜样力量">榜样力量</option>
+                                        <option value="身边榜样">身边榜样</option>
+                                        <option value="新时代楷模">新时代楷模</option>
+                                        <option value="热点时事">热点时事</option>
+                                        <option value="最美中国人">最美中国人</option>
+                                        <option value="最美中国景">最美中国景</option>
+                                        <option value="最美中国事">最美中国事</option>
+                                        <option value="电影">电影</option>
+                                        <option value="书籍">书籍</option>
+                                    </select>
+
+                                </div>
+                            </div>
+                            <div class="div-highe2"></div>
+                            <div class="form-group">
+                                <label>上传封面</label>
+                                <div class="input-group col-xs-12">
+                                    <div class="col-xs-10">
+                                        <input type="text" class="form-control file-upload-info" readonly placeholder="上传封面" id="urls" name="photo" >
+
+                                        <input type="file" id="photoI" style="display:none" multiple="multiple" onchange="getImages()"/>
+                                    </div>
+                                    <div class="col-xs-2">
+                                        <button class="file-upload-browse btn btn-primary" type="button" onclick="selectFiles()">上传</button></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-5">
+                            <label  class="col-sm-3  control-label">封面预览</label>
+                            <div class="col-sm-7 col-sm-offset-2">
+                                 <span>
+                                    <div class="div-highe"></div>
+                               <img class="img" id="srcs" src="/images/cover.jpg"  alt="封面" />
+                                 </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-lg-12">
+                        <label for="description">内容</label>
+                        <textarea id="description"  name="content"></textarea>
+                    </div>
+                    <input type="reset" class="btn btn-light" value="重置">
+                    <input type="button" class="btn btn-primary mr-2" value="提交" id="subBtn" onclick="submitInfo()">
+                </form>
+            </div>
+        </section>
+    </div>
+</div>
+<!-------------------------------------底部------------------------>
+<div th:replace="personal_common :: downpersonal"></div>
+</body>
+</html>

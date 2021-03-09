@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover">
     <meta name="format-detection" content="telephone=no" />
     <title>首页</title>
-    <link rel="shortcut icon" th:href="@{/img/title.ico}" />
+    <link rel="shortcut icon" th:href="@{/img/logos.ico}" />
     <link rel="stylesheet" th:href="@{/css/slick.css}">
     <link th:href="@{/css/index.css}" rel="stylesheet" type="text/css">
     <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
@@ -23,7 +23,7 @@
     <div class="smenu" id="smenu"><i class="icon-menu"></i></div>
     <div class="navwrapper">
         <div class="logowrapper">
-            <a href="#" class="logo"><img src="" alt=""></a>
+            <a href="#" class="logo"><img th:src="@{/img/logo.png}" alt=""></a>
         </div>
         <div class="nav">
             <div class="mainnav clearfix">
@@ -38,7 +38,7 @@
                     </li>
                     <li><a th:href="@{/user/topic}">话题广场</a>
                     </li>
-                        <li th:if="${session.user != null}"><a  th:href="@{/user/personalInfo}" >个人中心</a>
+                        <li th:if="${session.user != null}"><a  th:href="@{/person/personalInfo}" >个人中心</a>
                             <ul class="last">
                                 <li th:if="${session.user.utype=='admin'}"><a th:href="@{/admin/index.html}">管理员界面</a></li>
                                 <li><a th:href="@{/loginOut}">退出登录</a></li>

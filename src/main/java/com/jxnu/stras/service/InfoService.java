@@ -14,6 +14,8 @@ public interface InfoService extends IService<Info> {
     public boolean updateInfo2(Integer infoId);
     public boolean deleteInfo(Integer infoId);
     public List<Info> mainRotate();
+    public Integer countByPhone(String Uphone);
+    public Integer countByPhoneStatus(String Uphone);
     public List<Info> findInfoByHot();
     public List<Info> findInfoBytype(@Param("info_type") String info_type, @Param("start") int start, @Param("length") int length);
 }

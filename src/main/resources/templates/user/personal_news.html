@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>我的消息-繁星思政网</title>
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+    <div th:replace="personal_common :: commonheadperson"></div>
+
+</head>
+<body>
+<div th:replace="personal_common :: daohang"></div>
+<!-----------个人展示部分---------------------------------------->
+<div th:replace="personal_common :: personphoto"></div>
+<!--------------------------主体部分---------------------------------->
+<div class="col-md-12" >
+    <!--侧边导航------------------->
+    <div th:replace="personal_common :: leftperson(urlP='personNews')"></div>
+    <!--主体部分---------------------------->
+    <div class="col-md-7  db"><br>
+        <div class="col-md-9">
+            <div class="panel">
+                <header class="panel-heading" style="color: white">
+                    我的消息
+                </header>
+                <div class="panel-body">
+                    <h3 th:if="${comments.records.size() == 0}">暂无消息！</h3>
+                    <ul class="chats cool-chat" th:if="${comments.records.size() !=0}">
+                        <li th:each="commentList:${comments.records}" class="in">
+                            <img th:src="${commentList.user.photo}" alt="" class="avatar">
+                            <div class="message">
+                                <span class="arrow"></span>
+                                <a class="name" href="#" th:text="${commentList.user.uname}">Jone Doe</a>
+                                <span class="datetime" >[[${commentList.date}]] 回复您的评论 </span>
+                                <span class="body">
+                                            [[${commentList.content}]]
+                                        </span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="pager">
+
+                    <a th:href="@{/person/userNews(pn=${comments.current}-1)}" rel="external nofollow" ><<</a>
+                    <!-- 页数列表 -->
+                    <a  th:each="num:${#numbers.sequence(1,comments.pages)}"  th:href="@{/person/userNews(pn=${num})}" rel="external nofollow" th:class="${num==comments.current?'current':''}">[[${num}]]</a>
+                    <!-- 下一页 按钮 -->
+                    <a th:href="@{/person/userNews(pn=${comments.current}+1)}" rel="external nofollow">
+                        >>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+
+        </div>
+</div>
+<!-------------------------------------底部------------------------>
+<div th:replace="personal_common :: downpersonal"></div>
+</body>
+</html>

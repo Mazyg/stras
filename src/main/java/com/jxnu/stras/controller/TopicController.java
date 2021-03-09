@@ -39,6 +39,17 @@ public class TopicController {
     @Resource
     CommentService commentService;
 
+    public void nums(HttpServletRequest request,Model model){
+        User users = (User) request.getSession().getAttribute("user");
+        if (users == null){return;}
+        Integer TopicNum = topicService.topicCountByphone(users.getPhone());
+        Integer infoNum = infoService.countByPhone(users.getPhone());
+        Integer newNum = commentService.countByUser(users.getPhone());
+        model.addAttribute("topicNum",TopicNum);
+        model.addAttribute("infoNum",infoNum);
+        model.addAttribute("newNums",newNum);
+    }
+
     /**
      * 用户界面展示所有的话题
      * @param pn 页数
@@ -47,7 +58,8 @@ public class TopicController {
      * @return
      */
     @GetMapping("/user/topic")
-    public String userAllTopic(@RequestParam(value = "pn",defaultValue = "1")Integer pn ,@RequestParam(value = "is",defaultValue = "0")Integer is, Model model){
+    public String userAllTopic(@RequestParam(value = "pn",defaultValue = "1")Integer pn ,@RequestParam(value = "is",defaultValue = "0")Integer is,
+                               Model model,HttpServletRequest request){
         Page<Topic> topicPage = new Page<>(pn,6);
         QueryWrapper<Topic> wrapper = new QueryWrapper<>();
         wrapper.eq("del",0);
@@ -60,6 +72,7 @@ public class TopicController {
             model.addAttribute("topicList",topics);
             model.addAttribute("is",0);
         }
+        nums(request,model);
         List<Topic> hotTopic = topicService.findTopicByHot();
         model.addAttribute("hotTopics",hotTopic);
         return "user/topic";
@@ -227,21 +240,35 @@ public class TopicController {
      * @return
      */
     @GetMapping("/user/topicDal")
-    public String topicDal(@RequestParam("tid")Integer tid,Model model){
+    public String topicDal(@RequestParam("tid")Integer tid,@RequestParam(value = "pn" ,defaultValue = "1")Integer pn,@RequestParam(value = "pns" ,defaultValue = "1")Integer pns,
+                           @RequestParam(value = "is",defaultValue = "0")Integer is, Model model,HttpServletRequest request){
+        boolean isUpdate = topicService.updateView(tid);
+        model.addAttribute("pn",pns);
+        model.addAttribute("is",is);
         Topic topic = topicService.getTopicbyID(tid);
         User user = userService.getUserByPhone(topic.getPhone());
         List<Info>  infoList = infoService.findInfoBytype(topic.getTtype(),0,5);
         model.addAttribute("topicDal",topic);
         model.addAttribute("topicUser",user);
         model.addAttribute("infoType",infoList);
-        List<Dynamic> dynamics = dynamicService.findByTid(tid);
-        for(Dynamic dynamic:dynamics){
+        Page<Dynamic> dPage = new Page<>(pn,4);
+        QueryWrapper<Dynamic> wrapper = new QueryWrapper<>();
+        wrapper.eq("tid",tid);
+        wrapper.select("wid","date","content","phone","tid");
+        Page<Dynamic> dynamicList = dynamicService.page(dPage,wrapper);
+        for(Dynamic dynamic:dynamicList.getRecords()){
             dynamic.setComments(commentService.findByWid(dynamic.getWid()));
             dynamic.setUser(userService.getUserByPhone(dynamic.getPhone()));
-            System.out.println("comm=="+dynamic.getComments());
         }
 
-        model.addAttribute("dynamics",dynamics);
+        Integer TopicNum = topicService.topicCountByphone(user.getPhone());
+        Integer infoNum = infoService.countByPhone(user.getPhone());
+        Integer newNum = commentService.countByUser(user.getPhone());
+        model.addAttribute("topicNum",TopicNum);
+        model.addAttribute("infoNum",infoNum);
+        model.addAttribute("newNums",newNum);
+        model.addAttribute("ids",tid);
+        model.addAttribute("dynamics",dynamicList);
         return "user/topDal";
     }
 }
