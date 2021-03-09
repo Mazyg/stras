@@ -81,6 +81,7 @@
                <div th:each="dynamic:${dynamics}" class="newPending_son">
                    <div class="pendPic"><img th:src="${dynamic.user.photo}"></div>
                    <div class="pendDetail">
+
                        <div class="pendDetail_head">
                            <p>[[${dynamic.user.uname}]]<span>[[${dynamic.date}]]</span></p>
                            <input type="text" style="display: none" id="wid" value="${dynamic.wid}">
