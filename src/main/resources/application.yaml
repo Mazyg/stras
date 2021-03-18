@@ -33,3 +33,9 @@ spring:
           enabled: true
           config:
             drop-table-allow: false
+  redis:
+    host: 81.68.234.98
+    port: 6379
+    password: mn123456
+    timeout: 5000
+

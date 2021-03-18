@@ -7,6 +7,10 @@ import com.jxnu.stras.domin.User;
 import com.jxnu.stras.domin.Video;
 import com.jxnu.stras.service.InfoService;
 import com.jxnu.stras.service.VideoService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +24,7 @@ import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Controller
 public class InfoController {
@@ -29,6 +34,9 @@ public class InfoController {
 
     @Resource
     VideoService videoService;
+
+    @Autowired
+    RedisTemplate redisTemplate;
 
     /**
      * 跳转话题发布页面
@@ -122,10 +130,7 @@ public class InfoController {
      */
     @GetMapping("/user/chineseInfo")
     public String chinese(Model model,@RequestParam(value = "pn",defaultValue = "1")Integer pn){
-        Page<Info> infoPage = new Page<>(pn,3);
-        QueryWrapper<Info> wrapper = new QueryWrapper<>();
-        wrapper.like("info_type","最美");
-        Page<Info> infoList = infoService.page(infoPage,wrapper);
+        Page<Info> infoList = infoService.chinesePageInfo(pn);
         List<Info> chinese = infoService.findInfoBytype("最美中国景",0,4);
         model.addAttribute("chinese",chinese);
         model.addAttribute("chineseList",infoList);
@@ -227,11 +232,7 @@ public class InfoController {
     /*跳转热点时事界面*/
     @GetMapping("/user/hotInfo")
     public String hotInfo(@RequestParam(value = "pn",defaultValue = "1")Integer pn,Model model){
-        Page<Info> infoPage = new Page<>(pn,4);
-        QueryWrapper<Info> wrapper = new QueryWrapper<>();
-        wrapper.eq("info_del",0);
-        wrapper.eq("info_type","热点时事");
-        Page<Info> infoList = infoService.page(infoPage,wrapper);
+        Page<Info> infoList = infoService.hotPageInfo(pn);
         model.addAttribute("hotInfo",infoList);
         List<Info> hotView = infoService.findInfoBytype("热点时事",0,1);
         model.addAttribute("hotTop",hotView);
@@ -251,11 +252,7 @@ public class InfoController {
      */
     @GetMapping("/user/manModels")
     public String manModel(@RequestParam(value = "pn",defaultValue = "1")Integer pn,Model model){
-        Page<Info> infoPage = new Page<>(pn,4);
-        QueryWrapper<Info> wrapper = new QueryWrapper<>();
-        wrapper.eq("info_del",0);
-        wrapper.eq("info_type","榜样力量");
-        Page<Info> infoList = infoService.page(infoPage,wrapper);
+        Page<Info> infoList = infoService.manPageInfo(pn);
         model.addAttribute("manList",infoList);
         List<Info> manTop = infoService.findInfoBytype("榜样力量",0,1);
         model.addAttribute("manTop",manTop);
@@ -267,13 +264,15 @@ public class InfoController {
     }
 
 
+    /**
+     * 全球战役
+     * @param pn 页数
+     * @param model
+     * @return
+     */
     @GetMapping("/user/allE")
     public String allEarth(@RequestParam(value = "pn",defaultValue = "1")Integer pn,Model model){
-        Page<Info> infoPage = new Page<>(pn,4);
-        QueryWrapper<Info> wrapper = new QueryWrapper<>();
-        wrapper.eq("info_del",0);
-        wrapper.eq("info_type","全球战疫");
-        Page<Info> infoList = infoService.page(infoPage,wrapper);
+        Page<Info> infoList = infoService.allPageE(pn);
         model.addAttribute("eList",infoList);
         List<Info> manTop = infoService.findInfoBytype("全球战疫",0,1);
         model.addAttribute("eTop",manTop);

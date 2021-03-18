@@ -5,18 +5,30 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jxnu.stras.domin.Topic;
+import com.jxnu.stras.domin.User;
 import com.jxnu.stras.mapper.TopicMapper;
 import com.jxnu.stras.service.TopicService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Service("TopicService")
 public class TopicServiceImpl extends ServiceImpl<TopicMapper, Topic> implements TopicService {
 
     @Resource
     TopicMapper topicMapper;
+
+    @Autowired
+    RedisTemplate redisTemplate;
+
+
 
     /**
      * 通过ID查找话题
@@ -25,7 +37,16 @@ public class TopicServiceImpl extends ServiceImpl<TopicMapper, Topic> implements
      */
     @Override
     public Topic getTopicbyID(Integer tid) {
-        return topicMapper.getTopicByID(tid);
+        String key = tid+"";
+        if(!redisTemplate.hasKey(key)){
+            Topic topic = topicMapper.getTopicByID(tid);
+            redisTemplate.opsForValue().set(key, topic);
+            redisTemplate.expire(key,6,TimeUnit.HOURS);
+            return (Topic) redisTemplate.opsForValue().get(key);
+        }else{
+            return (Topic) redisTemplate.opsForValue().get(key);
+        }
+
     }
 
     /**
@@ -63,9 +84,31 @@ public class TopicServiceImpl extends ServiceImpl<TopicMapper, Topic> implements
         return topicMapper.updateTopic3(topic);
     }
 
+    /**
+     * 更新话题浏览量，2小时内，用户无论访问多少次，算一次访问量
+     * @param tid 话题ID
+     * @param request 获取用户信息
+     * @return true Or false
+     */
     @Override
-    public boolean updateView(Integer tid) {
+    public boolean updateView(Integer tid, HttpServletRequest request) {
+        HttpSession session = request.getSession(true);
+        User user = (User) session.getAttribute("user");
+        String key;
+        if(user !=null){
+             key = tid+user.getPhone();
+        }else{
+            key = tid+"*";
+        }
+
+        if(!redisTemplate.hasKey(key)){
+            ValueOperations<String,String> operations = redisTemplate.opsForValue();
+            operations.set(key,"1");
+            redisTemplate.expire(key,2,TimeUnit.HOURS);
         return topicMapper.updateView(tid);
+        }else{
+            return false;
+        }
     }
 
     @Override
