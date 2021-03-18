@@ -2,22 +2,26 @@ package com.jxnu.stras;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.jxnu.stras.utils.SerializeUtil;
 import com.jxnu.stras.domin.Info;
 import com.jxnu.stras.domin.Topic;
 import com.jxnu.stras.domin.User;
 import com.jxnu.stras.mapper.TopicMapper;
 import com.jxnu.stras.mapper.UserMapper;
-import com.jxnu.stras.service.CommentService;
 import com.jxnu.stras.service.InfoService;
 import com.jxnu.stras.service.TopicService;
 import com.jxnu.stras.service.UserService;
+import net.sf.jsqlparser.statement.select.Top;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 
 import javax.annotation.Resource;
-import java.sql.Wrapper;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @SpringBootTest
 class StrasApplicationTests {
@@ -37,8 +41,9 @@ class StrasApplicationTests {
     @Resource
     private TopicMapper topicMapper;
 
-    @Resource
-    private CommentService commentService;
+    @Autowired
+    RedisTemplate redisTemplate;
+
 
     @Test
     void topicNum(){
@@ -85,7 +90,30 @@ class StrasApplicationTests {
 
     @Test
     void findComm(){
+        ValueOperations<String,String> operations = redisTemplate.opsForValue();
+        operations.set("test","retg");
+        String tr =operations.get("test");
+        System.out.println("drth=="+tr);
+    }
 
+    @Test
+    void redis(){
+       /* String key = "20";
+
+        ValueOperations<String,String> operations = redisTemplate.opsForValue();
+        operations.set(key,"1");
+        redisTemplate.expire(key,2,TimeUnit.HOURS);*/
+
+        List<Info> model = infoService.findInfoBytype("新时代楷模",0,3);
+        redisTemplate.opsForValue().set("modela",model);
+        redisTemplate.expire("modela",10,TimeUnit.MINUTES);
+        System.out.println(redisTemplate.opsForValue().get("modela"));
+
+
+        /*Topic topic = topicMapper.getTopicByID(20);
+            redisTemplate.opsForValue().set(key, topic);
+            redisTemplate.expire(key,12, TimeUnit.HOURS);
+        System.out.println(redisTemplate.opsForValue().get(key));*/
     }
 
 }

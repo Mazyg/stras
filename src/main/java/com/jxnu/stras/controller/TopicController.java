@@ -7,6 +7,9 @@ import com.jxnu.stras.domin.Info;
 import com.jxnu.stras.domin.Topic;
 import com.jxnu.stras.domin.User;
 import com.jxnu.stras.service.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,6 +41,8 @@ public class TopicController {
 
     @Resource
     CommentService commentService;
+
+
 
     public void nums(HttpServletRequest request,Model model){
         User users = (User) request.getSession().getAttribute("user");
@@ -242,7 +247,7 @@ public class TopicController {
     @GetMapping("/user/topicDal")
     public String topicDal(@RequestParam("tid")Integer tid,@RequestParam(value = "pn" ,defaultValue = "1")Integer pn,@RequestParam(value = "pns" ,defaultValue = "1")Integer pns,
                            @RequestParam(value = "is",defaultValue = "0")Integer is, Model model,HttpServletRequest request){
-        boolean isUpdate = topicService.updateView(tid);
+        boolean isUpdate = topicService.updateView(tid,request);
         model.addAttribute("pn",pns);
         model.addAttribute("is",is);
         Topic topic = topicService.getTopicbyID(tid);

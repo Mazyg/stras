@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.jxnu.stras.domin.Topic;
 import org.apache.ibatis.annotations.Param;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 public interface TopicService extends IService<Topic> {
@@ -19,7 +20,7 @@ public interface TopicService extends IService<Topic> {
     public boolean updateTopic2(Integer tid);
     public List<Topic> findTopicByHot();
     public boolean updateTopic3(Topic topic);
-    public boolean updateView(Integer tid);
+    public boolean updateView(Integer tid, HttpServletRequest request);
     public Integer topicCountByphone(String phone);
     public Integer topicCountByphoneStatus(String phone);
 
