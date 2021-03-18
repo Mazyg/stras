@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>话题广场</title>
-    <link rel="shortcut icon" th:href="@{/img/title.ico}" />
+    <link rel="shortcut icon" th:href="@{/img/logo.png}" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -65,14 +65,12 @@
                     </li>
                     <li><a th:href="@{/user/hotInfo}">热点时事</a>
                     </li>
-                    <li><a href="">爱我中华</a>
+                    <li><a th:href="@{/user/chineseInfo}">爱我中华</a>
                     </li>
                     <li><a th:href="@{/user/manModels}" >榜样力量</a>
                     </li>
                     <li><a th:href="@{/user/topic}">话题广场</a>
                     </li>
-                    <li><a href="">书籍</a></li>
-                    <li><a href="">电影</a></li>
                     <li th:if="${session.user != null}"><a href="@{/person/personalInfo}">个人中心</a>
                         <ul class="last">
                                     <li th:if="${session.user.utype == 'admin'}"><a th:href="@{/admin/index.html}">管理界面</a></li>
