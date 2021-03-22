@@ -77,7 +77,7 @@
             formData.append("img",file);
             formData.append("type",type);
             var xhr=new XMLHttpRequest();
-            xhr.open("post","http://81.68.234.98:5598/upload/img")
+            xhr.open("post","/upload/img")
             xhr.onload=function (ev) {
                 var json;
                 if(xhr.status!==200){

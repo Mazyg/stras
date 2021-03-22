@@ -2,6 +2,8 @@ package com.jxnu.stras;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.jxnu.stras.domin.Course;
+import com.jxnu.stras.mapper.CourseMapper;
 import com.jxnu.stras.utils.SerializeUtil;
 import com.jxnu.stras.domin.Info;
 import com.jxnu.stras.domin.Topic;
@@ -40,6 +42,9 @@ class StrasApplicationTests {
 
     @Resource
     private TopicMapper topicMapper;
+
+    @Resource
+    CourseMapper courseMapper;
 
     @Autowired
     RedisTemplate redisTemplate;
@@ -116,4 +121,18 @@ class StrasApplicationTests {
         System.out.println(redisTemplate.opsForValue().get(key));*/
     }
 
+
+    @Test
+    public void search(){
+        QueryWrapper<Course> courseQueryWrapper = new QueryWrapper<>();
+        courseQueryWrapper.like("course","经济").or().like("Tname","毛");
+        List<Course> courseList = courseMapper.selectList(courseQueryWrapper);
+        System.out.println("vfgb="+courseList);
+    }
+
+    @Test
+    public void vourse(){
+        Course course = courseMapper.findByID(2);
+        System.out.println("f=="+course);
+    }
 }

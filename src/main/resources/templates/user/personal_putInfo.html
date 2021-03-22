@@ -18,7 +18,7 @@
             formData.append("img",file);
             formData.append("type",type);
             var xhr=new XMLHttpRequest();
-            xhr.open("post","http://81.68.234.98:5598/upload/img")
+            xhr.open("post","/upload/img")
             xhr.onload=function (ev) {
                 var json;
                 if(xhr.status!==200){
@@ -44,11 +44,17 @@
          */
         function submitInfo() {
             var content = tinyMCE.activeEditor.getContent();
+            var $type = $("#info").val();
+            var $title = $("#title").val();
+            var $introduce = $("#introduction").val();
+            var $photo = $("#urls").val();
             alert(content);
             $.ajax({
                 type:"POST",
                 url:"/admin/submitInfo",
-                data:$('#info_form').serialize()+content,
+                contentType:"application/json;charset=UTF-8",
+                data:JSON.stringify({"title":$title,"title":$title,"introduce":$introduce,"infoType":$type,"photo":$photo,"content":content}),
+                dataType:"text",
                 success:function (msg) {
                     if(msg === "success"){
                         alert("操作成功！审核通过后将发布")
@@ -120,7 +126,7 @@
                 var type = $("#info").val();
                 xhr = new XMLHttpRequest();
                 xhr.withCredentials= false;
-                xhr.open("post","http://81.68.234.98:5598/upload/img");
+                xhr.open("post","/upload/img");
                 formData=new FormData();
                 formData.append("img" , blobInfo.blob());
                 formData.append("type",type);

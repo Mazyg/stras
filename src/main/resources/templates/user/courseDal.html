@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>课程详情-江西师范大学课程思政</title>
+    <link rel="shortcut icon  preload" th:href="@{/img/school.jpg}" />
+    <link rel="stylesheet  preload" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet  preload" th:href="@{/css/reset.css}"/>
+    <link rel="stylesheet  preload" th:href="@{/css/public.css}"/>
+    <link rel="stylesheet  preload" th:href="@{/css/topic.css}"/>
+    <link th:href="@{/css/base_news.css}" rel="stylesheet  preload" type="text/css">
+    <script type="text/javascript" th:src="@{/js/user/jump.js}"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/video-js.min.css}">
+    <script th:src="@{/js/video.min.js}"></script>
+    <style type="text/css">
+        body{
+            background-image: url("../img/bg_02.jpg");
+        }
+        .hig{
+            height: 80px;
+        }
+    </style>
+</head>
+<body>
+<header class="ltHead">
+    <div class="ltHead_cen">
+       <!--<a href=""><img th:src="@{/img/title.ico}" alt="" class="headPic1"/></a>-->
+        <ul class="headNav">
+            <li><a th:href="@{/}">首页</a></li>
+            <li><a th:href="@{/user/showCourse(pn=${pn})}">返回上一页</a></li>
+        </ul>
+        <!--未登入开始-->
+        <div class="ltForm">
+            <a href=""><img th:src="@{/img/indexForm_bg.png}" alt="" class="headPic2"/></a>
+            <ul th:if="${session.user == null}">
+                        <li><a th:href="@{/login.html}">登录</a></li>
+                        <li><a th:href="@{/registration}">注册</a></li>
+            </ul>
+            <ul th:if="${session.user != null}">
+                <li><a th:href="@{/person/personalInfo}" th:text="${session.user.uname}"></a></li>
+            </ul>
+        </div>
+    </div>
+</header>
+<div class="indexMain">
+    <div class="indexMain_left">
+        <div class="tzCon">
+            <div class="tzCon_head_right">
+                <h1>江西师范大学课程思政：[[${courseDea.course}]]</h1>
+            </div>
+            <div class="hig">&nbsp;</div>
+            <div th:each="videos:${cvideoList.records}">
+                <video id="my-video" class="video-js vjs-default-skin video" controls preload="none" width="752" height="380"
+                       th:poster="${courseDea.cphoto}"
+                       data-setup="{}">
+                    <source id="vi" th:src="${videos.video}" type='video/mp4' />
+                    <source src="" type="video/flv">
+                    <track kind="captions" src="demo.captions.vtt" srclang="en" label="English"></track>
+                    <track kind="subtitles" src="demo.captions.vtt" srclang="en" label="English"></track>
+                </video>
+                <br>
+                <h4>总共有[[${cvideoList.pages}]]个视频，当前正在播放视频-[[${videos.vname}]]</h4>
+            </div>
+
+            <div class="pager" style="text-align: left">
+             <p th:if="${cvideoList.pages == 0}">该老师暂无视频</p>
+            <a th:if="${cvideoList.pages != 0}" th:each="num:${#numbers.sequence(1,cvideoList.pages)}"  th:href="@{/user/courseDeal(pns=${num},id=${courseDea.id})}" rel="external nofollow" th:class="${num==cvideoList.current?'current':''}">视频-[[${num}]]</a>
+            <br><br><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[[${courseDea.introduce}]]</p>
+                <div class="hig">&nbsp;</div>
+            </div>
+        </div>
+        </div>
+
+    <div class="indexMain_right">
+        <div class="myMsg">
+                    <div class="myMsg_con">
+                        <div class="myMsg_conPic"><img th:src="${courseDea.tphoto}"></div>
+                        <p id="user" th:text="${courseDea.tname}"></p>
+                    </div>
+                    <div  class="myMsg_footer">
+                            <h3 style="text-align: center"><a style="font-size: 20px" href="">江西师范大学课程思政</a></h3>
+                    </div>
+        </div>
+        <div class="indexPublic">
+            <div class="indexPublic_head">
+                相关文件(点击下载)
+            </div>
+            <div class="indexPublic_con">
+                <ul class="weekHot">
+                    <li><a th:href="${courseDea.ppt}" th:download="${courseDea.ppt}" th:text="${courseDea.pname}"></a></li>
+                    <li><a th:href="${courseDea.designer}" th:download="${courseDea.designer}" th:text="${courseDea.dname}"></a></li>
+                    <li><a th:href="${courseDea.add1}" th:download="${courseDea.add1}" th:text="${courseDea.addTitle}"></a></li>
+                    <li><a th:href="${courseDea.add2}" th:download="${courseDea.add2}" th:text="${courseDea.addTitle2}"></a></li>
+                </ul>
+            </div>
+        </div>
+    <div class="clear">
+
+    </div>
+    </div>
+</div>
+<footer class="publicFooter">
+    <p></p>
+</footer>
+</body>
+</html>
+<script src="../js/user/jquery-1.8.3.min.js"></script>
+<script src="../js/user/tiezi.js"></script>

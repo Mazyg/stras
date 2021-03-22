@@ -1,6 +1,14 @@
+endpoint: oss-cn-shanghai.aliyuncs.com
+accessKeyId: LTAI5t738zAvuAjM3EWef2Tu
+accessKeySecret: hf8vyJhnlgdAmxejYGIvXzEvPMKCb2
+bucketName: mazyg
 server:
   port: 8088
 spring:
+  servlet:
+    multipart:
+      max-file-size: 10000MB
+      max-request-size: 10000MB
   datasource:
     url: jdbc:mysql://81.68.234.98:3306/stars?useSSL=false&serverTimezone=UTC&characterEncoding=UTF-8
     username: root
@@ -38,4 +46,5 @@ spring:
     port: 6379
     password: mn123456
     timeout: 5000
+
 

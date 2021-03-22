@@ -71,7 +71,12 @@
                       <li th:class="${url=='allInfo'?'active':''}"><a th:href="@{/admin/allInfo}">所有信息</a></li>
                   </ul>
               </li>
-
+              <li th:class="${url}=='putCourse'?'menu-list nav-active':(${url}=='courseVideo'?'menu-list nav-active':'menu-list')"><a><i class="fa fa-pagelines"></i> <span>课程思政</span></a>
+                  <ul class="sub-menu-list">
+                      <li th:class="${url=='putCourse'?'active':''}"><a th:href="@{/admin/putCourse}"> 课程内容发布</a></li>
+                      <li th:class="${url=='courseVideo'?'active':''}"><a th:href="@{/admin/putCvideo}"> 课程视频发布</a></li>
+                  </ul>
+              </li>
               <li><a th:href="@{/loginOut}"><i class="fa fa-sign-in"></i> <span>退出登录</span></a></li>
 
           </ul>

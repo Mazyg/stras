@@ -28,7 +28,7 @@
             formData.append("img",file);
             formData.append("type",type);
             var xhr=new XMLHttpRequest();
-            xhr.open("post","http://81.68.234.98:5598/upload/img")
+            xhr.open("post","/upload/img")
             xhr.onload=function (ev) {
                 var json;
                 if(xhr.status!==200){
@@ -56,7 +56,7 @@
             var formData=new FormData();
             formData.append("movie",file);
             var xhr=new XMLHttpRequest();
-            xhr.open("post","http://81.68.234.98:5598/upload/movie")
+            xhr.open("post","/upload/movie")
             xhr.onload=function (ev) {
                 var json;
                 if(xhr.status!==200){
@@ -71,7 +71,8 @@
                     console.log(json.location);
                     $("#urlV").val(json.location) ;
                     $("#vi").attr("src",json.location);
-                    document.querySelector('video').load();
+                    document.querySelector("#vi").src = json.location;
+                    document.querySelector('#my-video').load();
                 }
 
             };
@@ -206,7 +207,7 @@
                             <video id="my-video" class="video-js vjs-default-skin video" controls preload="none" width="580" height="264"
                                    poster="http://81.68.234.98:5598/file/img/14/picture-2ab863cc-53a3-4e32-b8e3-0534ddf199ed.jpeg"
                                    data-setup="{}">
-                                <source id="vi" src="http://81.68.234.98:5598/file/movie/movie-4a8f625a-757c-4d9f-a446-141806f76cbe.mp4" type='video/mp4' />
+                                <source id="vi" src="https://mazyg.oss-cn-shanghai.aliyuncs.com/movies/movie-0eafdba6-c0e6-4093-825c-8cb0c7d01259.mp4" type='video/mp4' />
                                 <source src="" type="video/flv">
                                 <track kind="captions" src="demo.captions.vtt" srclang="en" label="English"></track>
                                 <track kind="subtitles" src="demo.captions.vtt" srclang="en" label="English"></track>

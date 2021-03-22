@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>视频详情</title>
+    <div th:replace="info_common :: commomheader"></div>
+</head>
+<body>
+<div th:replace="info_common :: #head"></div>
+
+<div class="content yahei subchannel">
+    <div class="mainWrap clearfix">
+        <!--主体部分--------------------->
+        <section class="colunm1">
+            <h4>[[${videoD.vtitle}]]<br><span style="font-size: 15px">[[${videoD.vintroduce}]]</span></h4>
+            <div >
+                <br>
+                <video id="my-video" class="video-js vjs-default-skin video" controls preload="none" width="680" height="300"
+                       th:poster="${videoD.vphoto}"
+                       data-setup="{}">
+                    <source id="vi" th:src="${videoD.video}" type='video/mp4' />
+                    <source src="" type="video/flv">
+                    <track kind="captions" src="demo.captions.vtt" srclang="en" label="English"></track>
+                    <track kind="subtitles" src="demo.captions.vtt" srclang="en" label="English"></track>
+                </video>
+                <br>
+            </div>
+        </section>
+        <!--侧边部分--------------------->
+        <section class="colunm2">
+            <section class="mod withborder">
+                <h2>
+                    <span class="iconwraper"><i class="thunews-play-circle glyphicon glyphicon-play-circle"></i></span>
+                    精彩视频
+                    <a href="#" style="font-size:12px; color:#666; margin-left:30px">
+                    </a>
+                </h2>
+                <table class="table newslist clearfix" >
+                    <tr th:each="videos:${videoList}" >
+                        <td><a th:href="@{/user/videoDal(vid=${videos.vid})}"><img class="imgs1" th:src="${videos.vphoto}"></a></td>
+                        <td style="word-break:break-all; word-wrap:break-word; white-space:inherit"> <a th:href="@{/user/videoDal(vid=${videos.vid})}" ><p style="float: left">[[${videos.vtitle}]]</p></a>
+                            <br><br><br><small style="float: right"><i class=" glyphicon glyphicon-time"></i>[[${videos.vdate}]]</small></td>
+                    </tr>
+                </table>
+            </section>
+            <section class="mod withborder">
+                <h2 class="red"><span class="iconwraper">
+            <i class="thunews-line-chart glyphicon glyphicon-fire"></i>
+            </span>
+                    近期热点
+                    <a href="#" style="font-size:12px; color:#666; margin-left:30px">
+                    </a>
+                </h2>
+                <ul class="newslist clearfix"  id="resText">
+                    <li th:each="hotS:${hot}"><a href="">[[${hotS.title}]]<small style="float: right">[[${hotS.date}]]</small></a></li>
+                </ul>
+            </section>
+        </section>
+    </div>
+</div>
+
+
+</body>
+</html>

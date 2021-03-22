@@ -3,71 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>热点时事</title>
-   <!-- <link rel="shortcut icon" th:href="@{/img/title.ico}" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link th:href="@{/css/base_news.css}" rel="stylesheet" type="text/css">
-    <link th:href="@{/font/font.css}" rel="stylesheet" type="text/css">
-    <link th:href="@{/css/inner.css}" rel="stylesheet" type="text/css">
-    <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
-    <script th:src="@{/js/user/jquery-1.8.3.min.js}" type="text/javascript"></script>
-    <link rel="stylesheet" th:href="@{/css/slick.css}">
-    <script th:src="@{/js/user/slick.min.js}" type="text/javascript"></script>
-    <script th:src="@{/js/user/regexcut.js}" type="text/javascript"></script>
-    <link rel="stylesheet" th:href="@{/css/owl.carousel.css}">
-    <script th:src="@{/js/user/owl.carousel.min.js}" type="text/javascript"></script>
-    <script th:src="@{/js/user/comm.js}" type="text/javascript"></script>
-    <script type="text/javascript" th:src="@{/js/user/jump.js}"></script>
-    <script type="text/javascript" th:src="@{/js/user/searchsub.js}"></script>
-    <link th:href="@{/css/search-suggest.css}" rel="stylesheet" type="text/css">
-    <script type="text/javascript" th:src="@{/js/user/search-suggest.js}"></script>
-    <script type="text/javascript" th:src="@{/js/user/demo.js}"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <style type="text/css">
-        .imgs1{
-            width: 100px;
-            height: 80px;
-        }
-    </style>-->
     <div th:replace="info_common :: commomheader"></div>
 </head>
 <body>
-<!--导航栏及搜索框------------->
-<!--<header class="clearfix">
-    <section class="mainWrap">
-        <div class="topwraper relative clearfix">
-            <div class="search">
-                <input type="text" id="search" name="baidu_line" autocomplete="off"/>
-                <a onclick="searchSub(${numberPerPage})"><i>搜索</i></a>
-            </div>
-        </div>
-    </section>
-    <nav class="navwrap yahei">
-        <section class="mainWrap">
-            <ul id="nav">
-                <li><a href="">全球战疫</a>
-                </li>
-                <li><a href="">热点资讯</a>
-                </li>
-                <li><a href="">爱我中华</a>
-                </li>
-                <li><a href="">榜样力量</a>
-                </li>
-                <li><a href="">话题</a>
-                </li>
-                <li><a href="" >书籍</a></li>
-                <li><a href="">电影</a></li>
-                <li th:if="${session.user != null}"><a href="">个人中心</a>
-                    <ul class="last">
-                        <li><a href="">个人信息</a></li>
-                        <li><a href="">反馈</a></li>
-                        <li th:if="${session.user.utype=='admin'}"><a href="">管理界面</a></li>
-                        <li><a href="">退出登录</a></li>
-                    </ul>
-                </li>
-            </ul>
-        </section>
-    </nav>
-</header>-->
 
 <div th:replace="info_common :: #head"></div>
 
@@ -143,9 +81,9 @@
                 </h2>
                 <table class="table newslist clearfix" >
                         <tr th:each="videos:${videoList}" >
-                            <td><a href=""><img class="imgs1" th:src="${videos.vphoto}"></a></td>
-                            <td style="word-break:break-all; word-wrap:break-word; white-space:inherit"> <a href="" ><p style="float: left">[[${videos.vtitle}]]</p></a>
-                                <br><small style="float: right"><i class=" glyphicon glyphicon-time"></i>[[${videos.vdate}]]</small></td>
+                            <td><a th:href="@{/user/videoDal(vid=${videos.vid})}"><img class="imgs1" th:src="${videos.vphoto}"></a></td>
+                            <td style="word-break:break-all; word-wrap:break-word; white-space:inherit"> <a th:href="@{/user/videoDal(vid=${videos.vid})}" ><p style="float: left">[[${videos.vtitle}]]</p></a>
+                                <br><br><br><small style="float: right"><i class=" glyphicon glyphicon-time"></i>[[${videos.vdate}]]</small></td>
                         </tr>
                 </table>
             </section>
