@@ -1,24 +1,21 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:fragment="commomheader">
-    <link rel="shortcut icon" th:href="@{/img/logos.ico}" />
+    <link rel="shortcut icon" th:href="@{/img/school.jpg}" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link th:href="@{/css/base_news.css}" rel="stylesheet" type="text/css">
-    <link th:href="@{/font/font.css}" rel="stylesheet" type="text/css">
-    <link th:href="@{/css/inner.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{/css/base_news.css}" rel="stylesheet preload" type="text/css">
+    <!--<link th:href="@{/font/font.css}" rel="stylesheet preload" type="text/css">-->
+    <link th:href="@{/css/inner.css}" rel="stylesheet preload" type="text/css">
     <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
     <script th:src="@{/js/user/jquery-1.8.3.min.js}" type="text/javascript"></script>
-    <link rel="stylesheet" th:href="@{/css/slick.css}">
+    <link rel="stylesheet preload" th:href="@{/css/slick.css}">
     <script th:src="@{/js/user/slick.min.js}" type="text/javascript"></script>
     <script th:src="@{/js/user/regexcut.js}" type="text/javascript"></script>
-    <link rel="stylesheet" th:href="@{/css/owl.carousel.css}">
+    <link rel="stylesheet preload" th:href="@{/css/owl.carousel.css}">
     <script th:src="@{/js/user/owl.carousel.min.js}" type="text/javascript"></script>
     <script th:src="@{/js/user/comm.js}" type="text/javascript"></script>
     <script type="text/javascript" th:src="@{/js/user/jump.js}"></script>
     <script type="text/javascript" th:src="@{/js/user/searchsub.js}"></script>
-    <link th:href="@{/css/search-suggest.css}" rel="stylesheet" type="text/css">
-    <script type="text/javascript" th:src="@{/js/user/search-suggest.js}"></script>
-    <script type="text/javascript" th:src="@{/js/user/demo.js}"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <style type="text/css">
         .imgs1{
@@ -48,11 +45,12 @@
                 </li>
                 <li><a th:href="@{/user/hotInfo}">热点时事</a>
                 </li>
-                <li><a href="">爱我中华</a>
+                <li><a th:href="@{/user/chineseInfo}">爱我中华</a>
                 </li>
                 <li><a th:href="@{/user/manModels}">榜样力量</a>
                 </li>
-
+                <li><a th:href="@{/user/showCourse}">江西师大课程思政</a>
+                </li>
                 <li><a th:href="@{/user/topic}">话题广场</a>
                 </li>
                 <li th:if="${session.user != null}"><a th:href="@{/person/personalInfo}">个人中心</a>

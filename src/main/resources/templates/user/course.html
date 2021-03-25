@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>江西师范大学课程思政</title>
+    <div th:replace="info_common :: commomheader"></div>
+    <script type="text/javascript">
+        function isE() {
+            var p1= $("#key").val();
+            if(p1 == null||p1 == ""){
+                alert("输入不能为空！")
+                return false;
+            }
+            window.location.href="/user/searchCourse?key="+p1;
+        }
+    </script>
+</head>
+<body>
+<header id="head" class="clearfix" >
+    <section class="mainWrap">
+        <div class="topwraper relative clearfix">
+            <div class="search">
+                <form   id="searchs">
+                <input type="text"   id="key" name="key" autocomplete="off" required="required" placeholder="输入教师名或课程名搜索" />
+                    <a onclick="isE()"><i>搜索</i></a>
+                </form>
+            </div>
+        </div>
+    </section>
+    <nav class="navwrap yahei">
+        <section class="mainWrap">
+            <ul id="nav">
+                <li><a th:href="@{/}">首页</a>
+                </li>
+                <li><a th:href="@{/user/allE}">全球战疫</a>
+                </li>
+                <li><a th:href="@{/user/hotInfo}">热点时事</a>
+                </li>
+                <li><a th:href="@{/user/chineseInfo}">爱我中华</a>
+                </li>
+                <li><a th:href="@{/user/manModels}">榜样力量</a>
+                </li>
+                <li><a th:href="@{/user/showCourse}">江西师大课程思政</a>
+                </li>
+                <li><a th:href="@{/user/topic}">话题广场</a>
+                </li>
+                <li th:if="${session.user != null}"><a th:href="@{/person/personalInfo}">个人中心</a>
+                    <ul class="last">
+                        <li th:if="${session.user.utype=='admin'}"><a th:href="@{/admin/index.html}">管理界面</a></li>
+                        <li><a th:href="@{/loginOut}">退出登录</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </section>
+    </nav>
+</header>
+
+<div class="content yahei subchannel">
+    <div class="mainWrap clearfix">
+        <!--主体部分--------------------->
+        <section class="colunm1">
+            <!--顶部大图------------------------->
+            <div class="biggallery">
+                <div class="biggallerywraper">
+                    <ul class="biggallerylist clearfix">
+                        <li><a href="" target="_blank"><img th:src="${school.photo}"></a></li>
+                    </ul>
+                    <div class="imgintro1">
+                        <b></b>
+                        <h3>
+                            <a href="" target="_blank"  id="title1-1" class="jiequ">[[${school.title}]]</a>
+                        </h3>
+                        <p>[[${school.introduction}]]</p>
+                    </div>
+                </div>
+            </div>
+            <!--文章列表部分------------------------------->
+            <ul class="picnewslist people">
+                <li class="clearfix" th:each="hotList:${courses.records}">
+                    <figure>
+                        <a class="picwraper" th:href="@{/user/courseDeal(pn=${courses.current},id=${hotList.id})}" target="_blank">
+                            <img th:src="${hotList.cphoto}">
+                        </a>
+                        <div class="contentwraper">
+                            <figcaption>
+                                <span class="tips">江西师范大学课程思政</span>
+                                <a th:href="@{/user/courseDeal(pn=${courses.current},id=${hotList.id})}" target="_blank"  class="jiequ">
+                                    [[${hotList.course}]] : [[${hotList.tname}]]
+                                </a>
+                            </figcaption>
+                            <p>[[${hotList.ctitle}]]</p>
+                            <div class="thumb">
+                                <i class=" glyphicon glyphicon-time"></i>
+                                [[${hotList.date}]]
+                                <font  >
+                                    <span  ></span>
+                                </font>
+
+                            </div>
+                        </div>
+                    </figure>
+                </li>
+            </ul>
+            <br>
+            <!--分页部分-->
+            <div class="pager">
+
+                <a th:href="@{/user/showCourse(pn=${courses.current}-1)}" rel="external nofollow" ><<</a>
+                <!-- 页数列表 -->
+                <a  th:each="num:${#numbers.sequence(1,courses.pages)}"  th:href="@{/user/showCourse(pn=${num})}" rel="external nofollow" th:class="${num==courses.current?'current':''}">[[${num}]]</a>
+                <!-- 下一页 按钮 -->
+                <a th:href="@{/user/showCourse(pn=${courses.current}+1)}" rel="external nofollow">
+                    >>
+                </a>
+
+            </div>
+        </section>
+        <!--侧边部分--------------------->
+        <section class="colunm2">
+            <section class="mod withborder">
+                <h2>
+                    <span class="iconwraper"><i class="thunews-play-circle glyphicon glyphicon-play-circle"></i></span>
+                    精彩视频
+                    <a href="#" style="font-size:12px; color:#666; margin-left:30px">
+                    </a>
+                </h2>
+                <table class="table newslist clearfix" >
+                    <tr th:each="videos:${videoList}" >
+                        <td><a th:href="@{/user/videoDal(vid=${videos.vid})}"><img class="imgs1" th:src="${videos.vphoto}"></a></td>
+                        <td style="word-break:break-all; word-wrap:break-word; white-space:inherit"> <a th:href="@{/user/videoDal(vid=${videos.vid})}" ><p style="float: left">[[${videos.vtitle}]]</p></a>
+                            <br><br><br><small style="float: right"><i class=" glyphicon glyphicon-time"></i>[[${videos.vdate}]]</small></td>
+                    </tr>
+                </table>
+            </section>
+            <section class="mod withborder">
+                <h2 class="red"><span class="iconwraper">
+            <i class="thunews-line-chart glyphicon glyphicon-fire"></i>
+            </span>
+                    相关文件（点击下载）
+                    <a href="#" style="font-size:12px; color:#666; margin-left:30px">
+                    </a>
+                </h2>
+                <ul class="newslist clearfix"  id="resText">
+                    <li th:each="hotS:${addList}"><a th:href="${hotS.link}" th:download="${hotS.link}">[[${hotS.title}]]</a></li>
+                </ul>
+            </section>
+        </section>
+    </div>
+</div>
+
+
+</body>
+</html>

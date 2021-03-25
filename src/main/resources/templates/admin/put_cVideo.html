@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="ThemeBucket">
+  <link rel="shortcut icon" href="#" type="image/png">
+
+  <title>课程视频发布</title>
+    <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <div th:replace="admin_common :: commomheader"></div>
+    <script type="text/javascript">
+        function selectFile(){
+            $("#video").trigger("click");
+        }
+        function getImage() {
+            var photo=document.querySelector("#video");
+            var file=photo.files[0];
+            var formData=new FormData();
+            formData.append("movie",file);
+           /* formData.append("type",type);*/
+            var xhr=new XMLHttpRequest();
+            xhr.open("post","/upload/movie")
+            xhr.onload=function (ev) {
+                var json;
+                if(xhr.status!==200){
+                    failFun('HTTP Error:'+xhr.status);
+                    return
+                }
+                json=JSON.parse(this.responseText);
+                if(!json||typeof json.location !='string'){
+                    failFun('Invalid JSON:'+xhr.responseText);
+                    return;
+                }else{
+                    console.log(json.location);
+                    $("#Turl").val(json.location) ;
+                }
+
+
+            };
+            xhr.send(formData);
+        }
+
+
+        /**
+         * ajax提交表单，并刷新页面
+         */
+        function submitInfo() {
+            $.ajax({
+                type:"POST",
+                url:"/admin/saveCvideo",
+                data:$('#coursev_form').serialize(),
+                success:function (msg) {
+                    if(msg === "success"){
+                        alert("操作成功！")
+                    }else{
+                        alert("修改出错！")
+                    }
+                    window.location.href="/admin/putCvideo";
+                },
+                error:function () {
+                    alert("出错了！")
+                }
+            });
+        }
+    </script>
+    <!--<style>
+        .div-highe{
+            height: 70px;
+        }
+        .imgs{
+            width: 160px;
+            height: 205px;
+        }
+        .div-highe2{
+            height: 40px;
+        }
+    </style>-->
+</head>
+
+<body class="sticky-header">
+
+<section>
+    <!-- left side start-->
+    <div th:replace="admin_common :: #leftmune(url='courseVideo')"></div>
+    <!-- left side end-->
+    
+    <!-- main content start-->
+    <div class="main-content" >
+
+        <!-- header section start-->
+        <div th:replace="admin_common :: #headermune"></div>
+        <!-- header section end-->
+
+        <!-- page heading start-->
+        <div class="page-heading">
+            <h3>
+            </h3>
+        </div>
+        <!-- page heading end-->
+
+        <!--body wrapper start-->
+        <div class="wrapper">
+             <div class="row">
+                <div class="col-sm-12">
+                <section class="panel">
+                <header class="panel-heading">
+                    课程思政视频信息
+                </header>
+                <div class="panel-body">
+               <!-- <div class="space15"></div>-->
+                    <form class="forms-sample" id="coursev_form">
+                        <div class="col-sm-12">
+
+                            <div class="form-group">
+                                <label for="cid">CID</label>
+                                <input type="text" class="form-control" id="cid" placeholder="ID" name="cid" required>
+                            </div>
+
+                        <div class="form-group">
+                            <label for="vname">视频名称</label>
+                            <input type="text" class="form-control" id="vname" placeholder="视频名称" name="vname" required>
+                        </div>
+
+                            <div class="form-group">
+                            <label>视频文件</label>
+                            <div class="input-group col-xs-12">
+                                <div class="col-xs-10">
+                                    <input type="text" class="form-control file-upload-info" readonly placeholder="视频地址" id="Turl" name="video" >
+
+                                    <input type="file" id="video"  style="display:none" multiple="multiple" onchange="getImage()"/>
+                                </div>
+                                <div class="col-xs-2">
+                                    <button class="file-upload-browse btn btn-primary" type="button" onclick="selectFile()">上传</button></div>
+                            </div>
+                        </div>
+
+                        </div>
+                        <input type="reset" class="btn btn-light" value="重置">
+                        <input type="button" class="btn btn-primary mr-2" value="提交" id="subBtn" onclick="submitInfo()">
+                    </form>
+                </div>
+                </section>
+                </div>
+                </div>
+        </div>
+        <!--body wrapper end-->
+
+        <!--footer section start-->
+        <footer>
+            <div th:replace="admin_common :: #footer"></div>
+        </footer>
+        <!--footer section end-->
+
+
+    </div>
+    <!-- main content end-->
+</section>
+
+<!-- Placed js at the end of the document so the pages load faster -->
+
+<div th:replace="admin_common :: commomScript"></div>
+<!--data table-->
+
+
+</body>
+</html>

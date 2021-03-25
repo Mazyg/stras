@@ -13,10 +13,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -260,7 +257,7 @@ public class InfoController {
         model.addAttribute("hot",hot);
         List<Video> videoList = videoService.findVideo();
         model.addAttribute("videoList",videoList);
-        return "/user/manModel";
+        return "user/manModel";
     }
 
 
@@ -280,7 +277,18 @@ public class InfoController {
         model.addAttribute("hot",hot);
         List<Video> videoList = videoService.findVideo();
         model.addAttribute("videoList",videoList);
-        return "/user/allEarth";
+        return "user/allEarth";
+    }
+
+    @GetMapping("/user/videoDal")
+    public String videoDal(Integer vid,Model model){
+        Video video = videoService.getVideoById(vid);
+        model.addAttribute("videoD",video);
+        List<Info> hot = infoService.findInfoByHot();
+        model.addAttribute("hot",hot);
+        List<Video> videoList = videoService.findVideo();
+        model.addAttribute("videoList",videoList);
+        return "user/videoDal";
     }
 
     /**
@@ -329,7 +337,7 @@ public class InfoController {
      */
     @ResponseBody
     @PostMapping("/admin/submitInfo")
-    public String submitInfo(Info info, HttpServletRequest request){
+    public String submitInfo(@RequestBody Info info, HttpServletRequest request){
         Date now = new Date();
         SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         String time = ft.format(now);
@@ -338,6 +346,7 @@ public class InfoController {
         User user = (User) session.getAttribute("user");
         info.setUphone(user.getPhone());
         info.setUtype(user.getUtype());
+        System.out.println("info=="+info);
         if("admin".equals(user.getUtype())){
             info.setInfoStatus("已通过");
         }

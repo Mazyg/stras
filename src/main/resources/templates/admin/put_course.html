@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="ThemeBucket">
+  <link rel="shortcut icon" href="#" type="image/png">
+
+  <title>课程思政发布</title>
+    <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <div th:replace="admin_common :: commomheader"></div>
+    <script type="text/javascript">
+        function selectFile(){
+            $("#Tphoto").trigger("click");
+        }
+        function getImage() {
+            var photo=document.querySelector("#Tphoto");
+            var file=photo.files[0];
+            var type = $("#info").val();
+            var formData=new FormData();
+            formData.append("img",file);
+            formData.append("type",type);
+            var xhr=new XMLHttpRequest();
+            xhr.open("post","/upload/img")
+            xhr.onload=function (ev) {
+                var json;
+                if(xhr.status!==200){
+                    failFun('HTTP Error:'+xhr.status);
+                    return
+                }
+                json=JSON.parse(this.responseText);
+                if(!json||typeof json.location !='string'){
+                    failFun('Invalid JSON:'+xhr.responseText);
+                    return;
+                }else{
+                    console.log(json.location);
+                    $("#Turl").val(json.location) ;
+                    /*$("#src").attr("src",json.location);*/
+                }
+
+
+            };
+            xhr.send(formData);
+        }
+        function selectFile1(){
+            $("#Cphoto").trigger("click");
+        }
+        function getImage1() {
+            var photo=document.querySelector("#Cphoto");
+            var file=photo.files[0];
+            var type = $("#info").val();
+            var formData=new FormData();
+            formData.append("img",file);
+            formData.append("type",type);
+            var xhr=new XMLHttpRequest();
+            xhr.open("post","/upload/img")
+            xhr.onload=function (ev) {
+                var json;
+                if(xhr.status!==200){
+                    failFun('HTTP Error:'+xhr.status);
+                    return
+                }
+                json=JSON.parse(this.responseText);
+                if(!json||typeof json.location !='string'){
+                    failFun('Invalid JSON:'+xhr.responseText);
+                    return;
+                }else{
+                    console.log(json.location);
+                    $("#Curl").val(json.location) ;
+                    /*$("#src").attr("src",json.location);*/
+                }
+
+
+            };
+            xhr.send(formData);
+        }
+
+        function selectFile2(){
+            $("#ppt").trigger("click");
+        }
+        function getPPt() {
+            var photo=document.querySelector("#ppt");
+            var file=photo.files[0];
+            var type = $("#info").val();
+            var formData=new FormData();
+            formData.append("file",file);
+            formData.append("type",type);
+            var xhr=new XMLHttpRequest();
+            xhr.open("post","/upload/file")
+            xhr.onload=function (ev) {
+                var json;
+                if(xhr.status!==200){
+                    failFun('HTTP Error:'+xhr.status);
+                    return
+                }
+                json=JSON.parse(this.responseText);
+                if(!json||typeof json.location !='string'){
+                    failFun('Invalid JSON:'+xhr.responseText);
+                    return;
+                }else{
+                    console.log(json.location);
+                    $("#Purl").val(json.location) ;
+                    /*$("#src").attr("src",json.location);*/
+                }
+
+
+            };
+            xhr.send(formData);
+        }
+        function selectFile3(){
+            $("#designer").trigger("click");
+        }
+        function getDesihner() {
+            var photo=document.querySelector("#designer");
+            var file=photo.files[0];
+            var type = $("#info").val();
+            var formData=new FormData();
+            formData.append("file",file);
+            formData.append("type",type);
+            var xhr=new XMLHttpRequest();
+            xhr.open("post","/upload/file")
+            xhr.onload=function (ev) {
+                var json;
+                if(xhr.status!==200){
+                    failFun('HTTP Error:'+xhr.status);
+                    return
+                }
+                json=JSON.parse(this.responseText);
+                if(!json||typeof json.location !='string'){
+                    failFun('Invalid JSON:'+xhr.responseText);
+                    return;
+                }else{
+                    console.log(json.location);
+                    $("#Durl").val(json.location) ;
+                    /*$("#src").attr("src",json.location);*/
+                }
+
+
+            };
+            xhr.send(formData);
+        }
+
+        function selectFile4(){
+            $("#add1").trigger("click");
+        }
+        function getAdd1() {
+            var photo=document.querySelector("#add1");
+            var file=photo.files[0];
+            var type = $("#info").val();
+            var formData=new FormData();
+            formData.append("file",file);
+            formData.append("type",type);
+            var xhr=new XMLHttpRequest();
+            xhr.open("post","/upload/file")
+            xhr.onload=function (ev) {
+                var json;
+                if(xhr.status!==200){
+                    failFun('HTTP Error:'+xhr.status);
+                    return
+                }
+                json=JSON.parse(this.responseText);
+                if(!json||typeof json.location !='string'){
+                    failFun('Invalid JSON:'+xhr.responseText);
+                    return;
+                }else{
+                    console.log(json.location);
+                    $("#Aurl").val(json.location) ;
+                    /*$("#src").attr("src",json.location);*/
+                }
+
+
+            };
+            xhr.send(formData);
+        }
+        function selectFile5(){
+            $("#add2").trigger("click");
+        }
+        function getAdd2() {
+            var photo=document.querySelector("#add2");
+            var file=photo.files[0];
+            var type = $("#info").val();
+            var formData=new FormData();
+            formData.append("file",file);
+            formData.append("type",type);
+            var xhr=new XMLHttpRequest();
+            xhr.open("post","/upload/file")
+            xhr.onload=function (ev) {
+                var json;
+                if(xhr.status!==200){
+                    failFun('HTTP Error:'+xhr.status);
+                    return
+                }
+                json=JSON.parse(this.responseText);
+                if(!json||typeof json.location !='string'){
+                    failFun('Invalid JSON:'+xhr.responseText);
+                    return;
+                }else{
+                    console.log(json.location);
+                    $("#A2url").val(json.location) ;
+                }
+
+
+            };
+            xhr.send(formData);
+        }
+        /**
+         * ajax提交表单，并刷新页面
+         */
+        function submitInfo() {
+            $.ajax({
+                type:"POST",
+                url:"/admin/saveCourse",
+                data:$('#course_form').serialize(),
+                success:function (msg) {
+                    if(msg === "success"){
+                        alert("操作成功！")
+                    }else{
+                        alert("修改出错！")
+                    }
+                    window.location.href="/admin/putCourse";
+                },
+                error:function () {
+                    alert("出错了！")
+                }
+            });
+        }
+    </script>
+    <style>
+        .div-highe{
+            height: 70px;
+        }
+        .imgs{
+            width: 160px;
+            height: 205px;
+        }
+        .div-highe2{
+            height: 40px;
+        }
+    </style>
+</head>
+
+<body class="sticky-header">
+
+<section>
+    <!-- left side start-->
+    <div th:replace="admin_common :: #leftmune(url='putCourse')"></div>
+    <!-- left side end-->
+    
+    <!-- main content start-->
+    <div class="main-content" >
+
+        <!-- header section start-->
+        <div th:replace="admin_common :: #headermune"></div>
+        <!-- header section end-->
+
+        <!-- page heading start-->
+        <div class="page-heading">
+            <h3>
+            </h3>
+        </div>
+        <!-- page heading end-->
+
+        <!--body wrapper start-->
+        <div class="wrapper">
+             <div class="row">
+                <div class="col-sm-12">
+                <section class="panel">
+                <header class="panel-heading">
+                    课程思政信息
+                </header>
+                <div class="panel-body">
+               <!-- <div class="space15"></div>-->
+                    <form class="forms-sample" id="course_form">
+                        <div class="col-sm-12">
+
+                        <div class="form-group">
+                            <label for="title">老师姓名</label>
+                            <input type="text" class="form-control" id="Tname" placeholder="老师姓名" name="Tname" required>
+                        </div>
+                            <div class="form-group">
+                            <label>老师照片</label>
+                            <div class="input-group col-xs-12">
+                                <div class="col-xs-10">
+                                    <input type="text" class="form-control file-upload-info" readonly placeholder="头像地址" id="Turl" name="Tphoto" >
+
+                                    <input type="file" id="Tphoto"  style="display:none" multiple="multiple" onchange="getImage()"/>
+                                </div>
+                                <div class="col-xs-2">
+                                    <button class="file-upload-browse btn btn-primary" type="button" onclick="selectFile()">上传</button></div>
+                            </div>
+                        </div>
+                            <div class="form-group">
+                                <label for="title">课程名</label>
+                                <input type="text" class="form-control" id="course" placeholder="课程名" name="course" required>
+                            </div>
+                            <div class="form-group">
+                                <label>课程封面</label>
+                                <div class="input-group col-xs-12">
+                                    <div class="col-xs-10">
+                                        <input type="text" class="form-control file-upload-info" readonly placeholder="课程封面" id="Curl" name="Cphoto" >
+
+                                        <input type="file" id="Cphoto"  style="display:none" multiple="multiple" onchange="getImage1()"/>
+                                    </div>
+                                    <div class="col-xs-2">
+                                        <button class="file-upload-browse btn btn-primary" type="button" onclick="selectFile1()">上传</button></div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="title">PPT文件名</label>
+                                <input type="text" class="form-control" id="Pname" placeholder="PPT姓名" name="Pname" required>
+                            </div>
+                            <div class="form-group">
+                                <label>PPT</label>
+                                <div class="input-group col-xs-12">
+                                    <div class="col-xs-10">
+                                        <input type="text" class="form-control file-upload-info" readonly placeholder="PPT地址" id="Purl" name="ppt" >
+
+                                        <input type="file" id="ppt" style="display:none" multiple="multiple" onchange="getPPt()"/>
+                                    </div>
+                                    <div class="col-xs-2">
+                                        <button class="file-upload-browse btn btn-primary" type="button" onclick="selectFile2()">上传</button></div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="title">课程设计文件名</label>
+                                <input type="text" class="form-control" id="Dname" placeholder="课程设计名" name="Dname" required>
+                            </div>
+                            <div class="form-group">
+                                <label>课程设计</label>
+                                <div class="input-group col-xs-12">
+                                    <div class="col-xs-10">
+                                        <input type="text" class="form-control file-upload-info" readonly placeholder="课程设计" id="Durl" name="designer" >
+
+                                        <input type="file" id="designer" style="display:none" multiple="multiple" onchange="getDesihner()"/>
+                                    </div>
+                                    <div class="col-xs-2">
+                                        <button class="file-upload-browse btn btn-primary" type="button" onclick="selectFile3()">上传</button></div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="title">附件1标题</label>
+                                <input type="text" class="form-control" id="add_title" placeholder="附件标题" name="addTitle" required>
+                            </div>
+                            <div class="form-group">
+                                <label>附件1上传</label>
+                                <div class="input-group col-xs-12">
+                                    <div class="col-xs-10">
+                                        <input type="text" class="form-control file-upload-info" readonly placeholder="附件1" id="Aurl" name="add1" >
+
+                                        <input type="file" id="add1" style="display:none" multiple="multiple" onchange="getAdd1()"/>
+                                    </div>
+                                    <div class="col-xs-2">
+                                        <button class="file-upload-browse btn btn-primary" type="button" onclick="selectFile4()">上传</button></div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="title">附件2标题</label>
+                                <input type="text" class="form-control" id="title" placeholder="附件2标题" name="addTitle2" required>
+                            </div>
+                            <div class="form-group">
+                                <label>附件2上传</label>
+                                <div class="input-group col-xs-12">
+                                    <div class="col-xs-10">
+                                        <input type="text" class="form-control file-upload-info" readonly placeholder="附件2" id="A2url" name="add2" >
+
+                                        <input type="file" id="add2" style="display:none" multiple="multiple" onchange="getAdd2()"/>
+                                    </div>
+                                    <div class="col-xs-2">
+                                        <button class="file-upload-browse btn btn-primary" type="button" onclick="selectFile5()">上传</button></div>
+                                </div>
+                            </div>
+
+                        <div class="form-group">
+                            <label for="Ctitle">课程标题</label>
+                            <div class="input-group col-xs-12">
+                                <textarea name="Ctitle" id="Ctitle" placeholder="课程标题" required="required" class="col-10 form-control"  style=" height:80px"></textarea>
+                            </div>
+                        </div>
+                            <div class="form-group">
+                                <label for="introduce">课程简介</label>
+                                <div class="input-group col-xs-12">
+                                    <textarea name="introduce" id="introduce" placeholder="课程简介" required="required" class="col-10 form-control"  style=" height:80px"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <input type="reset" class="btn btn-light" value="重置">
+                        <input type="button" class="btn btn-primary mr-2" value="提交" id="subBtn" onclick="submitInfo()">
+                    </form>
+                </div>
+                </section>
+                </div>
+                </div>
+        </div>
+        <!--body wrapper end-->
+
+        <!--footer section start-->
+        <footer>
+            <div th:replace="admin_common :: #footer"></div>
+        </footer>
+        <!--footer section end-->
+
+
+    </div>
+    <!-- main content end-->
+</section>
+
+<!-- Placed js at the end of the document so the pages load faster -->
+
+<div th:replace="admin_common :: commomScript"></div>
+<!--data table-->
+
+
+</body>
+</html>
