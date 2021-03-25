@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.4.1</version>
+        <version>2.4.3</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.jxnu</groupId>
@@ -13,6 +13,7 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>stras</name>
     <description>Demo project for Spring Boot</description>
+    
 
     <properties>
         <java.version>11</java.version>
@@ -29,6 +30,7 @@
         </dependency>
 
         <dependency>
+<!--            自动重启：Ctrl+F9-->
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
@@ -40,6 +42,7 @@
             <optional>true</optional>
         </dependency>
         <dependency>
+            <!--            简化JavaBean开发，简化日志开发-->
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
@@ -96,6 +99,12 @@
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
             <version>3.4.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>RELEASE</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 
