@@ -98,7 +98,8 @@ public class LoginController {
      */
     @GetMapping("/registration")
     public String registration(){
-        return "registration";
+        System.out.println();
+        return "registrations";
     }
 
     /**
@@ -135,7 +136,6 @@ public class LoginController {
     @ResponseBody
     @PostMapping("/registerUser")
     public String registerUser(User user){
-        System.out.println("user="+user);
         boolean isReg = userService.save(user);
         if(isReg==true){
             return "success";

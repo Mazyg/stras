@@ -35,6 +35,7 @@
                     if(msg==="false"){
                         alert("该号码已注册")
                         $(" #phone").val("")
+                        return false;
                     }
                 },
                 error:function (msg) {
@@ -60,7 +61,7 @@
                 url:"/registerUser",
                 data:$('#regster').serialize(),
                 success:function (msg) {
-                    console.log(msg);
+                    alert(msg)
                     if(msg === "success"){
                         alert("注册成功，去登录吧！")
                     }else{
@@ -80,7 +81,7 @@
 
 <div class="container">
 
-    <form class="form-signin" id="regster">
+    <form class="form-signin"  id="regster">
         <div class="form-signin-heading text-center">
             <h1 class="sign-title">新用户注册</h1>
             <img src="images/login-logo.png" alt=""/>
@@ -104,9 +105,12 @@
             <!--<label class="checkbox">
                 <input type="checkbox" value="agree this condition" required> 我同意服务条款和隐私政策
             </label>-->
-            <button type="submit" class="btn btn-lg btn-login btn-block" onclick="register()">
+<!--            <button class="btn btn-lg btn-login btn-block" onclick.native="register()">-->
+<!--                <i class="fa fa-check"></i>-->
+<!--            </button>-->
+            <div class="btn btn-lg btn-login btn-block" onclick="register()">
                 <i class="fa fa-check"></i>
-            </button>
+            </div>
 
             <div class="registration">
                 已经注册。
