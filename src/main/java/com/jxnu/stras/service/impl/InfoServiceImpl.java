@@ -4,6 +4,9 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jxnu.stras.domin.Info;
+import com.jxnu.stras.domin.NiceDetail;
+import com.jxnu.stras.domin.Reply;
+import com.jxnu.stras.domin.Words;
 import com.jxnu.stras.mapper.InfoMapper;
 import com.jxnu.stras.service.InfoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -209,15 +212,36 @@ public class InfoServiceImpl extends ServiceImpl<InfoMapper,Info> implements Inf
      */
     @Override
     public List<Info> findInfoBytype(String info_type, int start, int length) {
-        String key = info_type+start+length+"";
-        if(!redisTemplate.hasKey(key)){
-            List<Info> infoLists = infoMapper.findInfoBytype(info_type,start,length);
-            redisTemplate.opsForValue().set(key,infoLists);
-            redisTemplate.expire(key,30,TimeUnit.MINUTES);
+        String key = info_type + start + length + "";
+        if (!redisTemplate.hasKey(key)) {
+            List<Info> infoLists = infoMapper.findInfoBytype(info_type, start, length);
+            redisTemplate.opsForValue().set(key, infoLists);
+            redisTemplate.expire(key, 30, TimeUnit.MINUTES);
             return (List<Info>) redisTemplate.opsForValue().get(key);
-        }else{
+        } else {
             return (List<Info>) redisTemplate.opsForValue().get(key);
         }
 
     }
+
+
+
+    @Override
+    public Integer insertNiceDetail(String uname,Integer infoId) {
+        return infoMapper.insertNiceDetail(uname,infoId);
+    }
+
+    @Override
+    public Integer deleteNiceDetail(String id) {
+        return infoMapper.deleteNiceDetail(id);
+    }
+
+    @Override
+    public NiceDetail findNiceDetail(String uname,Integer infoId) {
+        return  infoMapper.findNiceDetail(uname,infoId);
+    }
+
+
+
+
 }

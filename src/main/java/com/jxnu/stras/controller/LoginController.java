@@ -102,6 +102,15 @@ public class LoginController {
     }
 
     /**
+     * 跳转找回密码页面
+     * @return
+     */
+    @GetMapping("/findPsw")
+    public String findPsw(){
+        return "findPsw";
+    }
+
+    /**
      * 退出登录
      * @param request
      * @return

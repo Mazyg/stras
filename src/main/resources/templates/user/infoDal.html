@@ -1,0 +1,426 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>文章详情页</title>
+    <div th:replace="info_common :: commomheader"></div>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/layui.css}">
+    <link rel="stylesheet" th:href="@{/css/editormd.min.css}"/>
+    <style type="text/css">
+        .imgs1{
+             width: 100px;
+             height: 80px;
+         }
+        #tip{
+            position: relative;
+            top:20px;
+            left:450px;
+        }
+        #tip a{
+            color:white;
+            font-size: 14px;
+        }
+        .collect{
+            position: relative;
+            left: 70%;
+            font-size: 45px;
+            color: #AAB8C2;
+            width: 50px;
+            height: 50px;
+        }
+        .color{
+            color: #B4BF42;
+        }
+        .collect:hover, .collect:focus{
+            color: #B4BF42;
+        }
+        .heart {
+            background: url(/img/web_heart_animation.png);
+            background-position: left;
+            background-repeat: no-repeat;
+            height: 100px;
+            width: 100px;
+            cursor: pointer;
+            /*position: absolute;*/
+            /*left:700px;*/
+            position: relative;
+            /*top:-70px;*/
+            left: 75%;
+            background-size:2900%;
+        }
+        .heart:hover, .heart:focus{
+            background-position: right;
+        }
+        @-webkit-keyframes heartBlast {
+            0% {
+                background-position: left;
+            }
+            100% {
+                background-position: right;
+            }
+        }
+
+        @keyframes heartBlast {
+            0% {
+                background-position: left;
+            }
+            100% {
+                background-position: right;
+            }
+        }
+
+        .heartAnimation {
+            display: inline-block;
+            -webkit-animation-name: heartBlast;
+            animation-name: heartBlast;
+            -webkit-animation-duration: .8s;
+            animation-duration: .8s;
+            -webkit-animation-iteration-count: 1;
+            animation-iteration-count: 1;
+            -webkit-animation-timing-function: steps(28);
+            animation-timing-function: steps(28);
+            background-position: right;
+        }
+        .likeCount{font-family: 'Georgia', Times, Times New Roman, serif;font-size: 25px;color: #999999;position: relative;top: -70px;left: 88%;}
+    </style>
+<body>
+<div th:replace="info_common :: #head"></div>
+<div class="content yahei subchannel">
+    <div class="mainWrap clearfix">
+        <section class="colunm1">
+            <br>
+            <h2 class="dh2">[[${info.title}]]</h2>
+            <br><br><br>
+            <div><span class="siz" th:utext="${info.content}"></span></div>
+
+<!-------------------------------收藏----------------------------------------------------------->
+            <div class="heart " id="like1" rel="like"></div> <div class="likeCount" id="likeCount1">[[${niceNum}]]</div>
+            <br/>
+            <div style="margin:12% 4% 0 4%;">
+                <br/>
+                <!-- 留言的表单 -->
+                <form class="layui-form" th:action="@{/user/saveWords}" method="post" onsubmit="return check()">
+                    <input name="lwPhone" th:value="${uphone}" hidden="hidden"/>
+                    <input name="lwDate" th:value="${#dates.format(new java.util.Date().getTime(), 'yyyy-MM-dd')}" hidden="hidden"/>
+                    <input name="lwForArticleId" th:value="${info.infoId}" hidden="hidden"/>
+                    <div class="layui-input-block" style="margin-left: 0;margin-top: -90px;">
+                        <textarea id="lwContent" name="lwContent" placeholder="请输入你的留言" class="layui-textarea" style="height: 150px;"></textarea>
+                    </div>
+                    <br/>
+                    <div class="layui-input-block" style="text-align: left;margin-left: 0;">
+                        <input type="submit" class="layui-btn" value="留言">
+                    </div>
+                </form>
+                <br/>
+                <!-- 留言信息列表展示 -->
+                <div>
+                    <ul>
+                        <li th:each="words:${lw_list}" style="border-top: 1px dotted #01AAED">
+                                <br/>
+                                <div style="text-align: left;color:#444">
+                                    <div>
+                                        <span style="color:#01AAED">[[${words.lwName}]]</span>
+                                    </div>
+                                    <div>[[${words.lwContent}]]</div>
+                                </div>
+                                <div>
+                                    <div class="comment-parent" style="text-align:left;margin-top:7px;color:#444">
+                                        <span>[[${words.lwDate}]]</span>&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <p>
+                                            <a href="javascript:;" style="text-decoration: none;" onclick="btnReplyClick(this)">回复</a>
+                                            <div th:if="${user ne null && words.lwName eq user.uname}">
+                                                <a  href="javascript:;" style="text-decoration: none;" th:onclick="delClick([[${words.lwId}]]);">删除</a>
+                                            </div>
+                                        </p>
+                                        <hr style="margin-top: 7px;"/>
+                                    </div>
+                                    <!-- 回复表单默认隐藏 -->
+                                    <div class="replyContainer layui-hide" style="margin-left: 61px;">
+<!--                                        <form class="layui-form"method="get">-->
+                                            <input name="lrForArticleId" class="lrForArticleId" th:value="${info.infoId}" hidden="hidden"/>
+                                            <input name="lrPhone" class="lrPhone" th:value="${uphone}" hidden="hidden"/>
+                                            <input name="lrDate" class="lrDate" th:value="${#dates.format(new java.util.Date().getTime(), 'yyyy-MM-dd')}" hidden="hidden"/>
+                                            <input name="lrForPhone" class="lrForPhone" th:value="${words.lwPhone}" hidden="hidden"/>
+                                            <input name="lrForWords" class="lrForWords" th:value="${words.lwId}" hidden="hidden"/>
+                                            <input name="lrForReply" class="lrForReply" th:value="null" hidden="hidden"/>
+                                            <input th:value="null" hidden="hidden"/>
+                                            <div class="layui-form-item">
+                                                <textarea name="lrContent" class="layui-textarea lContent" lay-verify="replyContent" placeholder="请输入回复内容"style="min-height:80px;"></textarea>
+                                            </div>
+                                            <div class="layui-form-item">
+                                                <button class="layui-btn layui-btn-mini replyBtn" lay-submit="formReply" lay-filter="formReply">提交</button>
+                                            </div>
+<!--                                        </form>-->
+                                        <!-- 以下是回复信息 -->
+                                        <div th:each="reply:${lr_list}">
+                                            <!-- 每次遍历出来的留言下存在回复信息才展示（本条回复信息是本条留言下的就显示在当前留言下） -->
+                                            <div th:if="${reply.lrForWords eq (words.lwId)+''}">
+                                                <div style="text-align: left;margin-left:61px;color: #444">
+                                                    <div>
+                                                        <span style="color:#5FB878">[[${reply.lrName}]]&nbsp;&nbsp;</span>
+                                                    </div>
+                                                    <div>@[[${reply.lrForName}]]:&nbsp;&nbsp; [[${reply.lrContent}]]</div>
+                                                </div>
+                                                <div>
+                                                    <div class="comment-parent" style="text-align:left;margin-top:7px;margin-left:61px;color:#444">
+                                                        <span>[[${reply.lrDate}]]</span>
+                                                        &nbsp;&nbsp;&nbsp;&nbsp;
+                                                                                                                <p>
+                                                                                                                    <a href="javascript:;" style="text-decoration: none;" onclick="btnReplyClick(this)">回复</a>
+                                                                                                                    <div th:if="${user ne null && reply.lrName eq user.uname}">
+                                                                                                                            <a href="javascript:;" style="text-decoration: none;"  th:onclick="delReplyClick([[${reply.lrId}]])" >删除</a>
+                                                                                                                    </div>
+                                                                                                                </p>
+                                                        <hr style="margin-top: 7px;"/>
+                                                    </div>
+                                                    <!-- 回复表单默认隐藏 -->
+                                                                                                        <div class="replyContainer layui-hide" style="margin-left: 61px;">
+<!--                                                                                                            <form class="layui-form" action="../info/saveReply.do" method="post">-->
+                                                                                                                <input name="lrForArticleId" class="lrForArticleId" th:value="${info.infoId}" hidden="hidden"/>
+                                                                                                                <input name="lrPhone" class="lrPhone" th:value="${uphone}" hidden="hidden"/>
+                                                                                                                <input name="lrDate" class="lrDate" th:value="${#dates.format(new java.util.Date().getTime(), 'yyyy-MM-dd')}" hidden="hidden"/>
+                                                                                                                <input name="lrForPhone" class="lrForPhone" th:value="${words.lwPhone}" hidden="hidden"/>
+                                                                                                                <input name="lrForWords" class="lrForWords" th:value="${words.lwId}" hidden="hidden"/>
+                                                                                                                <input name="lrForReply" class="lrForReply" th:value="${reply.lrForReply}" hidden="hidden"/>
+                                                                                                                <input th:value="${reply.lrPhone}" hidden="hidden"/>
+                                                                                                                <div class="layui-form-item">
+                                                                                                                    <textarea name="lrContent" class="layui-textarea lContent" lay-verify="replyContent" placeholder="请输入回复内容"style="min-height:80px;"></textarea>
+                                                                                                                </div>
+                                                                                                                <div class="layui-form-item">
+                                                                                                                    <button class="layui-btn layui-btn-mini replyBtn" lay-submit="formReply" lay-filter="formReply">提交</button>
+                                                                                                                </div>
+<!--                                                                                                            </form>-->
+                                                                                                        </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                        </li>
+                    </ul>
+                </div>
+
+
+            </div>
+        </section>
+        <section class="colunm2">
+            <section class="mod withborder">
+                <h2>
+                    <span class="iconwraper"><i class="thunews-play-circle glyphicon glyphicon-play-circle"></i></span>
+                    精彩视频
+                    <a href="#" style="font-size:12px; color:#666; margin-left:30px">
+                    </a>
+                </h2>
+                <table class="table newslist clearfix" >
+                    <tr th:each="videos:${videoList}" >
+                        <td><a th:href="@{/user/videoDal(vid=${videos.vid})}"><img class="imgs1" th:src="${videos.vphoto}"></a></td>
+                        <td style="word-break:break-all; word-wrap:break-word; white-space:inherit"> <a th:href="@{/user/videoDal(vid=${videos.vid})}" ><p style="float: left">[[${videos.vtitle}]]</p></a>
+                            <br><br><br><small style="float: right"><i class=" glyphicon glyphicon-time"></i>[[${videos.vdate}]]</small></td>
+                    </tr>
+                </table>
+            </section>
+            <section class="mod withborder">
+                <h2 class="red"><span class="iconwraper">
+            <i class="thunews-line-chart glyphicon glyphicon-fire"></i>
+            </span>
+                    近期热点
+                    <a href="#" style="font-size:12px; color:#666; margin-left:30px">
+                    </a>
+                </h2>
+                <ul class="newslist clearfix"  id="resText">
+                    <li th:each="hotS:${hot}"><a href="">[[${hotS.title}]]<small style="float: right">[[${hotS.date}]]</small></a></li>
+                </ul>
+            </section>
+        </section>
+        </section>
+    </div>
+</div>
+</body>
+<script>
+    $(document).ready(function()
+    {
+    // -----------------------收藏----------------------------------------------------------
+        var color='[[${color}]]';
+        // alert(color);
+        if(color=="like"){
+            $(".heart").addClass("heartAnimation");
+        }
+        else {
+            $(".heart").removeClass("heartAnimation");
+        }
+        $('body').on("click",'.heart',function()
+        {
+            var uname='[[${uname}]]';
+            // alert(uname);
+            if(uname==""){
+               alert("请先去登录！");
+            }
+            else{
+                var A=$(this).attr("id");
+                var B=A.split("like");
+                var messageID=B[1];
+                $(this).css("background-position","")
+                var D=$(this).attr("rel");
+                if(D=== 'like')
+                {
+                    // $(this).addClass("heartAnimation").attr("rel","unlike");
+
+                }
+                else
+                {
+                    // $(this).removeClass("heartAnimation").attr("rel","like");
+                    $(this).css("background-position","left");
+                }
+                $.get("../nice/niceDetail.do",null,function(res){
+                    var count=parseInt($("#likeCount1").text());//将取出的点赞数转化为整型
+                    if(res=="up"){
+                        count=count+1;
+                        $(".heart").addClass("heartAnimation");//加上红心效果
+                    }
+                    else if(res=="down"){
+                        count=count-1;
+                        $(".heart").removeClass("heartAnimation");//去除红心效果
+                    }
+                    $("#likeCount1").text(count);
+                },"text");
+                // window.location.href="../info/niceDetail.do"
+             }
+        });
+    });
+</script>
+<script type="text/javascript">
+    layui.use('element', function () {
+        var element = layui.element;
+    });
+</script>
+<script type="text/javascript">
+  // 用户是否登录检测----------------------------------------------------------------------------------------------------
+    function check(){
+        var uphone= '[[${uphone}]]';
+        var lwContent = $("#lwContent").val();
+        if(uphone == "null" || uphone == ''){
+            alert("请先登录！");
+            return false;
+        }
+        if(lwContent==''){
+            alert("留言内容不能为空！");
+            return false;
+        }
+        return true;
+    }
+
+    // 将回复框和回复列表显示收起----------------------------------------------------------------------------------------
+    function btnReplyClick(elem) {
+        var $ = layui.jquery;
+        if($(this)){
+        }else if(!$(this)){
+            $(elem).parent('p').parent('.comment-parent').siblings('.replyContainer').toggleClass('layui-show');
+        }
+        $(elem).parent('p').parent('.comment-parent').siblings('.replyContainer').toggleClass('layui-hide');
+        if ($(elem).text() == '回复') {
+            $(elem).text('收起')
+        } else {
+            $(elem).text('回复')
+        }
+    }
+    // 回复留言------------------------------------------------------------------------------------------------------
+    $(".replyBtn").click(function(){
+        var uphone= '[[${uphone}]]';
+      var lrForArticleId = $(this).parent().parent().children('input').eq(0).val();//回复的文章id
+      var lrPhone = $(this).parent().parent().children('input').eq(1).val();//谁回复
+      var lrDate = $(this).parent().parent().children('input').eq(2).val();//回复时间
+      var lrForPhone = $(this).parent().parent().children('input').eq(3).val();//哪一个留言人的回复
+      var lrForWords = $(this).parent().parent().children('input').eq(4).val();//给哪一个id的留言的回复
+      var lrForReply=$(this).parent().parent().children('input').eq(5).val();//给哪一个id的回复的回复
+      var replyLrPhone=$(this).parent().parent().children('input').eq(6).val();//回复给谁(回复人)
+      var lrContent = $(this).parent().parent().children().children('textarea').eq(0).val();//回复内容
+      //   alert("用户："+uphone);
+      // alert("回复的文章id："+lrForArticleId);
+      // alert("谁回复:"+lrPhone);
+      // alert("回复时间："+lrDate);
+      // alert("哪一个留言人的回复:"+lrForPhone);
+      // alert("给哪一个id的留言的回复"+lrForWords);
+      // alert("给哪一个id的回复的回复:"+lrForReply);
+      // alert("回复给谁(回复人)"+replyLrPhone);
+      // alert("回复内容"+lrContent);
+        if(uphone == "null" || uphone == '') {
+            alert("请先登录！");
+            return false;
+        }
+        if(lrContent ==''){
+            alert("回复内容不能为空！");
+            return false;
+            }
+        if(replyLrPhone==""){
+            if(lrPhone==lrForPhone){
+                alert("用户不能给自己留言！");
+                return false;
+            }
+        }
+        else if(replyLrPhone==lrPhone){
+            alert("用户不能给自己留言！");
+            return false;
+        }
+            $.ajax({
+                    url: '/user/saveReply',
+                    type: "get",
+                    data: {
+                        lrPhone: lrPhone,
+                        lrDate: lrDate,
+                        lrContent: lrContent,
+                        lrForPhone: lrForPhone,
+                        lrForWords: lrForWords,
+                        lrForReply:lrForReply,
+                        lrForArticleId: lrForArticleId
+                    },
+                    success:function (result) {
+                        if (result == "false"){
+                            alert("回复失败");
+                        }else {
+                            alert("回复成功");
+                            window.location.href = "/user/infoDal?infoId="+lrForArticleId;
+                        }
+                    }
+                });
+
+  });
+    // -----------------------------删除留言-----------------------------------------------------------------------------
+  function delClick(lwId){
+      var infoId='[[${info.infoId}]]';
+      $.ajax({
+          url:"/user/delWords",
+          data:"lwId="+lwId,
+          type:"post",
+          success:function (result) {
+              if (result == "false"){
+                  alert("删除留言失败！");
+              }else {
+                  alert("删除留言成功！");
+                  window.location.href = "/user/infoDal?infoId="+infoId;
+              }
+          }
+      });
+  }
+
+  // -----------------------------删除回复-----------------------------------------------------------------------------
+    function delReplyClick(lrId) {
+        // alert("111111111111111")
+        var infoId='[[${info.infoId}]]';
+        $.ajax({
+            url:"/user/delReply",
+            data:"lrId="+lrId,
+            type:"post",
+            success:function (result) {
+                if (result == "false"){
+                    alert("删除回复失败！");
+                }else {
+                    alert("删除回复成功！");
+                    window.location.href = "/user/infoDal?infoId="+infoId;
+                }
+            }
+        });
+    }
+</script>
+</html>
+

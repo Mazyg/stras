@@ -1,12 +1,10 @@
 package com.jxnu.stras.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.jxnu.stras.domin.Info;
-import com.jxnu.stras.domin.Topic;
-import com.jxnu.stras.domin.User;
-import com.jxnu.stras.domin.Video;
-import com.jxnu.stras.service.InfoService;
-import com.jxnu.stras.service.VideoService;
+import com.jxnu.stras.domin.*;
+import com.jxnu.stras.service.*;
+import com.jxnu.stras.utils.ArticleUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -22,7 +20,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-
+@Slf4j
 @Controller
 public class InfoController {
 
@@ -31,6 +29,15 @@ public class InfoController {
 
     @Resource
     VideoService videoService;
+
+    @Resource
+    WordsService wordsService;
+
+    @Resource
+     UserService userService;
+
+    @Resource
+    ReplyService replyService;
 
     @Autowired
     RedisTemplate redisTemplate;
@@ -356,5 +363,13 @@ public class InfoController {
         }else{
             return "false";
         }
+    }
+    /**
+     *跳转积分商城页面
+     * @return
+     */
+    @GetMapping("/store/main")
+    public String storeMain(){
+        return "store/main";
     }
 }

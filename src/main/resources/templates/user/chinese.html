@@ -68,10 +68,10 @@
                 <div class="biggallerywraper">
                     <ul class="biggallerylist">
                             <li th:each="chineses :${chinese}">
-                                <a href="" target="_blank"><img th:src="${chineses.photo}"></a>
+                                <a href="" target="_blank" th:href="@{/user/infoDal(infoId=${chineses.infoId})}"><img th:src="${chineses.photo}"></a>
                                 <div class="imgintro">
                                     <b></b>
-                                    <h3><a href="" target="_blank" class="jiequ">【[[${chineses.title}]]】</a></h3>
+                                    <h3><a href="" target="_blank" class="jiequ" th:href="@{/user/infoDal(infoId=${chineses.infoId})}">【[[${chineses.title}]]】</a></h3>
                                     <p th:text="${chineses.introduce}"></p>
                                 </div>
                             </li>
@@ -79,7 +79,7 @@
                 </div>
                 <div class="imgthumb clearfix" style="margin-top:-10px">
                     <ul>
-                            <li th:each="chineses : ${chinese}" class="active"><a><img th:src="${chineses.photo}"></a></li>
+                            <li th:each="chineses : ${chinese}" class="active"><a><img th:src="${chineses.photo}" th:href="@{/user/infoDal(infoId=${chineses.infoId})}"></a></li>
                     </ul>
                 </div>
                 <script type="text/javascript">
@@ -110,7 +110,7 @@
             <ul class="picwhitenewslist clearfix">
                     <li th:each="chineseAll:${chineseList.records}">
                         <figure>
-                            <a href="" target="_blank"><img th:src="${chineseAll.photo}" ></a>
+                            <a href="" target="_blank" th:href="@{/user/infoDal(infoId=${chineseAll.infoId})}"><img th:src="${chineseAll.photo}" ></a>
                             <figcaption><a target="_blank" href="" class="jiequ">【[[${chineseAll.title}]]】</a></figcaption>
                             <div class="thumb"><i class="thunews-clock-o"></i>[[${chineseAll.date}]]<i class="thunews-eye"></i> <font id="font_itemlist_total_20191115111315714796419"><span id="itemlist_total_20191115111315714796419"></span></font></div>
                         </figure>
