@@ -2,9 +2,6 @@ package com.jxnu.stras.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.jxnu.stras.domin.Info;
-import com.jxnu.stras.domin.NiceDetail;
-import com.jxnu.stras.domin.Reply;
-import com.jxnu.stras.domin.Words;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -45,6 +42,14 @@ public interface InfoMapper extends BaseMapper<Info> {
     public boolean deleteInfo(Integer infoId);
 
     /**
+     * 刷新文章点赞数
+     * @param
+     * @return
+     */
+    @Update("update info set title=#{title},info_type=#{infoType},introduce=#{introduce} ,content=#{content},date=#{date}, photo=#{photo},nice=#{nice},view=#{view},info_status=#{infoStatus},Uphone=#{Uphone},info_del=#{infoDel},Utype=#{Utype} where info_id=#{infoId}")
+    public boolean updateInfo3(Info info);
+
+    /**
      * 按时间查询最新的5条轮播图
      * @return
      */
@@ -80,34 +85,5 @@ public interface InfoMapper extends BaseMapper<Info> {
             "where info_type like #{info_type} and info_del = 0\n"+
             "order by date desc\n"+"limit #{start},#{length}")
     public List<Info> findInfoBytype(@Param("info_type") String info_type, @Param("start") int start, @Param("length") int length);
-
-    /**
-     * 插入点赞记录
-     */
-    @Insert("insert into nicedetail(userId,contentId,createTime)\n" +
-            "VALUES(#{userId},#{contentId},NOW())")
-    Integer insertNiceDetail( @Param("userId") String uid,@Param("contentId") Integer infoId);
-
-    /**
-     * 删除点赞记录
-     *
-     * @param id
-     * @return
-     */
-    @Delete("DELETE from nicedetail\n" +
-            "where id=#{id}")
-    Integer deleteNiceDetail(String id);
-    /**
-     * 根据用户id和文章id信息查询点赞记录
-     *
-     * @param
-     * @return
-     */
-    @Select("select *\n" +
-            "from nicedetail\n" +
-            "where uname=#{uname}" +
-            " and contentId=#{uname}")
-    NiceDetail findNiceDetail(@Param("uname") String uname, @Param("infoId") Integer infoId);
-
 
 }

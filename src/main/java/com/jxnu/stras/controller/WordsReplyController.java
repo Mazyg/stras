@@ -29,6 +29,9 @@ public class WordsReplyController {
     @Resource
     ReplyService replyService;
 
+    @Resource
+    NiceInfoService niceInfoService;
+
     /**
      * 跳转文章详情
      */
@@ -45,20 +48,21 @@ public class WordsReplyController {
         else{uphone=user.getPhone();}
         model.addAttribute("uphone",uphone);
         log.info("用户："+uphone);
-//        -----------------------------点赞----------------------------------------
-        //获取文章点赞数
-//        int niceNum=info.getNice();
-//        log.info("点赞量"+niceNum);
-//        model.addAttribute("niceNum",niceNum);
-//        NiceDetail niceDetail=infoService.findNiceDetail(uname,infoId);
-//        request.getSession().setAttribute("color","like");
-//        if (niceDetail!=null){
-//            request.getSession().getAttribute("color");
-//            request.getSession().setAttribute("color","like");
-//        }else{
-//            request.getSession().setAttribute("color","unlike");
-//        }
-
+//        -----------------------------喜欢----------------------------------------
+        //获取喜欢人数
+        int niceNum=info.getNice();
+        log.info("喜欢量"+niceNum);
+        model.addAttribute("niceNum",niceNum);
+        NiceInfo niceInfo=niceInfoService.findNiceDetail(uphone,infoId);
+        log.info("niceInfo:"+niceInfo);
+        request.getSession().setAttribute("color","like");
+        if (niceInfo!=null){
+            log.info("结果为喜欢");
+            request.getSession().getAttribute("color");
+            request.getSession().setAttribute("color","like");
+        }else{
+            request.getSession().setAttribute("color","unlike");
+        }
 //       ------------------------------------- 留言-------------------------------------
         //封装留言信息(根据文章id查留言)
         lw_list = wordsService.findWordsByInfoId(infoId);
@@ -137,16 +141,28 @@ public class WordsReplyController {
     /**
      * 删除留言信息
      */
+    private List<Reply> replies;
     @ResponseBody
     @PostMapping("/user/delWords")
     public String delWords(String lwId){
-        boolean r1=replyService.delReply(lwId);
+        replies=replyService.findByLw(lwId);
+        log.info("该留言下回复的长度："+replies.size());
+        boolean r1;
+        if(replies.size()==0){
+            r1=true;
+
+        }
+        else {
+            r1=replyService.delReply(lwId);
+        }
         boolean r2=wordsService.delWords(lwId);
         log.info("r1="+r1);
         log.info("r2="+r2);
         if(r2==true && r1==true){
+            log.info("删除成功！");
             return "success";
         }else{
+            log.info("删除失败！");
             return "false";
         }
     }
@@ -167,5 +183,40 @@ public class WordsReplyController {
             return "false";
         }
     }
+
+    /**
+     * 点赞
+     */
+    @ResponseBody
+    @PostMapping("/user/niceInfo")
+    public String niceInfo(Integer infoId,String uphone){
+            System.out.println("文章Id："+infoId);
+            System.out.println("uphone："+uphone);
+            //查询是否有该用户的点赞记录
+            NiceInfo niceInfo=niceInfoService.findNiceDetail(uphone,infoId);
+            System.out.println("点赞记录："+niceInfo);
+            //根据文章id找到文章
+            Info info=infoService.getInfoById(infoId);
+            if (niceInfo!=null){
+                //如果找到这条记录，删除该记录，同时文章的点赞数减一
+                //删除记录
+                niceInfoService.deleteNiceDetail(niceInfo.getId());
+                System.out.println("点赞数-1");
+                //文章点赞数减一
+                info.setNice(info.getNice()-1);
+                infoService.updateInfo3(info);
+                return "down";
+            }else{
+                //如果没有找到这条记录，则添加这条记录，同时文章数加一；
+                //添加记录
+                niceInfoService.insertNiceDetail(uphone,infoId);
+                //文章点赞数加一
+                System.out.println("点赞数+1");
+                info.setNice(info.getNice()+1);
+                infoService.updateInfo3(info);
+                return "up";
+            }
+//        return "redirect:findByIdInfo.do?infoId="+infoId +"&uid="+uid;
+        }
 
 }

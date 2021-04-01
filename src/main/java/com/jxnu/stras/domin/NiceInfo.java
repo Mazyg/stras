@@ -10,9 +10,9 @@ import java.util.Date;
  */
 @Data
 @ToString
-public class NiceDetail {
-    private String id;
-    private String uphone;
+public class NiceInfo {
+    private Integer id;
+    private String uPhone;
     private String contentId;
     private Date createTime;
 }

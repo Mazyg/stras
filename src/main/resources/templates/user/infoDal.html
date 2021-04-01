@@ -241,8 +241,7 @@
     $(document).ready(function()
     {
     // -----------------------收藏----------------------------------------------------------
-        var color='[[${color}]]';
-        // alert(color);
+        var color='[[${session.color}]]';
         if(color=="like"){
             $(".heart").addClass("heartAnimation");
         }
@@ -251,9 +250,8 @@
         }
         $('body').on("click",'.heart',function()
         {
-            var uname='[[${uname}]]';
-            // alert(uname);
-            if(uname==""){
+            var uphone='[[${uphone}]]';
+            if(uphone==""){
                alert("请先去登录！");
             }
             else{
@@ -272,18 +270,38 @@
                     // $(this).removeClass("heartAnimation").attr("rel","like");
                     $(this).css("background-position","left");
                 }
-                $.get("../nice/niceDetail.do",null,function(res){
-                    var count=parseInt($("#likeCount1").text());//将取出的点赞数转化为整型
-                    if(res=="up"){
-                        count=count+1;
-                        $(".heart").addClass("heartAnimation");//加上红心效果
+                var infoId='[[${info.infoId}]]';
+                var uphone='[[${uphone}]]'
+                $.ajax({
+                    url:"/user/niceInfo",
+                    data:{infoId: infoId,
+                          uphone: uphone},
+                    type:"post",
+                    success:function (result) {
+                        var count=parseInt($("#likeCount1").text());//将取出的点赞数转化为整型
+                        if (result == "down"){
+                            count=count-1;
+                            $(".heart").removeClass("heartAnimation");//去除红心效果
+                        }else {
+                            count=count+1;
+                            $(".heart").addClass("heartAnimation");//加上红心效果
+                        }
+                        $("#likeCount1").text(count);
+                        // window.location.href = "/user/infoDal?infoId="+infoId;
                     }
-                    else if(res=="down"){
-                        count=count-1;
-                        $(".heart").removeClass("heartAnimation");//去除红心效果
-                    }
-                    $("#likeCount1").text(count);
-                },"text");
+                });
+                // $.get("../nice/niceDetail.do",null,function(res){
+                //     var count=parseInt($("#likeCount1").text());//将取出的点赞数转化为整型
+                //     if(res=="up"){
+                //         count=count+1;
+                //         $(".heart").addClass("heartAnimation");//加上红心效果
+                //     }
+                //     else if(res=="down"){
+                //         count=count-1;
+                //         $(".heart").removeClass("heartAnimation");//去除红心效果
+                //     }
+                //     $("#likeCount1").text(count);
+                // },"text");
                 // window.location.href="../info/niceDetail.do"
              }
         });
@@ -393,7 +411,7 @@
           data:"lwId="+lwId,
           type:"post",
           success:function (result) {
-              if (result == "false"){
+              if (result === "false"){
                   alert("删除留言失败！");
               }else {
                   alert("删除留言成功！");

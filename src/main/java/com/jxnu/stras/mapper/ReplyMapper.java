@@ -48,4 +48,11 @@ public interface ReplyMapper extends BaseMapper<Reply> {
      */
     @Select("select * from reply where lrForArticleId=#{lrForArticleId}")
     public  List<Reply> findByReply(Integer lrForArticleId);
+
+    /**
+     *     根据留言查询所有回复信息
+     */
+
+    @Select("select * from reply where lrForWords=#{lrForWords}")
+    public  List<Reply> findByLw(String lrForWords);
 }

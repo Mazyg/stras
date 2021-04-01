@@ -39,4 +39,11 @@ public class ReplyServiceImpl extends ServiceImpl<ReplyMapper, Reply> implements
     public List<Reply> findByReply(Integer lrForArticleId) {
         return replyMapper.findByReply(lrForArticleId);
     }
+
+    @Override
+    public List<Reply> findByLw(String lrForWords) {
+        return replyMapper.findByLw(lrForWords);
+    }
+
+
 }

@@ -11,5 +11,6 @@ public interface ReplyService extends IService<Reply> {
     public boolean delReply(String lr_for_words);
     public boolean delReply2(String lr_id);
     public List<Reply> findByReply(Integer lrForArticleId);
+    public List<Reply> findByLw(String lrForWords);
 
 }

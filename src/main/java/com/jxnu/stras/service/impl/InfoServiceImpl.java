@@ -4,9 +4,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jxnu.stras.domin.Info;
-import com.jxnu.stras.domin.NiceDetail;
-import com.jxnu.stras.domin.Reply;
-import com.jxnu.stras.domin.Words;
 import com.jxnu.stras.mapper.InfoMapper;
 import com.jxnu.stras.service.InfoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +24,7 @@ public class InfoServiceImpl extends ServiceImpl<InfoMapper,Info> implements Inf
 
     /**
      * 根据id查找信息
+     *
      * @param infoId
      * @return
      */
@@ -37,6 +35,7 @@ public class InfoServiceImpl extends ServiceImpl<InfoMapper,Info> implements Inf
 
     /**
      * 文章审核通过
+     *
      * @param infoId
      * @return
      */
@@ -47,6 +46,7 @@ public class InfoServiceImpl extends ServiceImpl<InfoMapper,Info> implements Inf
 
     /**
      * 文章审核不通过
+     *
      * @param infoId
      * @return
      */
@@ -55,8 +55,15 @@ public class InfoServiceImpl extends ServiceImpl<InfoMapper,Info> implements Inf
         return infoMapper.updateInfo2(infoId);
     }
 
+
+    @Override
+    public boolean updateInfo3(Info info) {
+        return infoMapper.updateInfo3(info);
+    }
+
     /**
      * 删除话题
+     *
      * @param infoId
      * @return
      */
@@ -67,17 +74,18 @@ public class InfoServiceImpl extends ServiceImpl<InfoMapper,Info> implements Inf
 
     /**
      * 按时间查询最新的5条轮播图
+     *
      * @return 轮播信息
      */
     @Override
     public List<Info> mainRotate() {
-        String key= "首页轮播";
-        if(!redisTemplate.hasKey(key)){
+        String key = "首页轮播";
+        if (!redisTemplate.hasKey(key)) {
             List<Info> infoList = infoMapper.mainRotate();
-            redisTemplate.opsForValue().set(key,infoList);
-            redisTemplate.expire(key,10, TimeUnit.MINUTES);
+            redisTemplate.opsForValue().set(key, infoList);
+            redisTemplate.expire(key, 10, TimeUnit.MINUTES);
             return (List<Info>) redisTemplate.opsForValue().get(key);
-        }else{
+        } else {
             return (List<Info>) redisTemplate.opsForValue().get(key);
         }
     }
@@ -95,86 +103,90 @@ public class InfoServiceImpl extends ServiceImpl<InfoMapper,Info> implements Inf
 
     /**
      * 侧边信息栏查询
+     *
      * @return 信息列表
      */
     @Override
     public List<Info> findInfoByHot() {
         String key = "侧边";
-        if(!redisTemplate.hasKey(key)){
+        if (!redisTemplate.hasKey(key)) {
             List<Info> infoList = infoMapper.findInfoByHot();
-            redisTemplate.opsForValue().set(key,infoList);
-            redisTemplate.expire(key,30,TimeUnit.MINUTES);
+            redisTemplate.opsForValue().set(key, infoList);
+            redisTemplate.expire(key, 30, TimeUnit.MINUTES);
             return (List<Info>) redisTemplate.opsForValue().get(key);
-        }else {
+        } else {
             return (List<Info>) redisTemplate.opsForValue().get(key);
         }
     }
 
     /**
      * 爱我中华页面分页
+     *
      * @param pn 页数
      * @return 页面数据
      */
     @Override
     public Page<Info> chinesePageInfo(Integer pn) {
-        String key = "chineseView"+pn;
+        String key = "chineseView" + pn;
         Page<Info> infoList;
-        if(!redisTemplate.hasKey(key)){
-            Page<Info> infoPage = new Page<>(pn,3);
+        if (!redisTemplate.hasKey(key)) {
+            Page<Info> infoPage = new Page<>(pn, 3);
             QueryWrapper<Info> wrapper = new QueryWrapper<>();
-            wrapper.eq("info_del",0);
-            wrapper.like("info_type","最美");
-            infoList = page(infoPage,wrapper);
-            redisTemplate.opsForValue().set(key,infoList);
-            redisTemplate.expire(key,30, TimeUnit.MINUTES);
+            wrapper.eq("info_del", 0);
+            wrapper.like("info_type", "最美");
+            infoList = page(infoPage, wrapper);
+            redisTemplate.opsForValue().set(key, infoList);
+            redisTemplate.expire(key, 30, TimeUnit.MINUTES);
             return (Page<Info>) redisTemplate.opsForValue().get(key);
-        }else{
-           return  (Page<Info>) redisTemplate.opsForValue().get(key);
+        } else {
+            return (Page<Info>) redisTemplate.opsForValue().get(key);
         }
     }
 
     /**
      * 热点时事页面分页查询
+     *
      * @param pn 页数
      * @return 信息列表
      */
     @Override
     public Page<Info> hotPageInfo(Integer pn) {
-       String key = "hotPageInfo"+pn;
-       Page<Info> hotList ;
-       if(!redisTemplate.hasKey(key)){
-           Page<Info> infoPage = new Page<>(pn,4);
-           QueryWrapper<Info> wrapper = new QueryWrapper<>();
-           wrapper.eq("info_del",0);
-           wrapper.eq("info_type","热点时事");
-           hotList = page(infoPage,wrapper);
-           redisTemplate.opsForValue().set(key,hotList);
-           redisTemplate.expire(key,30,TimeUnit.MINUTES);
-           return (Page<Info>) redisTemplate.opsForValue().get(key);
-       }else {
-           return (Page<Info>) redisTemplate.opsForValue().get(key);
-       }
+        String key = "hotPageInfo" + pn;
+        Page<Info> hotList;
+        if (!redisTemplate.hasKey(key)) {
+            Page<Info> infoPage = new Page<>(pn, 4);
+            QueryWrapper<Info> wrapper = new QueryWrapper<>();
+            wrapper.eq("info_del", 0);
+            wrapper.eq("info_type", "热点时事");
+            hotList = page(infoPage, wrapper);
+            redisTemplate.opsForValue().set(key, hotList);
+            redisTemplate.expire(key, 30, TimeUnit.MINUTES);
+            return (Page<Info>) redisTemplate.opsForValue().get(key);
+        } else {
+            return (Page<Info>) redisTemplate.opsForValue().get(key);
+        }
     }
 
     /**
      * 榜样力量分页
+     *
      * @param pn 页数
      * @return 信息列表
      */
     @Override
     public Page<Info> manPageInfo(Integer pn) {
-        String key = "manPageInfo"+pn;
+        String key = "manPageInfo" + pn;
         Page<Info> infoList;
-        if(!redisTemplate.hasKey(key)){
-            Page<Info> infoPage = new Page<>(pn,4);
+        if (!redisTemplate.hasKey(key)) {
+            Page<Info> infoPage = new Page<>(pn, 4);
             QueryWrapper<Info> wrapper = new QueryWrapper<>();
-            wrapper.eq("info_del",0);
-            wrapper.eq("info_type","榜样力量");
-             infoList = page(infoPage,wrapper);
-             redisTemplate.opsForValue().set(key,infoList);
-             redisTemplate.expire(key,30,TimeUnit.MINUTES);
-             return (Page<Info>) redisTemplate.opsForValue().get(key);
-        }else{
+            wrapper.eq("info_del", 0);
+            wrapper.eq("info_type", "榜样力量");
+            infoList = page(infoPage, wrapper);
+            redisTemplate.opsForValue().set(key, infoList);
+            redisTemplate.expire(key, 30, TimeUnit.MINUTES);
+            return (Page<Info>) redisTemplate.opsForValue().get(key);
+        } else {
             return (Page<Info>) redisTemplate.opsForValue().get(key);
         }
 
@@ -182,32 +194,34 @@ public class InfoServiceImpl extends ServiceImpl<InfoMapper,Info> implements Inf
 
     /**
      * 全球战役分页
+     *
      * @param pn 页数
      * @return 信息2列表
      */
     @Override
     public Page<Info> allPageE(Integer pn) {
-       String key = "allPageE"+pn;
-       Page<Info> infoList;
-       if (!redisTemplate.hasKey(key)){
-           Page<Info> infoPage = new Page<>(pn,4);
-           QueryWrapper<Info> wrapper = new QueryWrapper<>();
-           wrapper.eq("info_del",0);
-           wrapper.eq("info_type","全球战疫");
-           infoList = page(infoPage,wrapper);
-           redisTemplate.opsForValue().set(key,infoList);
-           redisTemplate.expire(key,30,TimeUnit.MINUTES);
-           return (Page<Info>) redisTemplate.opsForValue().get(key);
-       }else {
-           return (Page<Info>) redisTemplate.opsForValue().get(key);
-       }
+        String key = "allPageE" + pn;
+        Page<Info> infoList;
+        if (!redisTemplate.hasKey(key)) {
+            Page<Info> infoPage = new Page<>(pn, 4);
+            QueryWrapper<Info> wrapper = new QueryWrapper<>();
+            wrapper.eq("info_del", 0);
+            wrapper.eq("info_type", "全球战疫");
+            infoList = page(infoPage, wrapper);
+            redisTemplate.opsForValue().set(key, infoList);
+            redisTemplate.expire(key, 30, TimeUnit.MINUTES);
+            return (Page<Info>) redisTemplate.opsForValue().get(key);
+        } else {
+            return (Page<Info>) redisTemplate.opsForValue().get(key);
+        }
     }
 
     /**
      * 根据文章类别查找
+     *
      * @param info_type 类别
-     * @param start 开始位置
-     * @param length 查询条数
+     * @param start     开始位置
+     * @param length    查询条数
      * @return 文章列表
      */
     @Override
@@ -223,25 +237,4 @@ public class InfoServiceImpl extends ServiceImpl<InfoMapper,Info> implements Inf
         }
 
     }
-
-
-
-    @Override
-    public Integer insertNiceDetail(String uname,Integer infoId) {
-        return infoMapper.insertNiceDetail(uname,infoId);
-    }
-
-    @Override
-    public Integer deleteNiceDetail(String id) {
-        return infoMapper.deleteNiceDetail(id);
-    }
-
-    @Override
-    public NiceDetail findNiceDetail(String uname,Integer infoId) {
-        return  infoMapper.findNiceDetail(uname,infoId);
-    }
-
-
-
-
 }
