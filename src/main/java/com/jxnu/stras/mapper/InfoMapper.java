@@ -2,10 +2,7 @@ package com.jxnu.stras.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.jxnu.stras.domin.Info;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -43,6 +40,14 @@ public interface InfoMapper extends BaseMapper<Info> {
      */
     @Update("update info set info_del=1 where info_id=#{infoId}")
     public boolean deleteInfo(Integer infoId);
+
+    /**
+     * 刷新文章点赞数
+     * @param
+     * @return
+     */
+    @Update("update info set title=#{title},info_type=#{infoType},introduce=#{introduce} ,content=#{content},date=#{date}, photo=#{photo},nice=#{nice},view=#{view},info_status=#{infoStatus},Uphone=#{Uphone},info_del=#{infoDel},Utype=#{Utype} where info_id=#{infoId}")
+    public boolean updateInfo3(Info info);
 
     /**
      * 按时间查询最新的5条轮播图

@@ -39,6 +39,8 @@
                     </li>
                     <li><a th:href="@{/user/topic}">话题广场</a>
                     </li>
+                    <li><a th:href="@{/store/main}">积分商城</a>
+                    </li>
                         <li th:if="${session.user != null}"><a  th:href="@{/person/personalInfo}" >个人中心</a>
                             <ul class="last">
                                 <li th:if="${session.user.utype=='admin'}"><a th:href="@{/admin/index.html}">管理员界面</a></li>
