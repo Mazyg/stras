@@ -6,7 +6,7 @@ $(function(){
         var val = parseInt($(".qprice").eq(i).html().substring(1));
         totalCost += val;
     }
-    $("#totalprice").html("￥"+totalCost);
+    $("#totalprice").html(totalCost+"积分");
     //settlement2使用
     $("#settlement2_totalCost").val(totalCost);
 });

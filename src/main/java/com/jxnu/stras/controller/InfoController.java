@@ -12,11 +12,13 @@ import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -30,14 +32,10 @@ public class InfoController {
     @Resource
     VideoService videoService;
 
-    @Resource
-    WordsService wordsService;
-
-    @Resource
-     UserService userService;
-
-    @Resource
-    ReplyService replyService;
+    @Autowired
+    private ProductCategoryService productCategoryService;
+    @Autowired
+    private CartService cartService;
 
     @Autowired
     RedisTemplate redisTemplate;
@@ -368,8 +366,22 @@ public class InfoController {
      *跳转积分商城页面
      * @return
      */
+//    @GetMapping("/store/main")
+//    public String storeMain(){
+//        return "store/main";
+//    }
     @GetMapping("/store/main")
-    public String storeMain(){
-        return "store/main";
+    public ModelAndView storeMain(HttpSession session){
+        log.info("进入storeMain。。。。。。。。。。。。。。。。。。。。");
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("store/main");
+        modelAndView.addObject("list",productCategoryService.getAllProductCategoryVO());
+        User user = (User)session.getAttribute("user");
+        if(user == null){
+            modelAndView.addObject("cartList",new ArrayList<>());
+        }else{
+            modelAndView.addObject("cartList",cartService.findAllCartVOByUserId(user.getPhone()));
+        }
+        return modelAndView;
     }
 }

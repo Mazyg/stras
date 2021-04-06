@@ -4,12 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <th:block th:include="common.html :: source"></th:block>
-    <script type="text/javascript" src="/js/settlement.js"></script>
+    <div th:include="/store/common :: source"></div>
+    <script type="text/javascript" th:src="@{/js/store/settlement.js}"></script>
 </head>
 <body>
-
-<th:block th:include="common.html :: header"></th:block>
+<th:block th:include="/store/common :: header"></th:block>
 
 <div class="i_bg">
     <div id="settlement">
@@ -30,28 +29,28 @@
                 </tr>
 
 
-                <tr class="goods" >
+                <tr class="goods" th:each="cart:${cartList}">
                     <td>
                         <div class="c_s_img">
-                            <a><img src="/images/c_2.jpg" width="73" height="73" /></a>
+                            <a><img th:src="'/images/'+${cart.fileName}" width="73" height="73" /></a>
                         </div>
-                        <div>手机</div>
+                        <div th:text="${cart.name}"></div>
                     </td>
-                    <td align="center" style="color: #ff4e00;" id="price">3000</td>
+                    <td align="center" style="color: #ff4e00;" id="price" th:text="${cart.price}"></td>
                     <td align="center">
                         <div class="c_num">
-                            <input type="hidden" class="productPrice" value="100"/>
-                            <input type="hidden" class="productStock" value="5"/>
+                            <input type="hidden" class="productPrice" th:value="${cart.price}"/>
+                            <input type="hidden" class="productStock" th:value="${cart.stock}"/>
                             <input type="button" value="" onclick="subQuantity(this)" class="car_btn_1" />
-                            <input type="text" value="2" name="quantit" class="car_ipt" readonly="readonly" />
+                            <input type="text" th:value="${cart.quantity}" name="quantit" class="car_ipt" readonly="readonly" />
                             <input type="button" value="" onclick="addQuantity(this);" class="car_btn_2" />
                         </div>
                     </td>
-                    <input type="hidden" value="1" class="id"/>
-                    <td align="center" style="color: #ff4e00;" class="qprice">￥6000</td>
+                    <input type="hidden" class="id" th:value="${cart.id}" />
+                    <td align="center" style="color: #ff4e00;" class="qprice" th:text="${cart.cost}+'积分'"></td>
                     <td align="center">
                         <a href="javascript:void(0);"
-                                          onclick="removeCart(this);" class="delete">删除</a></td>
+                           onclick="removeCart(this);" class="delete">删除</a></td>
                 </tr>
 
 
@@ -74,8 +73,8 @@
     </div>
 </div>
 
-<th:block th:include="common.html :: footer"></th:block>
-<th:block th:include="common.html :: permit"></th:block>
+<th:block th:include="/store/common :: footer"></th:block>
+<th:block th:include="/store/common :: permit"></th:block>
 
 </body>
 </html>
