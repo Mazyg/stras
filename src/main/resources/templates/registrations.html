@@ -103,19 +103,13 @@
             <p>输入您的帐户密码</p>
             <input type="password" id="password1" name="password" placeholder="密码" class="form-control" required>
             <input type="password" id="password2" placeholder="确认密码" class="form-control" onblur="isEq()" required>
-            <!--<label class="checkbox">
-                <input type="checkbox" value="agree this condition" required> 我同意服务条款和隐私政策
-            </label>-->
-<!--            <button class="btn btn-lg btn-login btn-block" onclick.native="register()">-->
-<!--                <i class="fa fa-check"></i>-->
-<!--            </button>-->
             <div class="btn btn-lg btn-login btn-block" onclick="register()">
                 <i class="fa fa-check"></i>
             </div>
 
             <div class="registration">
                 已经注册。
-                <a th:href="@{/}" class="">
+                <a th:href="@{/login.html}" class="">
                     去登陆
                 </a>
             </div>
