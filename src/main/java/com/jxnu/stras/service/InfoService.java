@@ -13,6 +13,7 @@ public interface InfoService extends IService<Info> {
 
     public boolean updateInfo(Integer infoId);
     public boolean updateInfo2(Integer infoId);
+    public boolean updateInfo3(Info info);
     public boolean deleteInfo(Integer infoId);
     public List<Info> mainRotate();
     public Integer countByPhone(String Uphone);

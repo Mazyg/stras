@@ -5,6 +5,11 @@ bucketName: mazyg
 server:
   port: 8088
 spring:
+  #声明thymeleaf使用非严格的html。
+  thymeleaf:
+    content-type: text/html
+    mode: LEGACYHTML5
+    cache: false
   servlet:
     multipart:
       max-file-size: 10000MB
