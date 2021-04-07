@@ -61,11 +61,12 @@
                 url:"/registerUser",
                 data:$('#regster').serialize(),
                 success:function (msg) {
-                    alert(msg)
                     if(msg === "success"){
                         alert("注册成功，去登录吧！")
+                        window.location.href="/registration";
                     }else{
                         alert("信息有误！")
+                        window.location.href="/registration";
                     }
                 },
                 error:function (msg) {
@@ -84,7 +85,7 @@
     <form class="form-signin"  id="regster">
         <div class="form-signin-heading text-center">
             <h1 class="sign-title">新用户注册</h1>
-            <img src="images/login-logo.png" alt=""/>
+            <img th:src="@{/images/logo1.png}" alt=""/>
         </div>
         <div class="login-wrap">
             <p>输入您的个人信息</p>

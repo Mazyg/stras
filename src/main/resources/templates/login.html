@@ -31,8 +31,9 @@
 
     <form class="form-signin" action="admin/index.html" method="post" th:action="@{/login}">
         <div class="form-signin-heading text-center">
-            <h1 class="sign-title">登录</h1>
-            <img th:src="@{/images/login-logo.png}" alt=""/>
+
+            <!--<img th:src="@{/images/login-logo.png}" alt=""/>-->
+            <img th:src="@{/images/logo1.png}" alt=""/>
         </div>
         <div class="login-wrap"><a  th:text="${msg}"></a>
             <input  class="form-control" id="phone" name="phone" type="tel" placeholder="手机号码" onblur="istel()" autofocus required>
