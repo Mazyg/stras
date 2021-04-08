@@ -6,12 +6,6 @@ import com.jxnu.stras.mapper.UserAddressMapper;
 import com.jxnu.stras.service.UserAddressService;
 import org.springframework.stereotype.Service;
 
-/**
- * <p>
- *  服务实现类
- * </p>
- *
- */
 @Service("UserAddressService")
 public class UserAddressServiceImpl extends ServiceImpl<UserAddressMapper, UserAddress> implements UserAddressService {
 
