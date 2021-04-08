@@ -17,8 +17,8 @@ $(function(){
 
 //商品数量++
 function increase() {
-    var value = $("#quantity").val();
-    var stock = $("#stock").text();
+    var value = $("#quantity").val();//获得当前选择的数量
+    var stock = $("#stock").text();//获得商品库存
     value++;
     if(value > stock){
         value = stock;
@@ -37,9 +37,13 @@ function reduce() {
 }
 
 //添加购物车
-function addCart(id,price){
-    var id = $("#productId").val();
-    var price = $("#productPrice").val();
-    var quantity = $("#quantity").val();
-    window.location.href="settlement1.html";
+function addCart(productId,price){
+    let stockStr = $("#stock").text();
+    let stock = parseInt(stockStr);
+    if(stock == 0){
+        alert("库存不足！");
+        return false;
+    }
+    let quantity = $("#quantity").val();
+    window.location.href="/cart/add/"+productId+"/"+price+"/"+quantity;
 }

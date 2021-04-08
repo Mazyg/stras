@@ -4,11 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <th:block th:include="common.html :: source"></th:block>
+    <div th:include="/store/common :: source"></div>
 </head>
 <body>
 
-<th:block th:include="common.html :: header"></th:block>
+<th:block th:include="/store/common :: header"></th:block>
 
 <div class="i_bg">
     <div id="settlement">
@@ -45,8 +45,8 @@
     </div>
 </div>
 
-<th:block th:include="common.html :: footer"></th:block>
-<th:block th:include="common.html :: permit"></th:block>
+<th:block th:include="/store/common :: footer"></th:block>
+<th:block th:include="/store/common :: permit"></th:block>
 
 </body>
 </html>

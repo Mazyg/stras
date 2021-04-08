@@ -87,9 +87,9 @@
             </span>
         </span>
             <span class="fr">
-            <span class="fl">你好，请<a href="/login.html" style="color:#ff4e00;">登录</a>&nbsp;<a href="/register.jsp" style="color:#ff4e00;">免费注册</a>&nbsp;&nbsp;</span>
-            <span class="fl"><a href="/userInfo.html" >欢迎回来，张三</a>&nbsp;|&nbsp;<a href="/orderList.html">我的订单</a>&nbsp;</span>
-            <span class="fl">|&nbsp;<a>注销</a></span>
+            <span class="fl" th:if="${session.user == null}">你好，请<a th:href="@{/login.html}" style="color:#ff4e00;">登录</a>&nbsp;<a th:href="@{/registration}" style="color:#ff4e00;">免费注册</a>&nbsp;&nbsp;</span>
+            <span class="fl" th:if="${session.user != null}"><a th:href="@{/store/userInfo.html}" >欢迎回来，<span th:text="${session.user.uname}"></span></a>&nbsp;|&nbsp;<a th:href="@{/store/orderList}">我的订单</a>&nbsp;</span>
+            <span class="fl" th:if="${session.user != null}">|&nbsp;<a th:href="@{/loginOut}">注销</a></span>
         </span>
         </div>
     </div>
@@ -125,35 +125,27 @@
             </form>
         </div>
         <div class="i_car">
-            <a href="/orderList.html">
+            <a href="/cart/findAllCart">
                 <div class="car_t">
                     购物车 [
-                    <span>3</span>
+                    <span th:text="${cartList.size()}"></span>
                     ]
                 </div>
             </a>
+
             <div class="car_bg">
                 <div class="un_login">我的购物车</div>
                 <ul class="cars">
-                    <li>
-                        <div class="img"><a href="/productDetail.html"><img src="/images/mat_1.jpg" width="58" height="58" /></a></div>
-                        <div class="name"><a href="/productDetail.html">相机</a></div>
-                        <div class="price"><font color="#ff4e00">￥300</font> X <span class="quantity">2</span>  =  <span class="cost">600</span></div>
-                    </li>
-                    <li>
-                        <div class="img"><a href="/productDetail.html"><img src="/images/mat_1.jpg" width="58" height="58" /></a></div>
-                        <div class="name"><a href="/productDetail.html">相机</a></div>
-                        <div class="price"><font color="#ff4e00">￥300</font> X <span class="quantity">2</span>  =  <span class="cost">600</span></div>
-                    </li>
-                    <li>
-                        <div class="img"><a href="/productDetail.html"><img src="/images/mat_1.jpg" width="58" height="58" /></a></div>
-                        <div class="name"><a href="/productDetail.html">相机</a></div>
-                        <div class="price"><font color="#ff4e00">￥300</font> X <span class="quantity">2</span>  =  <span class="cost">600</span></div>
+                    <li th:each="cart:${cartList}">
+                        <div class="img"><a th:href="'/product/findById/'+${cart.productId}"><img th:src="'/images/'+${cart.fileName}" width="58" height="58" /></a></div>
+                        <div class="name"><a th:href="'/product/findById/'+${cart.productId}" th:text="${cart.name}"></a></div>
+                        <div class="price"><font color="#ff4e00" th:text="${cart.price}+'积分'"></font> X <span class="quantity" th:text="${cart.quantity}"></span>  =  <span class="cost" th:text="${cart.cost}"></span></div>
                     </li>
                 </ul>
-                <div class="price_sum">共计&nbsp;<font color="#ff4e00">￥</font><span id="totalCost"></span></div>
-                <div class="price_a"><a href="/settlement1.html">去结算</a></div>
+                <div class="price_sum">共计&nbsp;<font color="#ff4e00"></font><span id="totalCost"></span></div>
+                <div class="price_a"><a href="/cart/findAllCart">去结算</a></div>
             </div>
+
         </div>
     </div>
     <!-- search -->
@@ -166,7 +158,7 @@
                 var val = parseInt($(".cost").eq(i).html());
                 totalCost += val;
             }
-            $("#totalCost").html("￥"+totalCost);
+            $("#totalCost").html(totalCost+'积分');
         });
     </script>
 </div>
@@ -179,66 +171,28 @@
                 <div class="nav_t">全部商品分类</div>
                 <div class="leftNav">
                     <ul>
-                        <li>
+                        <li th:each="levelOne:${list}">
                             <div class="fj">
-                                <span class="n_img"></span> <span class="fl" >一级分类1</span>
+                                <span class="n_img"></span> <span class="fl" th:text="${levelOne.name}"></span>
                             </div>
                             <div class="zj">
                                 <div class="zj_l">
-                                    <div class="zj_l_c">
+                                    <div class="zj_l_c" th:each="levelTwo:${levelOne.children}">
                                         <h2>
-                                            <a href="/productList.html">二级分类1</a>
+                                            <a th:href="'/product/list/two/'+${levelTwo.id}" th:text="${levelTwo.name}"></a>
                                         </h2>
-                                        <a href="/productList.html">三级分类1</a>
-                                        <a href="/productList.html">三级分类1</a>
-                                        <a href="/productList.html">三级分类1</a>
-                                    </div>
-                                    <div class="zj_l_c">
-                                        <h2>
-                                            <a href="/productList.html">二级分类2</a>
-                                        </h2>
-                                        <a href="/productList.html">三级分类2</a>
-                                        <a href="/productList.html">三级分类2</a>
-                                        <a href="/productList.html">三级分类2</a>
+                                        <a th:href="'/product/list/three/'+${levelThree.id}" th:each="levelThree:${levelTwo.children}" th:text="${levelThree.name}"></a>
                                     </div>
                                 </div>
                             </div>
                         </li>
-
-                        <li>
-                            <div class="fj">
-                                <span class="n_img"></span> <span class="fl" >一级分类1</span>
-                            </div>
-                            <div class="zj">
-                                <div class="zj_l">
-                                    <div class="zj_l_c">
-                                        <h2>
-                                            <a href="/productList.html">二级分类1</a>
-                                        </h2>
-                                        <a href="/productList.html">三级分类1</a>
-                                        <a href="/productList.html">三级分类1</a>
-                                        <a href="/productList.html">三级分类1</a>
-                                    </div>
-                                    <div class="zj_l_c">
-                                        <h2>
-                                            <a href="/productList.html">二级分类2</a>
-                                        </h2>
-                                        <a href="/productList.html">三级分类2</a>
-                                        <a href="/productList.html">三级分类2</a>
-                                        <a href="/productList.html">三级分类2</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-
-
                     </ul>
                 </div>
             </div>
             <ul class="menu_r">
-                <li><a href="/main.html">首页</a></li>
-                <li>
-                    <a href="/productList.html">一级分类</a>
+                <li><a th:href="@{/store/main}">首页</a></li>
+                <li th:each="productCategory:${list}">
+                    <a th:href="'/product/list/one/'+${productCategory.id}" th:text="${productCategory.name}"></a>
                 </li>
             </ul>
         </div>

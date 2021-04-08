@@ -10,7 +10,6 @@ import java.io.Serializable;
 @Data
 @ToString
 public class Cvideo implements Serializable {
-
     @TableId(type = IdType.AUTO)
     private Integer id;
     private String vname;

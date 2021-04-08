@@ -4,12 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <th:block th:include="common.html :: source"></th:block>
+    <div th:include="/store/common :: source"></div>
 </head>
 <body>
 
-<th:block th:include="common.html :: header"></th:block>
-<th:block th:include="common.html :: category"></th:block>
+<th:block th:include="/store/common :: header"></th:block>
+<th:block th:include="/store/common :: category"></th:block>
 
 <div class="i_bg">
     <div class="content mar_20">
@@ -17,16 +17,16 @@
         <div class="l_list">
             <div class="list_c">
                 <ul class="cate_list">
-                    <li>
+                    <li th:each="product:${productList}">
                         <div class="name">
-                            <a href="/productDetail.html">商品</a>
+                            <a th:href="'/product/findById/'+${product.id}" th:text="${product.name}"></a>
                         </div>
                         <div class="price">
-                            <font>￥<span>100</span></font> &nbsp;
+                            <font><span th:text="${product.price}"></span>积分</font> &nbsp;
                         </div>
                         <div class="img">
-                            <a href="/productDetail.html">
-                                <img src="/images/mat_3.jpg" width="185"
+                            <a th:href="'/product/findById/'+${product.id}">
+                                <img th:src="'/images/'+${product.fileName}" width="185"
                                      height="155" />
                             </a>
                         </div>
@@ -41,8 +41,8 @@
     </div>
 </div>
 
-<th:block th:include="common.html :: footer"></th:block>
-<th:block th:include="common.html :: permit"></th:block>
+<th:block th:include="/store/common :: footer"></th:block>
+<th:block th:include="/store/common :: permit"></th:block>
 
 </body>
 </html>
