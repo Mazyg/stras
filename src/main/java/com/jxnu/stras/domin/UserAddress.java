@@ -28,7 +28,7 @@ public class UserAddress implements Serializable {
       /**
      * 用户主键
      */
-      private Integer userId;
+      private String userPhone;
 
       /**
      * 地址

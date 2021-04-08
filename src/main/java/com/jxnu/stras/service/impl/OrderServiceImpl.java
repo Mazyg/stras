@@ -4,7 +4,9 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
 import com.jxnu.stras.domin.Orders;
-import com.jxnu.stras.mapper.OrderMapper;
+import com.jxnu.stras.domin.User;
+import com.jxnu.stras.domin.UserAddress;
+import com.jxnu.stras.mapper.*;
 import com.jxnu.stras.service.OrderService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,27 +25,27 @@ import java.util.stream.Collectors;
 @Service("OrderService")
 public class OrderServiceImpl extends ServiceImpl<OrderMapper, Orders> implements OrderService {
 
-//    @Autowired
-//    private UserAddressMapper userAddressMapper;
-//    @Autowired
-//    private CartMapper cartMapper;
-//    @Autowired
-//    private OrderMapper orderMapper;
-//    @Autowired
-//    private OrderDetailMapper orderDetailMapper;
-//    @Autowired
-//    private ProductMapper productMapper;
-//
-//    @Override
-//    public boolean save(Orders orders, User user,String address,String remark) {
-//        //判断是新地址还是老地址
+    @Autowired
+    private UserAddressMapper userAddressMapper;
+    @Autowired
+    private CartMapper cartMapper;
+    @Autowired
+    private OrderMapper orderMapper;
+    @Autowired
+    private OrderDetailMapper orderDetailMapper;
+    @Autowired
+    private ProductMapper productMapper;
+
+    @Override
+    public boolean save(Orders orders, User user, String address, String remark) {
+        //判断是新地址还是老地址
 //        if(orders.getUserAddress().equals("newAddress")){
 //            //存入数据库
 //            UserAddress userAddress = new UserAddress();
 //            userAddress.setAddress(address);
 //            userAddress.setRemark(remark);
 //            userAddress.setIsdefault(1);
-//            userAddress.setUserId(user.getId());
+//            userAddress.setUserPhone(user.getPhone());
 //
 //            QueryWrapper wrapper = new QueryWrapper();
 //            wrapper.eq("isdefault",1);
@@ -53,23 +55,24 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Orders> implement
 //            userAddressMapper.insert(userAddress);
 //            orders.setUserAddress(address);
 //        }
-//        //存储orders
-//        orders.setUserId(user.getId());
-//        orders.setLoginName(user.getLoginName());
-//        String seriaNumber = null;
-//        try {
-//            StringBuffer result = new StringBuffer();
-//            for(int i=0;i<32;i++) {
-//                result.append(Integer.toHexString(new Random().nextInt(16)));
-//            }
-//            seriaNumber =  result.toString().toUpperCase();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        orders.setSerialnumber(seriaNumber);
-//        orderMapper.insert(orders);
-//
-//        //存储ordersdetail
+        //存储orders
+        orders.setUserPhone(user.getPhone());
+        orders.setLoginName(user.getUname());
+        String seriaNumber = null;
+        //随机生成订单号
+        try {
+            StringBuffer result = new StringBuffer();
+            for(int i=0;i<32;i++) {
+                result.append(Integer.toHexString(new Random().nextInt(16)));
+            }
+            seriaNumber =  result.toString().toUpperCase();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        orders.setSerialnumber(seriaNumber);
+        orderMapper.insert(orders);
+
+        //存储ordersdetail
 //        QueryWrapper wrapper = new QueryWrapper();
 //        wrapper.eq("user_id",user.getId());
 //        List<Cart> cartList = cartMapper.selectList(wrapper);
@@ -80,14 +83,14 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Orders> implement
 //            orderDetail.setOrderId(orders.getId());
 //            orderDetailMapper.insert(orderDetail);
 //        }
-//
-//        //清空购物车
+
+        //清空购物车
 //        QueryWrapper wrapper1 = new QueryWrapper();
 //        wrapper1.eq("user_id",user.getId());
 //        cartMapper.delete(wrapper1);
-//        return true;
-//    }
-//
+        return true;
+    }
+
 //    @Override
 //    public List<OrderVO> findAllOrederVOByUserId(Integer id) {
 //        QueryWrapper wrapper = new QueryWrapper();

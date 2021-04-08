@@ -55,7 +55,7 @@
                 <div class="fre_ban">
                     <div id="imgPlay1" class="imgPlay1">
                         <ul class="imgs" id="actor1">
-                            <li><a href="/productDetail.html"><img th:src="${productCategory.topImg}" width="211"
+                            <li><a href="/store/productDetail.html"><img th:src="${productCategory.topImg}" width="211"
                             /></a></li>
                         </ul>
                     </div>
@@ -65,13 +65,13 @@
                 <ul>
                     <li th:each="productVO:${productCategory.productVOList}">
                         <div class="name">
-                            <a href="/productDetail.html" th:text="${productVO.name}"></a>
+                            <a th:href="'/product/findById/'+${productVO.id}" th:text="${productVO.name}"></a>
                         </div>
                         <div class="price">
                             <font><span th:text="${productVO.price}">206</span>积分</font> &nbsp;
                         </div>
                         <div class="img">
-                            <a href="/productDetail.html">
+                            <a th:href="'/product/findById/'+${productVO.id}">
                                 <img th:src="'/images/'+${productVO.fileName}" width="185"
                                      height="155" />
                             </a>
@@ -81,9 +81,9 @@
             </div>
             <div class="fresh_right">
                 <ul>
-                    <li><a href="/productDetail.html"><img src="/images/12.png" height="220"
+                    <li><a href="/store/productDetail.html"><img src="/images/12.png" height="220"
                     /></a></li>
-                    <li><a href="/productDetail.html"><img src="/images/13.png" height="220"
+                    <li><a href="/store/productDetail.html"><img src="/images/13.png" height="220"
                                                            style="margin-top: 5px" /></a></li>
                 </ul>
             </div>

@@ -27,7 +27,7 @@ public class Orders implements Serializable {
       /**
      * 用户主键
      */
-      private Integer userId;
+      private String userPhone;
 
       /**
      * 用户名
@@ -53,13 +53,13 @@ public class Orders implements Serializable {
      * 创建时间
      */
         @TableField(fill = FieldFill.INSERT)
-      private Data createTime;
+      private LocalDateTime createTime;
 
       /**
      * 更新时间
      */
         @TableField(fill = FieldFill.INSERT_UPDATE)
-      private Data updateTime;
+      private LocalDateTime updateTime;
 
 
 }

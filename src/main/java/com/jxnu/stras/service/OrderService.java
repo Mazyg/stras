@@ -14,6 +14,6 @@ import java.util.List;
  * </p>
  */
 public interface OrderService extends IService<Orders> {
-//    public boolean save(Orders orders, User user, String address, String remark);
+    public boolean save(Orders orders, User user, String address, String remark);
 //    public List<OrderVO> findAllOrederVOByUserId(Integer id);
 }

@@ -139,10 +139,10 @@
                     <li th:each="cart:${cartList}">
                         <div class="img"><a th:href="'/product/findById/'+${cart.productId}"><img th:src="'/images/'+${cart.fileName}" width="58" height="58" /></a></div>
                         <div class="name"><a th:href="'/product/findById/'+${cart.productId}" th:text="${cart.name}"></a></div>
-                        <div class="price"><font color="#ff4e00" th:text="'￥'+${cart.price}"></font> X <span class="quantity" th:text="${cart.quantity}"></span>  =  <span class="cost" th:text="${cart.cost}"></span></div>
+                        <div class="price"><font color="#ff4e00" th:text="${cart.price}+'积分'"></font> X <span class="quantity" th:text="${cart.quantity}"></span>  =  <span class="cost" th:text="${cart.cost}"></span></div>
                     </li>
                 </ul>
-                <div class="price_sum">共计&nbsp;<font color="#ff4e00">积分</font><span id="totalCost"></span></div>
+                <div class="price_sum">共计&nbsp;<font color="#ff4e00"></font><span id="totalCost"></span></div>
                 <div class="price_a"><a href="/cart/findAllCart">去结算</a></div>
             </div>
 

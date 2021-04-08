@@ -1,6 +1,7 @@
 package com.jxnu.stras.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.jxnu.stras.domin.Cart;
 import com.jxnu.stras.domin.User;
 import com.jxnu.stras.service.CartService;
@@ -54,40 +55,41 @@ public class CartController {
         modelAndView.addObject("cartList",cartService.findAllCartVOByUserId(user.getPhone()));
         return modelAndView;
     }
-//
-//    @GetMapping("/deleteById/{id}")
-//    public String deleteById(@PathVariable("id") Integer id){
-//        cartService.removeById(id);
-//        return "redirect:/cart/findAllCart";
-//    }
-//
-//    @GetMapping("/settlement2")
-//    public ModelAndView settlement2(HttpSession session){
-//        ModelAndView modelAndView = new ModelAndView();
-//        modelAndView.setViewName("settlement2");
-//        User user = (User)session.getAttribute("user");
-//        modelAndView.addObject("cartList",cartService.findAllCartVOByUserId(user.getId()));
-//        QueryWrapper wrapper = new QueryWrapper();
-//        wrapper.eq("user_id",user.getId());
-//        modelAndView.addObject("addressList",userAddressService.list(wrapper));
-//        return modelAndView;
-//    }
-//
-//    @PostMapping("/update/{id}/{quantity}/{cost}")
-//    @ResponseBody
-//    public String updateCart(
-//            @PathVariable("id") Integer id,
-//            @PathVariable("quantity") Integer quantity,
-//            @PathVariable("cost") Float cost
-//    ){
-//        Cart cart = cartService.getById(id);
-//        cart.setQuantity(quantity);
-//        cart.setCost(cost);
-//        if(cartService.updateById(cart)){
-//            return "success";
-//        }else{
-//            return "fail";
-//        }
-//    }
+
+    @GetMapping("/deleteById/{id}")
+    public String deleteById(@PathVariable("id") Integer id){
+        cartService.removeById(id);
+        return "redirect:/cart/findAllCart";
+    }
+//订单信息加载
+    @GetMapping("/settlement2")
+    public ModelAndView settlement2(HttpSession session){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("store/settlement2");
+        User user = (User)session.getAttribute("user");
+        modelAndView.addObject("cartList",cartService.findAllCartVOByUserId(user.getPhone()));
+        QueryWrapper wrapper = new QueryWrapper();
+        wrapper.eq("user_phone",user.getPhone());
+        modelAndView.addObject("addressList",userAddressService.list(wrapper));
+        return modelAndView;
+    }
+//Ajax更新购物车数据库的数据
+    @PostMapping("/update/{id}/{quantity}/{cost}")
+    @ResponseBody
+    public String updateCart(
+            @PathVariable("id") Integer id,
+            @PathVariable("quantity") Integer quantity,
+            @PathVariable("cost") Float cost
+    ){
+        //根据id找到购物车对应的数据，并更新数量和总价
+        Cart cart = cartService.getById(id);
+        cart.setQuantity(quantity);
+        cart.setCost(cost);
+        if(cartService.updateById(cart)){
+            return "success";
+        }else{
+            return "fail";
+        }
+    }
 }
 

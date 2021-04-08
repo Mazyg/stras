@@ -6,11 +6,6 @@ import com.jxnu.stras.vo.CartVO;
 
 import java.util.List;
 
-/**
- * <p>
- *  服务类
- * </p>
- */
 public interface CartService extends IService<Cart> {
     //根据用户的phone查看用户购物车内的所有商品
     public List<CartVO> findAllCartVOByUserId(String phone);
