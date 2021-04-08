@@ -3,9 +3,7 @@ package com.jxnu.stras.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
-import com.jxnu.stras.domin.Orders;
-import com.jxnu.stras.domin.User;
-import com.jxnu.stras.domin.UserAddress;
+import com.jxnu.stras.domin.*;
 import com.jxnu.stras.mapper.*;
 import com.jxnu.stras.service.OrderService;
 import org.springframework.beans.BeanUtils;
@@ -39,22 +37,22 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Orders> implement
     @Override
     public boolean save(Orders orders, User user, String address, String remark) {
         //判断是新地址还是老地址
-//        if(orders.getUserAddress().equals("newAddress")){
-//            //存入数据库
-//            UserAddress userAddress = new UserAddress();
-//            userAddress.setAddress(address);
-//            userAddress.setRemark(remark);
-//            userAddress.setIsdefault(1);
-//            userAddress.setUserPhone(user.getPhone());
-//
-//            QueryWrapper wrapper = new QueryWrapper();
-//            wrapper.eq("isdefault",1);
-//            UserAddress oldDefault = userAddressMapper.selectOne(wrapper);
-//            oldDefault.setIsdefault(0);
-//            userAddressMapper.updateById(oldDefault);
-//            userAddressMapper.insert(userAddress);
-//            orders.setUserAddress(address);
-//        }
+        if(orders.getUserAddress().equals("newAddress")){
+            //存入数据库
+            UserAddress userAddress = new UserAddress();
+            userAddress.setAddress(address);
+            userAddress.setRemark(remark);
+            userAddress.setIsdefault(1);
+            userAddress.setUserPhone(user.getPhone());
+
+            QueryWrapper wrapper = new QueryWrapper();
+            wrapper.eq("isdefault",1);
+            UserAddress oldDefault = userAddressMapper.selectOne(wrapper);
+            oldDefault.setIsdefault(0);
+            userAddressMapper.updateById(oldDefault);
+            userAddressMapper.insert(userAddress);
+            orders.setUserAddress(address);
+        }
         //存储orders
         orders.setUserPhone(user.getPhone());
         orders.setLoginName(user.getUname());
@@ -73,21 +71,21 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Orders> implement
         orderMapper.insert(orders);
 
         //存储ordersdetail
-//        QueryWrapper wrapper = new QueryWrapper();
-//        wrapper.eq("user_id",user.getId());
-//        List<Cart> cartList = cartMapper.selectList(wrapper);
-//        for (Cart cart : cartList) {
-//            OrderDetail orderDetail = new OrderDetail();
-//            BeanUtils.copyProperties(cart,orderDetail);
-//            orderDetail.setId(null);
-//            orderDetail.setOrderId(orders.getId());
-//            orderDetailMapper.insert(orderDetail);
-//        }
+        QueryWrapper wrapper = new QueryWrapper();
+        wrapper.eq("user_phone",user.getPhone());
+        List<Cart> cartList = cartMapper.selectList(wrapper);
+        for (Cart cart : cartList) {
+            OrderDetail orderDetail = new OrderDetail();
+            BeanUtils.copyProperties(cart,orderDetail);
+            orderDetail.setId(null);
+            orderDetail.setOrderId(orders.getId());
+            orderDetailMapper.insert(orderDetail);
+        }
 
         //清空购物车
-//        QueryWrapper wrapper1 = new QueryWrapper();
-//        wrapper1.eq("user_id",user.getId());
-//        cartMapper.delete(wrapper1);
+        QueryWrapper wrapper1 = new QueryWrapper();
+        wrapper1.eq("user_phone",user.getPhone());
+        cartMapper.delete(wrapper1);
         return true;
     }
 

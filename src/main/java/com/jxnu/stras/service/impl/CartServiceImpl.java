@@ -18,11 +18,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * <p>
- *  服务实现类
- * </p>
- */
 @Service("CartService")
 @Slf4j
 public class CartServiceImpl extends ServiceImpl<CartMapper, Cart> implements CartService {

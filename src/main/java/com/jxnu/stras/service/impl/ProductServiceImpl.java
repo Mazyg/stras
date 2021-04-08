@@ -1,24 +1,15 @@
 package com.jxnu.stras.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jxnu.stras.domin.Product;
 import com.jxnu.stras.mapper.ProductMapper;
 import com.jxnu.stras.service.ProductService;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * <p>
- *  服务实现类
- * </p>
- */
 @Service("ProductService")
 public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> implements ProductService {
 
