@@ -116,10 +116,10 @@
     <!-- search -->
     <div class="top">
         <div class="logo">
-            <a href="/main.html"><img th:src="@{/img/logo.png}" style="width: 140px; height: 140px; margin-left: 50px"></a>
+            <a th:href="@{/store/main}"><img th:src="@{/img/logo.png}" style="width: 140px; height: 140px; margin-left: 50px"></a>
         </div>
         <div class="search">
-            <form action="/productList.html" method="post">
+            <form action="/product/findByKey" method="post">
                 <input type="text" name="keyWord" class="s_ipt">
                 <input type="submit" value="搜索" class="s_btn">
             </form>

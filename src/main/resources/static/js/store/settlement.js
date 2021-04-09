@@ -110,3 +110,13 @@ function removeCart(obj){
         window.location.href = "/cart/deleteById/"+id;
     }
 }
+
+//购物车为空时，点确认结算不能跳转
+function settlement2() {
+    var totalCost = $("#totalprice").text();
+    if (totalCost == "0积分") {
+        alert("购物车为空，不能结算！");
+        return false;
+    }
+    window.location.href = "/cart/settlement2";
+}

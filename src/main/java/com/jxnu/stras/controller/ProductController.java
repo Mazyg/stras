@@ -1,5 +1,6 @@
 package com.jxnu.stras.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.jxnu.stras.domin.User;
 import com.jxnu.stras.service.CartService;
 import com.jxnu.stras.service.ProductCategoryService;
@@ -42,24 +43,25 @@ public class ProductController {
         return modelAndView;
     }
 
-//    @PostMapping("/findByKey")
-//    public ModelAndView findByKey(String keyWord, HttpSession session){
-//        ModelAndView modelAndView = new ModelAndView();
-//        modelAndView.setViewName("productList");
-//        //根据关键字查询
-//        QueryWrapper wrapper = new QueryWrapper();
-//        wrapper.like("name",keyWord);
-//        modelAndView.addObject("productList",productService.list(wrapper));
-//        modelAndView.addObject("list",productCategoryService.getAllProductCategoryVO());
-//        User user = (User)session.getAttribute("user");
-//        if(user == null){
-//            modelAndView.addObject("cartList",new ArrayList<>());
-//        }else{
-//            modelAndView.addObject("cartList",cartService.findAllCartVOByUserId(user.getId()));
-//        }
-//        return modelAndView;
-//    }
-//
+    //检索商品功能
+    @PostMapping("/findByKey")
+    public ModelAndView findByKey(String keyWord, HttpSession session){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("/store/productList");
+        //根据关键字查询
+        QueryWrapper wrapper = new QueryWrapper();
+        wrapper.like("name",keyWord);
+        modelAndView.addObject("productList",productService.list(wrapper));
+        modelAndView.addObject("list",productCategoryService.getAllProductCategoryVO());
+        User user = (User)session.getAttribute("user");
+        if(user == null){
+            modelAndView.addObject("cartList",new ArrayList<>());
+        }else{
+            modelAndView.addObject("cartList",cartService.findAllCartVOByUserId(user.getPhone()));
+        }
+        return modelAndView;
+    }
+
     @GetMapping("/findById/{id}")
     public ModelAndView findById(@PathVariable("id") Integer id, HttpSession session){
         ModelAndView modelAndView = new ModelAndView();
