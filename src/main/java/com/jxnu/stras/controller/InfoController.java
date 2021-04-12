@@ -32,6 +32,11 @@ public class InfoController {
     @Resource
     VideoService videoService;
 
+    @Resource
+    SchoolService schoolService;
+
+
+
     @Autowired
     private ProductCategoryService productCategoryService;
     @Autowired
@@ -362,17 +367,25 @@ public class InfoController {
             return "false";
         }
     }
+
+
+    @GetMapping("/user/searchInfo")
+    public String searchInfo(@RequestParam("key") String key,Model model){
+        List<Info> infoList = infoService.searchInfo(key);
+        model.addAttribute("infoList",infoList);
+        List<Video> videoList = videoService.findVideo();
+        model.addAttribute("videoList",videoList);
+        List<Info> hot = infoService.findInfoByHot();
+        model.addAttribute("hot",hot);
+        return "user/search_info";
+    }
+
     /**
      *跳转积分商城页面
      * @return
      */
-//    @GetMapping("/store/main")
-//    public String storeMain(){
-//        return "store/main";
-//    }
     @GetMapping("/store/main")
     public ModelAndView storeMain(HttpSession session){
-        log.info("进入storeMain。。。。。。。。。。。。。。。。。。。。");
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("store/main");
         modelAndView.addObject("list",productCategoryService.getAllProductCategoryVO());

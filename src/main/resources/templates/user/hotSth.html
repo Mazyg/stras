@@ -17,12 +17,12 @@
             <div class="biggallery">
                     <div class="biggallerywraper" th:each="infoTop:${hotTop}">
                         <ul class="biggallerylist clearfix">
-                            <li><a href="" target="_blank"><img th:src="${infoTop.photo}"></a></li>
+                            <li><a th:href="@{/user/infoDal(infoId=${infoTop.infoId})}" target="_blank"><img th:src="${infoTop.photo}"></a></li>
                         </ul>
                         <div class="imgintro1">
                             <b></b>
                             <h3>
-                                <a href="" target="_blank"  id="title1-1" class="jiequ">[[${infoTop.title}]]</a>
+                                <a th:href="@{/user/infoDal(infoId=${infoTop.infoId})}" target="_blank"  id="title1-1" class="jiequ">[[${infoTop.title}]]</a>
                             </h3>
                             <p>[[${infoTop.introduce}]]</p>
                         </div>
@@ -32,13 +32,13 @@
             <ul class="picnewslist people">
                     <li class="clearfix" th:each="hotList:${hotInfo.records}">
                         <figure>
-                            <a class="picwraper" href="" target="_blank">
+                            <a class="picwraper" th:href="@{/user/infoDal(infoId=${hotList.infoId})}" target="_blank">
                                 <img th:src="${hotList.photo}">
                             </a>
                             <div class="contentwraper">
                                 <figcaption>
                                     <span class="tips">[[${hotList.infoType}]]</span>
-                                    <a href="" target="_blank"  class="jiequ">
+                                    <a th:href="@{/user/infoDal(infoId=${hotList.infoId})}" target="_blank"  class="jiequ">
                                         [[${hotList.title}]]
                                     </a>
                                 </figcaption>
@@ -96,7 +96,7 @@
                     </a>
                 </h2>
                 <ul class="newslist clearfix"  id="resText">
-                    <li th:each="hotS:${hot}"><a href="">[[${hotS.title}]]<small style="float: right">[[${hotS.date}]]</small></a></li>
+                    <li th:each="hotS:${hot}"><a th:href="@{/user/infoDal(infoId=${hotS.infoId})}">[[${hotS.title}]]<small style="float: right">[[${hotS.date}]]</small></a></li>
                 </ul>
             </section>
         </section>

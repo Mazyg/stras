@@ -87,9 +87,15 @@ public class CourseController {
         }
     }
 
+
+    /**
+     * 搜索课程信息
+     * @param key 搜索关键字
+     * @param model
+     * @return 课程信息
+     */
     @GetMapping("/user/searchCourse")
     public String searchCourse(@RequestParam("key") String key,Model model){
-        System.out.println("k=="+key);
         List<Course> courses = courseService.searchCourse(key);
         model.addAttribute("courseList",courses);
         School school = schoolService.findSchool();
@@ -116,7 +122,6 @@ public class CourseController {
         model.addAttribute("school",school);
         model.addAttribute("addList",adds);
         model.addAttribute("courses",courseList);
-
         return "user/course";
     }
 

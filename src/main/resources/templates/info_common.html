@@ -18,6 +18,17 @@
     <script type="text/javascript" th:src="@{/js/user/searchsub.js}"></script>
     <script th:src="@{/js/layui.js}" type="text/javascript"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script type="text/javascript">
+        function isE() {
+            var p1= $("#search").val();
+            if(p1 == null||p1 == ""){
+                alert("输入不能为空！")
+                return false;
+            }
+            window.location.href="/user/searchInfo?key="+p1;
+        }
+    </script>
+
     <style type="text/css">
         .imgs1{
             width: 100px;
@@ -32,8 +43,8 @@
     <section class="mainWrap">
         <div class="topwraper relative clearfix">
             <div class="search">
-                <input type="text" id="search" name="baidu_line" autocomplete="off"/>
-                <a onclick="searchSub(${numberPerPage})"><i>搜索</i></a>
+                <input type="text" id="search" name="search" autocomplete="off" placeholder="输入关键字搜索"/>
+                <a onclick="isE()"><i>搜索</i></a>
             </div>
         </div>
     </section>

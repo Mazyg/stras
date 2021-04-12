@@ -68,7 +68,7 @@
                 <div class="biggallerywraper">
                     <ul class="biggallerylist">
                             <li th:each="chineses :${chinese}">
-                                <a href="" target="_blank" th:href="@{/user/infoDal(infoId=${chineses.infoId})}"><img th:src="${chineses.photo}"></a>
+                                <a th:href="@{/user/infoDal(infoId=${chineses.infoId})}" target="_blank" ><img th:src="${chineses.photo}"></a>
                                 <div class="imgintro">
                                     <b></b>
                                     <h3><a href="" target="_blank" class="jiequ" th:href="@{/user/infoDal(infoId=${chineses.infoId})}">【[[${chineses.title}]]】</a></h3>

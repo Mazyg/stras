@@ -38,7 +38,7 @@
                         </li>
                     </ul>
                 </div>
-                <div class="pager">
+                <div class="pager" th:if="${comments.records.size() != 0}">
 
                     <a th:href="@{/person/userNews(pn=${comments.current}-1)}" rel="external nofollow" ><<</a>
                     <!-- 页数列表 -->

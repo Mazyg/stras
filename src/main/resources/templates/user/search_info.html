@@ -2,11 +2,57 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>全球战役---繁星思政网</title>
+    <title>文章搜索结果---繁星思政网</title>
     <div th:replace="info_common :: commomheader"></div>
+    <script type="text/javascript">
+        function isEq() {
+            var p1= $("#key").val();
+            if(p1 == null||p1 == ""){
+                alert("输入不能为空！")
+                return false;
+            }
+            window.location.href="/user/searchInfo?key="+p1;
+        }
+    </script>
 </head>
 <body>
-<div th:replace="info_common :: #head"></div>
+<header id="head" class="clearfix" >
+    <section class="mainWrap">
+        <div class="topwraper relative clearfix">
+            <div class="search">
+                <form  id="searchs">
+                <input type="text" id="key" name="key" autocomplete="off" required placeholder="输入关键字搜索"/>
+                <a onclick="isEq()"><i>搜索</i></a></form>
+            </div>
+        </div>
+    </section>
+    <nav class="navwrap yahei">
+        <section class="mainWrap">
+            <ul id="nav">
+                <li><a th:href="@{/}">首页</a>
+                </li>
+                <li><a th:href="@{/user/allE}">全球战疫</a>
+                </li>
+                <li><a th:href="@{/user/hotInfo}">热点时事</a>
+                </li>
+                <li><a th:href="@{/user/chineseInfo}">爱我中华</a>
+                </li>
+                <li><a th:href="@{/user/manModels}">榜样力量</a>
+                </li>
+                <li><a th:href="@{/user/showCourse}">江西师大课程思政</a>
+                </li>
+                <li><a th:href="@{/user/topic}">话题广场</a>
+                </li>
+                <li th:if="${session.user != null}"><a th:href="@{/person/personalInfo}">个人中心</a>
+                    <ul class="last">
+                        <li th:if="${session.user.utype=='admin'}"><a th:href="@{/admin/index.html}">管理界面</a></li>
+                        <li><a th:href="@{/loginOut}">退出登录</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </section>
+    </nav>
+</header>
 
 <div class="content yahei subchannel">
     <div class="mainWrap clearfix">
@@ -14,29 +60,21 @@
         <section class="colunm1">
             <!--顶部大图------------------------->
             <div class="biggallery">
-                <div class="biggallerywraper" th:each="infoTop:${eTop}">
-                    <ul class="biggallerylist clearfix">
-                        <li><a th:href="@{/user/infoDal(infoId=${infoTop.infoId})}" target="_blank"><img th:src="${infoTop.photo}"></a></li>
-                    </ul>
-                    <div class="imgintro1">
-                        <b></b>
-                        <h3>
-                            <a th:href="@{/user/infoDal(infoId=${infoTop.infoId})}" target="_blank"  id="title1-1" class="jiequ">[[${infoTop.title}]]</a>
-                        </h3>
-                        <p>[[${infoTop.introduce}]]</p>
-                    </div>
+                <div class="biggallerywraper">
+
                 </div>
             </div>
             <!--文章列表部分------------------------------->
             <ul class="picnewslist people">
-                <li class="clearfix" th:each="hotList:${eList.records}">
+                <h3 th:if="${infoList.size() == 0}">该关键字暂无搜索结果，换个词搜索吧！</h3>
+                <li class="clearfix" th:if="${infoList.size() != 0}" th:each="hotList:${infoList}">
                     <figure>
                         <a class="picwraper" th:href="@{/user/infoDal(infoId=${hotList.infoId})}" target="_blank">
                             <img th:src="${hotList.photo}">
                         </a>
                         <div class="contentwraper">
                             <figcaption>
-                                <span class="tips">[[${hotList.infoType}]]</span>
+                                <span class="tips" th:text="${hotList.infoType}"></span>
                                 <a th:href="@{/user/infoDal(infoId=${hotList.infoId})}" target="_blank"  class="jiequ">
                                     [[${hotList.title}]]
                                 </a>
@@ -45,7 +83,6 @@
                             <div class="thumb">
                                 <i class=" glyphicon glyphicon-time"></i>
                                 [[${hotList.date}]]
-                                <i class=" glyphicon glyphicon-eye-open"></i>[[${hotList.view}]]
                                 <font  >
                                     <span  ></span>
                                 </font>
@@ -56,18 +93,6 @@
                 </li>
             </ul>
             <br>
-            <!--分页部分-->
-            <div class="pager">
-
-                <a th:href="@{/user/allE(pn=${eList.current}-1)}" rel="external nofollow" ><<</a>
-                <!-- 页数列表 -->
-                <a  th:each="num:${#numbers.sequence(1,eList.pages)}"  th:href="@{/user/allE(pn=${num})}" rel="external nofollow" th:class="${num==eList.current?'current':''}">[[${num}]]</a>
-                <!-- 下一页 按钮 -->
-                <a th:href="@{/user/allE(pn=${eList.current}+1)}" rel="external nofollow">
-                    >>
-                </a>
-
-            </div>
         </section>
         <!--侧边部分--------------------->
         <section class="colunm2">
@@ -95,7 +120,7 @@
                     </a>
                 </h2>
                 <ul class="newslist clearfix"  id="resText">
-                    <li th:each="hotS:${hot}"><a th:href="@{/user/infoDal(infoId=${hotS.infoId})}">[[${hotS.title}]]<small style="float: right">[[${hotS.date}]]</small></a></li>
+                    <li th:each="hotS:${hot}"><a th:href="@{/user/infoDal(infoId=${hotS.infoId})}">[[${hotS.title}]]</a></li>
                 </ul>
             </section>
         </section>

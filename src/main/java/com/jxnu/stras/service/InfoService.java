@@ -23,5 +23,6 @@ public interface InfoService extends IService<Info> {
     public Page<Info> hotPageInfo(Integer pn);
     public Page<Info> manPageInfo(Integer pn);
     public Page<Info> allPageE(Integer pn);
+    public List<Info> searchInfo(String key);
     public List<Info> findInfoBytype(@Param("info_type") String info_type, @Param("start") int start, @Param("length") int length);
 }

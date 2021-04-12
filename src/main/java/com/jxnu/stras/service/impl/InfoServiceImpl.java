@@ -217,6 +217,19 @@ public class InfoServiceImpl extends ServiceImpl<InfoMapper,Info> implements Inf
     }
 
     /**
+     * 搜索文章信息
+     * @param key 查找关键字
+     * @return 文章列表
+     */
+    @Override
+    public List<Info> searchInfo(String key) {
+        QueryWrapper<Info> wrapper = new QueryWrapper<>();
+        wrapper.like("title",key).or().like("introduce",key);
+        List<Info> infoList = infoMapper.selectList(wrapper);
+        return infoList;
+    }
+
+    /**
      * 根据文章类别查找
      *
      * @param info_type 类别
