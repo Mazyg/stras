@@ -44,4 +44,9 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper,Video> implements 
             return (List<Video>) redisTemplate.opsForValue().get(key);
         }
     }
+
+    @Override
+    public boolean updateVideoView(Integer vid) {
+        return videoMapper.updateVideoView(vid);
+    }
 }

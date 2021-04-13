@@ -292,6 +292,7 @@ public class InfoController {
 
     @GetMapping("/user/videoDal")
     public String videoDal(Integer vid,Model model){
+        boolean isUpdate = videoService.updateVideoView(vid);
         Video video = videoService.getVideoById(vid);
         model.addAttribute("videoD",video);
         List<Info> hot = infoService.findInfoByHot();

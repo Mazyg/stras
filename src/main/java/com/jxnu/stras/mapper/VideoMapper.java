@@ -23,4 +23,7 @@ public interface VideoMapper extends BaseMapper<Video> {
             "ORDER  BY Vdate desc\n" +
             "limit 0 ,4")
     public List<Video>  findVideo();
+
+    @Update("update video set Vview= Vview+1 where vid = #{vid}")
+    public boolean updateVideoView(Integer vid);
 }

@@ -71,7 +71,7 @@
                     未审核文章
                 </header>
                 <div class="panel-body">
-                <div class="adv-table editable-table ">
+                <div class="adv-table editable-table " th:if="${infoList.records.size()}!= 0">
                 <div class="space15"></div>
                 <table class="table table-striped table-hover table-bordered" id="editable-sample">
                 <thead>
@@ -100,16 +100,17 @@
                 </tr>
                 </tbody>
                 </table>
-                    <div class="row-fluid">
+                    <div class="row-fluid" >
                         <div class="span6">
                             <div class="dataTables_info" id="dynamic-table_info">第 [[${infoList.current}]] 页 共 [[${infoList.pages}]] 页 [[${infoList.total}]] 条数据</div>
                         </div>
-                        <div class="span6"><div class="dataTables_paginate paging_bootstrap pagination">
+                        <div class="span6" ><div class="dataTables_paginate paging_bootstrap pagination">
                             <ul><li class="prev"><a th:href="@{/admin/notInfo(pn=${infoList.current}-1)}">← Pre</a></li>
                                 <li th:class="${num == infoList.current?'active':''}" th:each="num:${#numbers.sequence(1,infoList.pages)}"><a th:href="@{/admin/notInfo(pn=${num})}">[[${num}]]</a></li>
                                 <li class="next"><a th:href="@{/admin/notInfo(pn=${infoList.current+1})}">Next → </a></li>
                             </ul></div></div></div>
                 </div>
+                    <div><h3>暂无未审核文章！去别处看看吧！</h3></div>
                 </div>
                 </section>
                 </div>

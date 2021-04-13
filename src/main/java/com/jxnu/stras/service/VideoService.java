@@ -10,4 +10,5 @@ public interface VideoService extends IService<Video> {
     public Video getVideoById(Integer vid);
     public boolean deleteVideo(Integer vid);
     public List<Video> findVideo();
+    public boolean updateVideoView(Integer vid);
 }

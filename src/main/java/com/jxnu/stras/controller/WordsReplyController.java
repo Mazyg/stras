@@ -41,6 +41,7 @@ public class WordsReplyController {
     private User user;
     @GetMapping("/user/infoDal")
     public String articleDeal(Model model, @RequestParam("infoId")Integer infoId, HttpServletRequest request){
+        boolean isUpdate = infoService.updateInfoView(infoId,request);
         Info info = infoService.getInfoById(infoId);
         User user = (User) request.getSession().getAttribute("user");
         String uphone;

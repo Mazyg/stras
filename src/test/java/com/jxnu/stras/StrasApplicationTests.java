@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jxnu.stras.domin.Course;
 import com.jxnu.stras.mapper.CourseMapper;
+import com.jxnu.stras.mapper.VideoMapper;
 import com.jxnu.stras.utils.SerializeUtil;
 import com.jxnu.stras.domin.Info;
 import com.jxnu.stras.domin.Topic;
@@ -23,6 +24,7 @@ import org.springframework.data.redis.core.ValueOperations;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 @SpringBootTest
@@ -44,10 +46,39 @@ class StrasApplicationTests {
     private TopicMapper topicMapper;
 
     @Resource
+    private VideoMapper videoMapper;
+
+    @Resource
     CourseMapper courseMapper;
 
     @Autowired
     RedisTemplate redisTemplate;
+
+    @Autowired
+    StringRedisTemplate stringRedisTemplate;
+
+    @Test
+    void redsiTest(){
+        Set<String> keys = stringRedisTemplate.keys("*");
+        stringRedisTemplate.delete(keys);
+        System.out.println("dfg==="+keys.size());
+        for(String k:keys){
+            System.out.println("k=="+k);
+           redisTemplate.delete(stringRedisTemplate.dump(k));
+            if(stringRedisTemplate.hasKey(String.valueOf(redisTemplate.dump(k)))){
+                System.out.println("false");
+            }else{
+                System.out.println("true");
+            }
+        }
+
+    }
+
+    @Test
+    void updateVideoView(){
+        boolean video = videoMapper.updateVideoView(5);
+        System.out.println(video);
+    }
 
 
     @Test

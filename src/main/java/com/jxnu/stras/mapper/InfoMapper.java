@@ -72,6 +72,9 @@ public interface InfoMapper extends BaseMapper<Info> {
     @Select("select count(*) from info where Uphone = #{Uphone} and info_status = '未审核'")
     public Integer countByPhoneStatus(String Uphone);
 
+    @Update("update info set view = view+1 where info_id = #{infoId}")
+    public boolean updateInfoView(Integer infoId);
+
 
     /**
      * 通过文章类别搜索文章

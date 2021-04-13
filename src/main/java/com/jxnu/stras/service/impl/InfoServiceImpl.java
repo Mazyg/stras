@@ -4,13 +4,19 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jxnu.stras.domin.Info;
+import com.jxnu.stras.domin.User;
 import com.jxnu.stras.mapper.InfoMapper;
 import com.jxnu.stras.service.InfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 @Service("InfoService")
@@ -21,6 +27,9 @@ public class InfoServiceImpl extends ServiceImpl<InfoMapper,Info> implements Inf
 
     @Autowired
     RedisTemplate redisTemplate;
+
+    @Autowired
+    StringRedisTemplate stringRedisTemplate;
 
     /**
      * 根据id查找信息
@@ -249,5 +258,31 @@ public class InfoServiceImpl extends ServiceImpl<InfoMapper,Info> implements Inf
             return (List<Info>) redisTemplate.opsForValue().get(key);
         }
 
+    }
+
+    /**
+     * 更新文章浏览量
+     * @param infoId 文章ID
+     * @param request 请求
+     * @return
+     */
+    public boolean updateInfoView(Integer infoId, HttpServletRequest request) {
+        HttpSession session = request.getSession(true);
+        User user = (User) session.getAttribute("user");
+        String key;
+        if(user !=null){
+            key = infoId+user.getPhone()+"info";
+        }else{
+            key = infoId+"*"+"info";
+        }
+
+        if(!redisTemplate.hasKey(key)){
+            ValueOperations<String,String> operations = redisTemplate.opsForValue();
+            operations.set(key,"1");
+            redisTemplate.expire(key,2,TimeUnit.HOURS);
+            return infoMapper.updateInfoView(infoId);
+        }else{
+            return false;
+        }
     }
 }

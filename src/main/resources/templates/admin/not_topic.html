@@ -152,7 +152,8 @@
                     </div>
                 </div>
                 <div class="space15"></div>
-                <table class="table table-striped table-hover table-bordered" id="editable-sample">
+                    <h3 th:if="${topics.records.size()}==0">暂无未审核话题！去别处看看吧！</h3>
+                <table th:if="${topics.records.size()} != 0" class="table table-striped table-hover table-bordered" id="editable-sample">
                 <thead>
                 <tr>
                     <th>ID</th>
@@ -180,7 +181,7 @@
                 </tr>
                 </tbody>
                 </table>
-                    <div class="row-fluid">
+                    <div th:if="${topics.records.size()} != 0" class="row-fluid">
                         <div class="span6">
                             <div class="dataTables_info" id="dynamic-table_info">第 [[${topics.current}]] 页 共 [[${topics.pages}]] 页 [[${topics.total}]] 条数据</div>
                         </div>

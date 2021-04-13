@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.jxnu.stras.domin.Info;
 import org.apache.ibatis.annotations.Param;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 public interface InfoService extends IService<Info> {
@@ -24,5 +25,6 @@ public interface InfoService extends IService<Info> {
     public Page<Info> manPageInfo(Integer pn);
     public Page<Info> allPageE(Integer pn);
     public List<Info> searchInfo(String key);
+    public boolean updateInfoView(Integer infoId, HttpServletRequest request);
     public List<Info> findInfoBytype(@Param("info_type") String info_type, @Param("start") int start, @Param("length") int length);
 }
