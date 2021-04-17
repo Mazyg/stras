@@ -32,11 +32,6 @@ public class InfoController {
     @Resource
     VideoService videoService;
 
-    @Resource
-    SchoolService schoolService;
-
-
-
     @Autowired
     private ProductCategoryService productCategoryService;
     @Autowired
@@ -261,7 +256,7 @@ public class InfoController {
     public String manModel(@RequestParam(value = "pn",defaultValue = "1")Integer pn,Model model){
         Page<Info> infoList = infoService.manPageInfo(pn);
         model.addAttribute("manList",infoList);
-        List<Info> manTop = infoService.findInfoBytype("榜样力量",0,1);
+        List<Info> manTop = infoService.findInfoBytype("人物",0,1);
         model.addAttribute("manTop",manTop);
         List<Info> hot = infoService.findInfoByHot();
         model.addAttribute("hot",hot);
@@ -370,6 +365,12 @@ public class InfoController {
     }
 
 
+    /**
+     * 搜索文章
+     * @param key 搜索关键字
+     * @param model model
+     * @return 搜索结果列表
+     */
     @GetMapping("/user/searchInfo")
     public String searchInfo(@RequestParam("key") String key,Model model){
         List<Info> infoList = infoService.searchInfo(key);
