@@ -10,7 +10,7 @@
                 var $tid = $(this).parent().parent().children("td").eq(0).text();
                 $.ajax({
                     type:"POST",
-                    url:"/admin/deleteTopic",
+                    url:"/user/deleteTopic",
                     data:"tid="+$tid,
                     success:function (msg) {
                         if(msg === "success"){
@@ -38,7 +38,8 @@
     <div th:replace="personal_common :: leftperson(urlP='personTopic')"></div>
     <!--主体部分---------------------------->
     <div class="col-md-7  db"><br>
-        <table class="table table-striped table-hover table-bordered" id="editable-sample">
+        <h3 th:if="${topics.total == 0}">还未发布话题，快去话题广场发布话题吧！</h3>
+        <table th:if="${topics.total != 0}" class="table table-striped table-hover table-bordered" id="editable-sample">
             <thead>
             <tr>
                 <th style="display: none">ID</th>
@@ -67,7 +68,7 @@
             </tbody>
         </table>
 
-        <div class="pager">
+        <div th:if="${topics.total != 0}" class="pager">
 
             <a th:href="@{/person/personTopic(pn=${topics.current}-1)}" rel="external nofollow" ><<</a>
             <!-- 页数列表 -->

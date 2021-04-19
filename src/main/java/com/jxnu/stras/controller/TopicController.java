@@ -132,6 +132,7 @@ public class TopicController {
     @GetMapping("/admin/topicDetail")
     public String topicDetail(@RequestParam("id")Integer tid,@RequestParam(value = "pn",defaultValue = "1")Integer pn,Model model){
         Topic topic = topicService.getTopicbyID(tid);
+        System.out.println("topic=="+topic);
         User user = userService.getUserByPhone(topic.getPhone());
         model.addAttribute("topicDetail",topic);
         model.addAttribute("topicUser",user);
@@ -149,6 +150,7 @@ public class TopicController {
     @GetMapping("/admin/topicDetail2")
     public String topicDetail2(@RequestParam("id")Integer tid,@RequestParam(value = "pn",defaultValue = "1")Integer pn,Model model){
         Topic topic = topicService.getTopicbyID(tid);
+        System.out.println("topic=="+topic);
         User user = userService.getUserByPhone(topic.getPhone());
         model.addAttribute("topicDetail",topic);
         model.addAttribute("topicUser",user);
@@ -172,13 +174,34 @@ public class TopicController {
         HttpSession session = request.getSession(true);
         User user = (User) session.getAttribute("user");
         topic.setPhone(user.getPhone());
-        if("admin".equals(user.getUtype())){
-            topic.setTstatus("已审核");
-            topic.setTresult("已通过");
-        }else {
-            topic.setTstatus("未审核");
-            topic.setTresult("未通过");
+        topic.setTstatus("已审核");
+        topic.setTresult("已通过");
+        boolean isAdd = topicService.save(topic);
+        if(isAdd==true){
+            return "success";
+        }else{
+            return "false";
         }
+    }
+
+    /**
+     * 用户发布话题
+     * @param topic 话题信息
+     * @param request 获取请求
+     * @return 保存结构
+     */
+    @ResponseBody
+    @PostMapping("/user/addTopic")
+    public String addTopicUser(Topic topic, HttpServletRequest request){
+        Date now = new Date();
+        SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        String time = ft.format(now);
+        topic.setDate(time);
+        HttpSession session = request.getSession(true);
+        User user = (User) session.getAttribute("user");
+        topic.setPhone(user.getPhone());
+        topic.setTstatus("未审核");
+        topic.setTresult("未通过");
         boolean isAdd = topicService.save(topic);
         if(isAdd==true){
             return "success";
@@ -230,8 +253,23 @@ public class TopicController {
     @PostMapping("/admin/deleteTopic")
     public String deleteTopic(Integer tid){
         boolean idDel = topicService.deleteTopic(tid);
-        Topic topic = topicService.getTopicbyID(tid);
-        if(idDel==true && topic.getDel()==1){
+        if(idDel==true ){
+            return "success";
+        }else{
+            return "false";
+        }
+    }
+
+    /**
+     * 用户删除话题
+     * @param tid 话题ID
+     * @return 删除结果
+     */
+    @ResponseBody
+    @PostMapping("/user/deleteTopic")
+    public String deleteTopicUser(Integer tid){
+        boolean idDel = topicService.deleteTopic(tid);
+        if(idDel==true ){
             return "success";
         }else{
             return "false";

@@ -73,7 +73,7 @@
                 <input type="submit" value="评论" id="postMsg" th:disabled="${session.user==null?'disabled':'false'}"/>
             </div>
         </div>
-        <div class="newPending">
+        <div th:if="${dynamics.records.size() != 0}" class="newPending">
             <div class="newPending_head">
                 <div class="tzHeng"></div>
                 <div class="newPending_head_tittle">相关回复</div>
@@ -124,7 +124,7 @@
                </div>
             <!--测试内容结束、十条内容分页-->
         </div>
-        <div class="pager">
+        <div th:if="${dynamics.records.size() != 0}" class="pager">
         <a th:href="@{/user/topicDal(pn=${dynamics.current}-1,tid=${ids})}" rel="external nofollow" ><<</a>
         <!-- 页数列表 -->
         <a  th:each="num:${#numbers.sequence(1,dynamics.pages)}"  th:href="@{/user/topicDal(pn=${num},tid=${ids})}" rel="external nofollow" th:class="${num==dynamics.current?'current':''}">[[${num}]]</a>

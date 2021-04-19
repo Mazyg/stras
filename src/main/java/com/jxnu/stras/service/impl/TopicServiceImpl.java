@@ -37,16 +37,9 @@ public class TopicServiceImpl extends ServiceImpl<TopicMapper, Topic> implements
      */
     @Override
     public Topic getTopicbyID(Integer tid) {
-        String key = tid+"";
-        if(!redisTemplate.hasKey(key)){
-            Topic topic = topicMapper.getTopicByID(tid);
-            redisTemplate.opsForValue().set(key, topic);
-            redisTemplate.expire(key,6,TimeUnit.HOURS);
-            return (Topic) redisTemplate.opsForValue().get(key);
-        }else{
-            return (Topic) redisTemplate.opsForValue().get(key);
-        }
 
+            Topic topic = topicMapper.getTopicByID(tid);
+            return topic;
     }
 
     /**
